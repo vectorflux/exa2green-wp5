@@ -1,2 +1,2 @@
 #/bin/bash -l
-rm -vf *~ *.aux *.eps *.pdf *.log *.ps *.dvi *.out
+rm -vf *~ *.aux *.eps *.pdf *.log *.ps *.dvi *.out *.bbl *.blg
