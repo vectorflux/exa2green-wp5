@@ -1,6 +1,9 @@
 #/bin/bash -l
 ./clean.sh
-latex template.tex
-dvips -o template.ps template.dvi
-ps2pdf -sPAPERSIZE=a4 template.ps
-acroread template.pdf
+latex draft.tex
+bibtex draft.aux
+latex draft.tex
+latex draft.tex
+dvips -o draft.ps draft.dvi
+ps2pdf -sPAPERSIZE=a4 draft.ps
+acroread draft.pdf

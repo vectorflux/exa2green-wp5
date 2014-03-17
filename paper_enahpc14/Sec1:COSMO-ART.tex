@@ -1,0 +1,33 @@
+This   study   uses   the   regional   atmospheric   model   COSMO-ART
+\citep{Vogel-2009} (ART stands for Aerosols and Reactive Trace gases),
+in which atmospheric chemistry is online-coupled to the COSMO regional
+numerical      weather      prediction      and     climate      model
+\citep{Baldauf-2011}. The online coupling  is realized in a consistent
+way using the same spatial and temporal resolution for all scalars, as
+for    example   advection,   the    same   numerical    schemes   are
+applied. Detailed model description can be found in the aforementioned
+publications as well as in \citep{Stanelle-2010}, \citep{Bangert-2012}
+and \citep{Knote-2011}.
+
+The gaseous chemistry in COSMO-ART  is simulated by a modified version
+of  the Regional Acid  Deposition Model,  Version 2  (RADM2) mechanism
+\citep{Stockwell-1990},  which  is   extended  to  describe  secondary
+organic  aerosol formation  \citep{Schell-2001}  and hydroxyl  radical
+recycling  due  to  isoprene chemistry  \citep{Geiger-2003}.   Aerosol
+dynamics   are  simulated   with   the  modal   aerosol  module   MADE
+\citep{Ackermann-1998}, improved  by explicit treatment  of soot aging
+through  condensation  of  inorganic \citep{Riemer-2003}  and  organic
+substances.   The five  modes  that represent  the aerosol  population
+contain:  pure   soot,  secondary  mixtures   of  sulfates,  nitrates,
+ammonium, organics  and water (nucleation and  accumulation mode), and
+the  internal mixtures  of all  these species  in both  modes. Aerosol
+species are transferred among  these mixtures through condensation and
+coagulation.   A  separate  coarse  mode contains  additional  primary
+emitted  particles.    Meteorologically-affected  emissions  are  also
+online-coupled to the model  system. Sea-salt and desert dust emission
+algorithms are described in \citep{Vogel-2006} and \citep{Vogel-2009}.
+The biogenic VOC emissions are calculated as functions of the land use
+type    based    on   the    Global    Land    Cover   2000    dataset
+\citep{Bartholome-2005}  and the  modeled  temperatures and  radiative
+fluxes  \citep{Vogel-1995}.   Sedimentation,  advection,  washout  and
+turbulent diffusion also modify the aerosol distributions.
