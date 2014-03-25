@@ -1,4 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%% file draft.tex %%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % This is a general template file for the LaTeX package SVJour3
 % for Springer journals.          Springer Heidelberg 2010/09/16
@@ -47,6 +47,8 @@ grestore
 \usepackage{hyperref}
 \usepackage[round, sort, numbers, authoryear]{natbib}
 %
+\DeclareRobustCommand\IPCClongname{}
+%
 % please place your own definitions here and don't use \def but
 % \newcommand{}{}
 %
@@ -64,16 +66,22 @@ grestore
 
 %\titlerunning{Short form of title} % if too long for running head
 
-\author{J.Charles \and M.Dolz}
+\author{J.Charles \and W.Sawyer \and M.Dolz \and C.Malossi}
 
 %\authorrunning{Short form of author list} % if too long for running
 %head
 
 \institute{Dr. Joseph Charles \at Swiss National Supercomputing Centre
-  (CSCS)\\ CH-6900  Lugano, Switzerland \\  Tel.: +41 (0) 91  610 8216
-  \\  \email{joseph.charles@cscs.ch}  \\  \and  Dr.  Manuel  Dolz  \at
-  University of Hamburg \\ 20148  Hamburg, Germany \\ Tel.: +49 (0) 40
-  460094-404 \\ \email{manuel.dolz@informatik.uni-hamburg.de}}
+  (CSCS)\\ CH-6900  Lugano, Switzerland  \\ Tel: +41  (0) 91  610 8216
+  \\ \email{joseph.charles@cscs.ch} \and Dr.  William Sawyer \at Swiss
+  National Supercomputing Centre  (CSCS)\\ CH-6900 Lugano, Switzerland
+  \\ Tel:  +41 (0) 91 610 8229  \\ \email{william.sawyer@cscs.ch} \and
+  Dr.  Manuel Dolz \at University of Hamburg \\ 20148 Hamburg, Germany
+  \\         Tel:         +49         (0)        40         460094-404
+  \\ \email{manuel.dolz@informatik.uni-hamburg.de}  \and Dr. Cristiano
+  Malossi  \at  IBM  Zurich  Research Laboratory  \\  CH-8000  Zurich,
+  Switzerland     \\     Tel:      +41     (0)     44     724     8616
+  \\ \email{ACM@zurich.ibm.com}}
 
 \date{Received: date / Accepted: date} % The correct dates will be
                                        % entered by the editor
@@ -97,14 +105,16 @@ grestore
   elements. Moreover, we describe measurement devices and energy-aware
   techniques  employed  to  evaluate   the  energy  footprint  of  the
   considered  application and  to  get detailed  insights about  power
-  bottlenecks.  Our approach is to improve corresponding code sections
-  to  sustain high  performance  while minimizing  energy-to-solution.
-  This preliminary  study sets the basis of  broader considerations to
-  tackle challenges  related to energy efficient HPC  in the framework
-  of the Exa2Green project (\url{http://exa2green.eu/}).
+  bottlenecks.   Our  motivation  is  to  improve  corresponding  code
+  sections    to   sustain    high   performance    while   minimizing
+  energy-to-solution.   This  preliminary  study  sets  the  basis  of
+  broader  considerations  to  tackle  challenges  related  to  energy
+  efficient   HPC  in   the   framework  of   the  Exa2Green   project
+  (\url{http://exa2green.eu/}).
 
 \keywords{High performance computing  \and Energy-aware computing \and
-  Numerical Weather Prediction}
+  Green computing  \and Numerical Weather  Prediction \and Atmospheric
+  Chemistry \and Aerosol Modelling \and COSMO-ART}
 % \PACS{PACS code1 \and PACS code2 \and more}
 % \subclass{MSC code1 \and MSC code2 \and more}
 \end{abstract}
@@ -163,17 +173,17 @@ number & number & number \\
 \end{table}
 
 \begin{acknowledgements}
-The  authors  would  like  to  thank the  High  Performance  and  High
-Productivity  Computing  (\url{www.hp2c.ch})  Initiative and  the  FP7
-funding this project.)
+This  research  was  supported   by  the  Exa2Green  research  project
+co-funded  under the  EU  7th Framework  Program  Future and  Emerging
+Technologies (FET) Proactive Initiative: Minimising Energy Consumption
+of Computing to  the Limit (MINECC).  The authors  would like to thank
+the    High    Performance    and    High    Productivity    Computing
+(\url{www.hp2c.ch}) Initiative.)
 \end{acknowledgements}
 
-%\bibliographystyle{spbasic}  % basic style, author-year citations
-%\bibliographystyle{spphys}   % APS-like style for physics
-%\bibliographystyle{spmpsci}  % mathematics and physical sciences
-\bibliographystyle{unsrtnat}
-
-\bibliography{draft}  % name your BibTeX data base
+\DeclareRobustCommand\IPCClongname{ Intergovernmental Panel on Climate Change}
+\bibliographystyle{plainnat}
+\bibliography{\jobname}
 
 \end{document}
 
