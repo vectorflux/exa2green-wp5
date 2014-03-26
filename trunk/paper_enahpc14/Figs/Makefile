@@ -5,8 +5,6 @@ FICHIERS_PDF = $(patsubst %.plt,%.pdf,  $(FICHIERS_GNUPLOT))
 
 all: $(FICHIERS_PDF)
 
-commit:
-
 clean: 	
 	@echo "PDF files deletion"
 	@rm -vf *.pdf *~
