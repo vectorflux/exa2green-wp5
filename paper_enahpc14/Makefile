@@ -3,7 +3,7 @@ REP 	= ./Figs
 LATEX 	= latex
 BIBTEX 	= bibtex -terse
 
-.PHONY: all figs $(REP) clean realclean dvi ps pdf svn commit tarball
+.PHONY: all $(REP) clean realclean dvi ps pdf
 
 all: realclean $(REP) dvi ps pdf
 
@@ -25,11 +25,6 @@ dvi: $(SRC).dvi
 ps : $(SRC).ps 
 
 pdf : $(SRC).pdf
-
-svn:
-	svn commit
-
-commit: all clean svn
 
 %.dvi : %.tex
 	@echo "LaTeX compilation"
