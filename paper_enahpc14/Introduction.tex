@@ -49,33 +49,36 @@ air  (including sea  salt,  mineral dust,  sulphate, nitrate,  organic
 carbon and  black carbon),  with highly variable  chemical composition
 and  size  distribution \citep{Putaud-2010}.   Although  they are  not
 considered a heat-trapping greenhouse gas and have shorter atmospheric
-lifetimes, they significantly affect  the Earth's radiation budget and
-are acknowledged as one of  the most significant and uncertain aspects
-in  anthropogenic forcing  over the  last 150  years \citep{Koch-2009,
-IPCC-2013}.  Enhanced  aerosols concentrations can  impact the climate
-system by  reflecting (e.g.  pure sulfates and  nitrates) or absorbing
-(e.g.  black  carbon) solar radiation  and thereby exert a  cooling or
-warming  effect on  the Earth-atmosphere  system, causing  a so-called
-direct    radiative   forcing    \citep{Charlson-1991,   Haywood-2000,
-Ramanathan-2001,  Liao-2005, Bangert-2012,  Lundgren-2013}.  Depending
-on their  size and  chemical composition, they  can also act  as cloud
-condensation  and   ice  nuclei   and  profoundly  impact   the  cloud
-microphysical   processes  and   optical   properties  (cloud   albedo
-effect,   \citealp{Twomey-1977}),  leading   to  changes   in  droplet
-concentrations                \citep{Albrecht-1989}                and
-precipitation   \citep{Rosenfeld-2000,   Khain-2008,  Pruppacher-2010,
-Seifert-2012, Tao-2012, Lee-2012},  and therefore producing a negative
-indirect   radiative    forcing   \citep{Haywood-2000,   Lohmann-2005,
-VandenHeever-2011,   Rosenfeld-2013}.    However,   the   effects   of
-anthropogenic aerosols on clouds and the hydrological cycle as well as
-the  cloud   lifetime  effect  are  especially  hard   to  assess  and
+lifetimes, they significantly  affect the atmospheric radiative fluxes
+and  are acknowledged  as one  of the  most significant  and uncertain
+aspects    in    anthropogenic    forcing    over   the    last    150
+years \citep{Koch-2009,  IPCC-2013}.  Enhanced aerosols concentrations
+can impact the  climate system by reflecting (e.g.   pure sulfates and
+nitrates)  or  absorbing  (e.g.   black carbon)  solar  radiation  and
+thereby  exert a  cooling or  warming effect  on  the Earth-atmosphere
+system,      causing       a      so-called      direct      radiative
+forcing     \citep{Charlson-1991,    Haywood-2000,    Ramanathan-2001,
+Liao-2005, Bangert-2012, Lundgren-2013}.   Depending on their size and
+chemical composition, they can also  act as cloud condensation and ice
+nuclei, and  thereby influence  the cloud microphysical  processes and
+optical   properties  (cloud  albedo   effect,  \citealp{Twomey-1977})
+through the contribution to  cloud formation.  This results in changes
+in      droplet      concentrations     \citep{Albrecht-1989}      and
+precipitation     \citep{Rosenfeld-2000,    Khain-2008,    Khain-2009,
+Pruppacher-2010,   Seifert-2012,  Tao-2012,  Lee-2012},   producing  a
+so-called  negative  indirect  radiative forcing  \citep{Haywood-2000,
+Lohmann-2005,  VandenHeever-2011, Rosenfeld-2013}.  Wet  scavenging of
+aerosol  particles  represents  a  major  removal  mechanism  for  air
+pollutants from  the atmosphere, however the  effects of anthropogenic
+aerosols on  clouds and  the hydrological cycle  as well as  the cloud
+lifetime    effect    are    especially    hard    to    assess    and
 quantify   \citep{IPCC-2013},   and   remain   one  of   the   largest
 uncertainties in climate modeling and in climate change prediction due
-to the lack of  understanding of cloud feedbacks \citep{Sherwood-2013,
+to  the lack  of  knowledge in  cloud feedbacks  \citep{Sherwood-2013,
 Rosenfeld-2013, Lee-2013}. \\
 
 \noindent 
-Hence to  enhance our understanding of  aerosol-cloud interactions and
+Hence to  improve our understanding of  aerosol-cloud interactions and
 reduce  uncertainties  of aerosol  effects  in  climate, the  research
 community is making a  concerted international effort to represent the
 underlying chemical  processes through models.  These  models, such as
@@ -106,16 +109,20 @@ developments will  facilitate the  application of COSMO  for numerical
 weather prediction and climate  simulations, they do little to address
 the  coupling with  the  ART model  extension,  for which  significant
 investments  are still required  to take  it to  a similar  level. The
-efficiency of ART is being  addressed in the EU Exa2Green project.  In
-Sec.~\ref{sec:1},  we   introduce  the  aerosol  model   and  its  its
-integration  into  COSMO.    Sec.~\ref{sec:2}  presents  the  hardware
-considerations.  In  Sec.~\ref{sec:3} we describe  measurement devices
-and energy-aware techniques employed  to evaluate the energy footprint
-of the  considered application.  Finally,  Sec.~\ref{sec:4} presents a
-benchmark  analysis  of  COSMO-ART   from  the  Exa2Green  project  to
-highlight the critical components and an outline of the next steps for
-model optimization.  The ultimate goal  of the project is to deliver a
-prototype code, which  provides an energy efficiency of  at least five
-times of the  baseline value.  Such an implementation  would allow the
-community to  investigate critical questions at  higher resolution and
-over longer periods, at reduced cost to the environment.
+efficiency of ART is being  addressed in the EU Exa2Green project. The
+ultimate goal  of the  project is to  deliver a prototype  code, which
+provides an energy  efficiency of at least five  times of the baseline
+value.   Such   an  implementation   would  allow  the   community  to
+investigate critical  questions at  higher resolution and  over longer
+periods, at reduced cost  to the environment.  In Sec.~\ref{sec:1}, we
+introduce the online coupled  mesoscale atmosphere and chemistry model
+COSMO-ART  \citep{Vogel-2009}  that  accounts  for  feedbacks  between
+chemistry,  aerosols,  radiation,  and clouds.   Sec.~\ref{sec:2}  and
+Sec.~\ref{sec:3}  successively describe  the hardware  and measurement
+devices used in evaluation as well as energy-aware techniques employed
+to  determine  the energy  footprint  of  the considered  application.
+Sec.~\ref{sec:4}  shows benchmark results  from the  Exa2Green project
+and highlight the critical  components of the application.  Finally, a
+summary   and  directions   for  model   optimization  are   given  in
+Sec.~\ref{concl}.
+
