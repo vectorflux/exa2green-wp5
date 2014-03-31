@@ -1,16 +1,50 @@
+#
+# LaTeX Makefile Invocation
+# -------------------------
+#
+# You can use the following commands:
+#
+# - make help: 		Prints an overview of the available commands
+# - make all:		Generates the DVI, PS and PDF files
+# - make dvi:		Generates the DVI file
+# - make ps:		Generates the PS file
+# - make pdf:		Generates the PDF file
+# - make clean:		Removes all generated output excluding EPS, PS and PDF files
+# - make realclean: 	Removes all generated output including EPS, PS and PDF files
+
 SRC 	= paper
-REP 	= ./Figs
+FIGDIR	= ./Figs
 LATEX 	= latex
 BIBTEX 	= bibtex -terse
 
-.PHONY: all $(REP) clean realclean dvi ps pdf
+.PHONY: all $(FIGDIR) clean realclean dvi ps pdf
 
-all: realclean $(REP) dvi ps pdf
+all: realclean $(FIGDIR) dvi ps pdf
 
-$(REP):
+$(FIGDIR):
 	@$(MAKE) -C $@ $(MAKECMDGOALS)
 
-clean: $(REP)
+help:
+	@echo ""
+	@echo "LaTeX Makefile Options"
+	@echo "----------------------"
+	@echo "Environment variables:"
+	@echo "  SRC		Filename to make (without extension)"
+	@echo "  FIGDIR	Directory to store figures that have to be compiled"
+	@echo "  LATEX		Implementation of TeX/LaTeX"	
+	@echo "  BIBTEX	Reference management software"	
+	@echo ""
+	@echo "Targets:"
+	@echo "  help		Prints this overview"
+	@echo "  all		Generates the DVI, PS and PDF files"
+	@echo "  dvi		Generates the DVI file"
+	@echo "  ps		Generates the PS file"
+	@echo "  pdf		Generates the PDF file"
+	@echo "  clean		Removes all generated output excluding EPS, PS and PDF files"
+	@echo "  realclean	Removes all generated output including EPS, PS and PDF files"
+	@echo ""
+
+clean: $(FIGDIR)
 	@echo "LaTeX compilation files deletion"
 	@rm -vf *.bak *.idx *.out *~ *.log *.aux *.dvi *.toc *.lot *.lof
 	@echo "BibTeX files deletion"
