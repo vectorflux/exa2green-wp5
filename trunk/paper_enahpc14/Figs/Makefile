@@ -18,4 +18,3 @@ realclean: clean
 %.pdf: %.eps
 	@echo "conversion of "$*".eps"
 	@epstopdf $*.eps 
-

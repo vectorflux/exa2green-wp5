@@ -80,9 +80,9 @@
   detailed  insights about  power bottlenecks.   Our motivation  is to
   improve  corresponding  code sections  to  sustain high  performance
   while  minimizing energy-to-solution.   This preliminary  study sets
-  the basis of broader  considerations to tackle challenges related to
-  energy efficient high performance  computing in the framework of the
-  Exa2Green project (\url{http://exa2green.eu/}).
+  the basis of subsequent  considerations to tackle challenges related
+  to energy  efficient high performance computing in  the framework of
+  the Exa2Green project (\url{http://exa2green.eu/}).
 
 \keywords{High performance computing  \and Energy-aware computing \and
   Green computing  \and Numerical weather  prediction \and Atmospheric
@@ -96,11 +96,15 @@
 \label{intro}
 \input{Introduction.tex}
 
-\section{COSMO coupled with ART extension}
+\section{The operational COSMO-ART}
 \label{sec:1}
-\subsection{Model description and set-up}
-\label{subsec:1}
-\input{Sec1:COSMO-ART.tex}
+\subsection{Model description}
+\label{subsec:1.1}
+\input{Subsec_1.1:Model_Description.tex}
+
+\subsection{Model setup}
+\label{subsec:1.2}
+\input{Subsec_1.2:Model_Setup.tex}
 
 \section{Hardware description}
 \label{sec:2}
@@ -110,6 +114,9 @@
 
 \section{Benchmark results}
 \label{sec:4}
+
+\section{Conclusion}
+\label{concl}
 
 %\paragraph{Paragraph headings} Use paragraph headings as needed.
 
@@ -138,7 +145,8 @@ co-funded  under the  EU  7th Framework  Program  Future and  Emerging
 Technologies (FET) Proactive Initiative: Minimising Energy Consumption
 of Computing to  the Limit (MINECC).  The authors  would like to thank
 the  High  Performance  and  High  Productivity  Computing  Initiative
-(\url{www.hp2c.ch}).)
+(\url{www.hp2c.ch}) for  results that will be  leveraged in subsequent
+code refactoring.
 \end{acknowledgements}
 
 \DeclareRobustCommand\IPCClongname{ - Intergovernmental Panel on Climate Change}
