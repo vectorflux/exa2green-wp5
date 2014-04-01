@@ -6,21 +6,23 @@ continental scale model coupled  online to the COSMO numerical weather
 prediction  (NWP) and  climate  model \citep{Baldauf-2011}.   Physical
 processes  like  transport,  turbulent  diffusion,  and  dry  and  wet
 deposition  are  treated  together  with  photochemistry  and  aerosol
-dynamics using  the modal  approach.  Aerosols dynamics  are simulated
-with the modal aerosol module MADE \citep{Ackermann-1998}, improved by
+dynamics  using the  modal approach.  
+
+Aerosols dynamics  are simulated  with the modal  aerosol microphysics
+module  MADE \citep{Ackermann-1998}, expanded  in MADEsoot  to feature
 explicit  treatment of  soot aging  through condensation  of inorganic
-\citep{Riemer-2003}   and   organic   substances   (MADEsoot),   which
-represents the  aerosol population using  eleven overlapping lognormal
-modes.   Five  modes  represent  sub-micron  particles  consisting  of
-sulphate,  ammonium,  nitrate,   organic  compounds,  water  and  soot
-\citep{Riemer-2004}  in a  range  of mixing  state.   These modes  are
-coupled with  the gas  phase by condensation  and nucleation,  and are
-strongly influenced by anthropogenic emissions of gases and particles.
-Sea    salt     \citep{Lundgren-2013},    mineral    dust    particles
-\citep{Vogel-2006, Stanelle-2010}  and rest anthropogenic  species are
-treated by  seven additional modes. For each  mode, mass contributions
-and total  number concentration  are prognostic quantities,  while the
-standard deviation is fixed.
+\citep{Riemer-2003} and organic substances. MADE describes the aerosol
+population  through  five   modes  representing  sub-micron  particles
+consisting of sulphate, ammonium, nitrate, particulate organic matter,
+water and soot  \citep{Riemer-2004} in a range of  mixing state. These
+modes are coupled  with the gas phase by  condensation and nucleation,
+and are  strongly influenced by  anthropogenic emissions of  gases and
+particles. MADEsoot  describes the sub-micrometer  aerosol population,
+composed  of sea  salt \citep{Lundgren-2013},  mineral  dust particles
+\citep{Vogel-2006,  Stanelle-2010},   by  means  of   six  interacting
+log-normal modes.  For each  mode, mass contributions and total number
+concentration are prognostic  quantities, while the standard deviation
+is fixed.
 
 Specific  modules are included  to simulate  the dispersion  of pollen
 grains    \citep{Vogel-2008}   and    other    biological   particles.
