@@ -1,31 +1,87 @@
 \subsection{Model description}
 \label{subsec:1.1}
+COSMO-ART  (ART  stands  for   Aerosols  and  Reactive  Trace  gases),
+developed  at  KIT  Karlsruhe  \citep{Vogel-2009}, is  a  regional  to
+continental scale model coupled  online to the COSMO numerical weather
+prediction  (NWP) and  climate  model \citep{Baldauf-2011}.   Physical
+processes  like  transport,  turbulent  diffusion,  and  dry  and  wet
+deposition  are  treated  together  with  photochemistry  and  aerosol
+dynamics using  the modal  approach.  Aerosols dynamics  are simulated
+with the modal aerosol module MADE \citep{Ackermann-1998}, improved by
+explicit  treatment of  soot aging  through condensation  of inorganic
+\citep{Riemer-2003}   and   organic   substances   (MADEsoot),   which
+represents the  aerosol population using  eleven overlapping lognormal
+modes.   Five  modes  represent  sub-micron  particles  consisting  of
+sulphate,  ammonium,  nitrate,   organic  compounds,  water  and  soot
+\citep{Riemer-2004}  in a  range  of mixing  state.   These modes  are
+coupled with  the gas  phase by condensation  and nucleation,  and are
+strongly influenced by anthropogenic emissions of gases and particles.
+Sea    salt     \citep{Lundgren-2013},    mineral    dust    particles
+\citep{Vogel-2006, Stanelle-2010}  and rest anthropogenic  species are
+treated by  seven additional modes. For each  mode, mass contributions
+and total  number concentration  are prognostic quantities,  while the
+standard deviation is fixed.
 
-COSMO-ART  (ART   stands  for  Aerosols  and   Reactive  Trace  gases,
-\citealp{Vogel-2009}),  developed  at KIT  Karlsruhe  (Germany), is  a
-regional  to  continental scale  model  coupled  online  to the  COSMO
-numerical    weather    prediction    (NWP)    and    climate    model
-\citep{Baldauf-2011}. COSMO is used  by several European countries for
-operational weather  forecast. The  gaseous chemistry in  COSMO-ART is
-solved by  a modified version  of the Regional Acid  Deposition Model,
-Version  2 (RADM2)  mechanism \citep{Stockwell-1990},  which  has been
-extended   to    describe   secondary   organic    aerosol   formation
-\citep{Schell-2001, Athanasopoulou-2013} and hydroxyl recycling due to
-isoprene chemistry \citep{Geiger-2003}  and heterogeneous reactions as
-hydrolysis  of N2O5.  Aerosols are  represented by  the  modal aerosol
-module MADE \citep{Ackermann-1998},  improved by explicit treatment of
-soot aging  through condensation of  inorganic \citep{Riemer-2003} and
-organic substances (MADEsoot).
+Specific  modules are included  to simulate  the dispersion  of pollen
+grains    \citep{Vogel-2008}   and    other    biological   particles.
+Meteorologically-influenced emissions  are also online  coupled within
+the  model  system.  The  biogenic  VOC  (volatile organic  compounds)
+emissions are  calculated as functions of  the land use  type based on
+the Global  Land Cover 2000  dataset and the modeled  temperatures and
+radiative fluxes \citep{Vogel-1995}.
 
-The  five modes that  represent the  aerosol population  contain: pure
-soot, secondary mixtures of sulfates, nitrates, ammonium, organics and
-water (nucleation  and accumulation) and the internal  mixtures of all
-these species in  both modes. Separate fine and  coarse emission modes
-for  sea-salt,  dust  \citep{Stanelle-2010},  and  rest  anthropogenic
-species  are treated by  six additional  modes.  Specific  modules are
-included    to   simulate    the   dispersion    of    pollen   grains
-\citep{Vogel-2008}   and  other  biological   particles.   Meteorology
-affected emissions are also online coupled within the model system.
+The gaseous chemistry in COSMO-ART  is solved by a modified version of
+the  Regional  Acid  Deposition  Model, Version  2  (RADM2)  mechanism
+\citep{Stockwell-1990},  which  is   extended  to  describe  secondary
+organic aerosol formation based on a volatile basis set (VBS) approach
+\citep{Athanasopoulou-2013}  and  hydroxyl  radical recycling  due  to
+isoprene chemistry \citep{Geiger-2003}.  The thermodynamic equilibrium
+between the  gas and particulate  phases of the inorganic  material is
+achieved through the  ISORROPIA II module \citep{Fountoukis-2007}. 
+
+COSMO-ART  is  fully  online-coupled,  and  allows  for  feedbacks  of
+aerosols  on  temperature,  radiation  and cloud  condensation  nuclei
+(CCN).   Analytical  description  of  modules  incorporated  for  this
+purpose  exists in  \citep{Vogel-2009,  Bangert-2011}.  The  radiation
+scheme used  within the  model to calculate  the vertical  profiles of
+shortwave and longwave radiative fluxes is GRAALS \citep{Ritter-1992}.
+In order to account for  the interaction of aerosol particles with the
+cloud microphysics and radiation,  COSMO-ART uses the two-moment cloud
+microphysics  scheme of  Seifert and  Beheng  \citep{Seifert-2006} and
+comprehensive parameterizations for cloud condensation and ice crystal
+nucleation  \citep{Bangert-2011, Bangert-2012}.   The system  of stiff
+ordinary differential equations described by chemical reactions in the
+aqueous-phase together with the transfer reactions is solved using the
+Kinetic PreProcessor (KPP, \citealp{Damian-2002}).
+
+Detailed  model  description  can   be  found  in  the  aforementioned
+publications  as   well  as  in   \citep{Stanelle-2010,  Bangert-2012,
+  Knote-2011, Knote-2013}.
 
 \subsection{Model setup}
 \label{subsec:1.2}
+To define a baseline within a code under development, it was necessary
+to  find  a  run-configuration  capable  of  being  recreated  in  all
+subsequent versions. The  energy-to-solution benchmarking of COSMO-ART
+concerns  one-day  long simulations  without  spin-up  stage, using  a
+222x216x40  discretization of  Europe and  a  time step  of 120s.  The
+baseline code incorporates 34 2-d and  45 3-d fields to be written out
+every hour for a simulation starting  on April 13th, which is close to
+the equinox and thus brings  benefits of having approximately half day
+of night and  half day of sun exposure, to  ensure a proper activation
+of  the chemistry  cycle. Ultimately  new  input files  closer to  the
+equinox (on March 20th) will be  created, but the current set of input
+files is fine for the time being.
+
+This COSMO-ART  version is configured  to deal with a  semi Lagrangian
+horizontal advection scheme  with tricubic interpolation and selective
+filling diffusion option in combination with the Runge-Kutta dynamical
+core.   Concerning the modelling  of wet  deposition in  aerosols, the
+baseline  has  only  indirect  cloud  feedbacks  but  doesn't  include
+in-cloud  scavenging (rainout)  and  below-cloud scavenging  (washout)
+yet.  Amongst  physical parameterizations, precipitation  formation is
+performed  by a  two-moment  cloud microphysics  scheme  instead of  a
+classical  bulk microphysics  scheme. Another  important point  is the
+fact that  this version makes  use of the Kinetic  PreProcessor solver
+for  the  resolution of  atmospheric  chemistry ordinary  differential
+equations.
