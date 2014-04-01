@@ -21,6 +21,15 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage[round, sort&compress, numbers]{natbib}
+
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage{units}
+\usepackage{color}
+
+\usepackage{xspace}
+\newcommand{\pmlib}{\texttt{pmlib}\xspace}
+
 %
 \DeclareRobustCommand\IPCClongname{}
 %
@@ -32,31 +41,40 @@
 %
 \begin{document}
 
-\title{Evaluating the performance  and energy efficiency of COSMO-ART,
-  a fully online coupled model  system composed of a numerical weather
-  forecast model  and a  chemical transport model.   \thanks{Grants or
-    other notes  about the  article that should  go on the  front page
-    should be placed here.}}
+\title{Evaluating the Performance  and Energy Efficiency of COSMO-ART,
+  a Fully Online Coupled Model System with Numerical Weather
+    Forecast and Chemical Transport Models }
+ % \thanks{This work was supported 
+ %   by the EU Project FP7 318793 ``EXA2GREEN''}}
 %\subtitle{Write here subtitle}
 
 %\titlerunning{Short form of title} % if too long for running head
 
-\author{J.Charles \and W.Sawyer \and M.Dolz \and C.Malossi}
+\author{Joseph~Charles \and William~Sawyer \and Manuel~F.~Dolz \and Cristiano~Malossi}
 
 %\authorrunning{Short form of author list} % if too long for running
 %head
 
-\institute{Dr. Joseph Charles \at Swiss National Supercomputing Centre
-  (CSCS)\\ CH-6900  Lugano, Switzerland  \\ Tel: +41  (0) 91  610 8216
-  \\ \email{joseph.charles@cscs.ch} \and Dr.  William Sawyer \at Swiss
-  National Supercomputing Centre  (CSCS)\\ CH-6900 Lugano, Switzerland
-  \\ Tel:  +41 (0) 91 610 8229  \\ \email{william.sawyer@cscs.ch} \and
-  Dr.  Manuel Dolz \at University of Hamburg \\ 20148 Hamburg, Germany
-  \\         Tel:         +49         (0)        40         460094-404
-  \\ \email{manuel.dolz@informatik.uni-hamburg.de}  \and Dr. Cristiano
-  Malossi  \at  IBM  Zurich  Research Laboratory  \\  CH-8000  Zurich,
-  Switzerland     \\     Tel:      +41     (0)     44     724     8616
-  \\ \email{ACM@zurich.ibm.com}}
+\institute{J.~Charles, W.~Sawyer 
+	\at Swiss National Supercomputing Centre (CSCS)
+	\\ CH-6900 Lugano, Switzerland  
+	%\\ Tel: +41  (0) 91  610 8216
+ 	\\ E-mails:~{\{joseph.charles,william.sawyer\}@cscs.ch} 
+        %\and Dr.  William Sawyer 
+        %\at Swiss National Supercomputing Centre  (CSCS)
+        %\\ CH-6900 Lugano, Switzerland
+        %\\ Tel:  +41 (0) 91 610 8229  
+        %\\ \email{william.sawyer@cscs.ch} 
+        \and M.~F.~Dolz 
+        \at Dept. of Informatics, University of Hamburg
+	\\ D-22.527 Hamburg, Germany
+        %\\ Tel: +49 (0) 40 460094-404
+        \\ \email{manuel.dolz@informatik.uni-hamburg.de}  
+        \and C.~Malossi  
+        \at IBM Zurich Research Laboratory 
+        \\  CH-8000 Zurich, Switzerland
+        %\\  Tel: +41 (0) 44 724 8616
+        \\ \email{ACM@zurich.ibm.com}}
 
 \date{Received: date / Accepted: date} % The correct dates will be
                                        % entered by the editor
@@ -105,6 +123,7 @@
 
 \section{Power measurement systems}
 \label{sec:3}
+\input{power-measurement.tex}
 
 \section{Benchmark results}
 \label{sec:4}
