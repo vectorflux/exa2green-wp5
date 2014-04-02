@@ -62,28 +62,47 @@ publications  as   well  as  in   \citep{Stanelle-2010,  Bangert-2012,
 
 \subsection{Model setup}
 \label{subsec:1.2}
-To define a baseline within a code under development, it was necessary
-to  find  a  run-configuration  capable  of  being  recreated  in  all
-subsequent versions. The  energy-to-solution benchmarking of COSMO-ART
-concerns  one-day  long simulations  without  spin-up  stage, using  a
-222x216x40  discretization of  Europe and  a  time step  of 120s.  The
-baseline code incorporates 34 2-d and  45 3-d fields to be written out
-every hour for a simulation starting  on April 13th, which is close to
-the equinox and thus brings  benefits of having approximately half day
-of night and  half day of sun exposure, to  ensure a proper activation
-of  the chemistry  cycle. Ultimately  new  input files  closer to  the
-equinox (on March 20th) will be  created, but the current set of input
-files is fine for the time being.
+Establishing effective energy performance benchmarking of a code under
+intense development such as COSMO-ART is a challenging task because of
+the  absolute necessity that  results must  be reproducible  within an
+expected  variance for the  duration of  the Exa2Green  project. After
+consultation  with  the  climate  community  to  properly  define  the
+baseline,  it was  necessary to  find a  run-configuration  capable of
+being recreated in all subsequent versions of the code.
+
+Thus, we give here a brief  overview of the main features of the model
+setup for  our benchmark's daily  runs.  Three-dimensional simulations
+are  performed over  Europe  for April  13th,  which is  close to  the
+equinox and thus  brings benefits of having approximately  half day of
+night  and half  day  of  sun exposure,  therefore  ensuring a  proper
+activation of the chemistry cycle. We consider daily 24-hour forecasts
+without  any  previous spin-up  simulations.   The calculation  domain
+corresponds to  the CORDEX-EU-44  domain and is  covered by a  grid of
+$222\times   216$    points   with   a    horizontal   resolution   of
+$0.22\,^{\circ}$,  i.e.  50  km in  both directions,  and  40 vertical
+layers.   Boundary  and initial  conditions,  emmissions and  external
+parameters  were obtained by  the INT2LM  pre-processing interpolation
+tool, which  performed the usual interpolation from  coarse grid model
+data, and  INT2LM\_trcr\_ART, which consists mostly  of the definition
+of a large number of  tracers.  The meteorological initial and bounday
+conditions are  obtained by  the the ECMWF  global spectral  model IFS
+with an update  frequency of 3h.  Boundary data  for gas-phase species
+are taken from IFS-MOZART  output at 6h temporal resolution.  Multiple
+runs of COSMO-ART were  performed to illustrate the reproducibility of
+the baseline, and quantify  the significant uncertainties in the power
+measurement,   as   dictated   by   the  available   technology   (see
+subsection~\ref{subsec:3.2}).   The run-configuration  incorporates 34
+2-d and 45 3-d fields to be written out every hour and doesn't include
+data assimilation methods.
 
 This COSMO-ART  version is configured  to deal with a  semi Lagrangian
 horizontal advection scheme  with tricubic interpolation and selective
 filling diffusion option in combination with the Runge-Kutta dynamical
-core.   Concerning the modelling  of wet  deposition in  aerosols, the
-baseline  has  only  indirect  cloud  feedbacks  but  doesn't  include
-in-cloud  scavenging (rainout)  and  below-cloud scavenging  (washout)
-yet.  Amongst  physical parameterizations, precipitation  formation is
+core. It  also makes  use of the  Kinetic PreProcessor solver  for the
+resolution of  atmospheric chemistry ordinary  differential equations.
+Concerning the  modelling of wet deposition in  aerosols, the baseline
+has  only  indirect  cloud  feedbacks  but  doesn't  include  in-cloud
+scavenging  (rainout)   and  below-cloud  scavenging   (washout)  yet.
+Amongst   physical  parameterizations,   precipitation   formation  is
 performed  by a  two-moment  cloud microphysics  scheme  instead of  a
-classical  bulk microphysics  scheme. Another  important point  is the
-fact that  this version makes  use of the Kinetic  PreProcessor solver
-for  the  resolution of  atmospheric  chemistry ordinary  differential
-equations.
+classical  bulk microphysics  scheme.
