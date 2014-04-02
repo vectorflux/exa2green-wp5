@@ -1,5 +1,58 @@
-\subsection{Power-Performance measurement framework}
+\subsection{Hardware description}
 \label{subsec:3.1}
+
+\subsubsection{Monch (CSCS - ETH Zurich)}
+While hardware  platforms mature  and are replaced,  we have  chosen a
+state-of-the-art  dual-socket Intel  Ivybridge-based  platform (called
+``Monch'')  for our power  measurements, as  it is  slated to  stay in
+service without upgrade for the duration of the Exa2Green project.  In
+principle at least,  this architecture could be recreated  or found in
+an identical configuration beyond  the lifetime of the project.  Given
+that  the baseline  benchmark  can be  reproduced  within an  expected
+variance   (cf  previous   section),   and  that   the  baseline   run
+configuration can be  used in all future versions of  the code, a fair
+comparison  will  be  made  between  the baseline  and  the  milestone
+versions of COSMO-ART.
+
+Monch, which is installed  at the Swiss National Supercomputing Center
+(CSCS)  of  the  ETH  Zurich,  is a  10  rack  NEC-provided  (LX-2400)
+Intel-based cluster, utilised  from people that are part  of the Swiss
+Platform  for  Advanced Scientific  Computing  (PASC),  which aims  at
+positioning  Swiss  computational sciences  in  the emerging  exascale
+era. It is  composed of 16 administration nodes,  312 standard compute
+nodes, 24 large-memory compute nodes, 24 huge-memory compute nodes and
+8  servers to  provide  I/O  to Lustre.   Each  standard compute  node
+comprises 2 Intel 10-core Ivy Bridge EP E5-2660v2 processors operating
+at  2.2 GHz,  offering 32GB  of DDR3  1600MHz RAM,  with a  base clock
+frequency of 2.2 GHz, themselves  connected by a high speed Infiniband
+network,  based on Mellanox  SX6036 managed  FDR (Fourteen  Data Rate)
+switches, with a 56 Gb/s speed.
+
+A snapshot of the code, which includes, at least conceptually, all the
+information needed  to reproduce the  energy-to-solution benchmarks of
+COSMO-ART, was  produced and run  on a full  rack of 52  nodes without
+hyperthreading (hyperthreading was attempted, but always led to higher
+energy-to-solution), i.e. on a total  of 1040 cores using 20 tasks per
+node.
+
+\subsection{Power-Performance measurement framework}
+\label{subsec:3.2}
+
+\subsubsection{CSCS - ETH Zurich}
+E3METER  Intelligent Power Strips  (IPS) and  Monitors (IPM)  are high
+quality electricity meters which enable to monitor and optimize energy
+consumption of datacenters or large facilities.  A central data logger
+- the  E3METER Data Concentrator  - aggregates  all measured  data and
+makes them available in various forms (SNMP, Web, etc). Data transfers
+between E3METER  IPS and E3METER Concentrator  use reliable narrowband
+powerline  communication (PLC)  technology which  avoids the  need for
+extra cabling.  It has  one internal temperature sensor. Two dedicated
+extension  ports  can be  used  to  measure  external temperature  and
+humidity  through E3METER  remote sensors.  It  features non-intrusive
+voltage, current and frequency measurement through current transformer
+with an accuracy of 1\%.
+
+\subsubsection{University of Hamburg}
 To assess the  performance and the energy efficiency  of COSMO-ART, we
 employ   a    version   of   the    integrated   framework   presented
 in~\cite{energy13}  that  works in  combination  with VampirTrace  and
