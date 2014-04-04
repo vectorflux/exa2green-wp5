@@ -3,10 +3,11 @@
 COSMO-ART  (ART  stands  for   Aerosols  and  Reactive  Trace  gases),
 developed  at  KIT  Karlsruhe  \citep{Vogel-2009}, is  a  regional  to
 continental scale model coupled  online to the COSMO numerical weather
-prediction  (NWP) and  climate  model \citep{Baldauf-2011}.   Physical
-processes  like  transport,  turbulent  diffusion,  and  dry  and  wet
-deposition  are  treated  together  with  photochemistry  and  aerosol
-dynamics  using the  modal approach.  
+prediction (NWP) and climate model \citep{Baldauf-2011}. It allows the
+online calculation of reactive  trace substances and their interaction
+with  the atmosphere.   Physical processes  like  transport, turbulent
+diffusion,  and  dry and  wet  deposition  are  treated together  with
+photochemistry and aerosol dynamics using the modal approach.
 
 Aerosols dynamics  are simulated  with the modal  aerosol microphysics
 module  MADE \citep{Ackermann-1998}, expanded  in MADEsoot  to feature
@@ -72,7 +73,7 @@ being recreated in all subsequent versions of the code.
 
 Thus, we give here a brief  overview of the main features of the model
 setup for  our benchmark's daily  runs.  Three-dimensional simulations
-are  performed over  Europe  for April  13th,  which is  close to  the
+are performed over  Europe for April 13th 2010, which  is close to the
 equinox and thus  brings benefits of having approximately  half day of
 night  and half  day  of  sun exposure,  therefore  ensuring a  proper
 activation of the chemistry cycle. We consider daily 24-hour forecasts
@@ -82,18 +83,16 @@ $222\times   216$    points   with   a    horizontal   resolution   of
 $0.22\,^{\circ}$,  i.e.  50  km in  both directions,  and  40 vertical
 layers.   Boundary  and initial  conditions,  emmissions and  external
 parameters  were obtained by  the INT2LM  pre-processing interpolation
-tool, which  performed the usual interpolation from  coarse grid model
-data, and  INT2LM\_trcr\_ART, which consists mostly  of the definition
+tool, which interpolate  data from a coarse-grid driving  model to the
+rotated    latitude-longitude   grid    of   the    COSMO-Model,   and
+INT2LM\_trcr\_ART,  which  interpolates  aerosol  or  gaseous  species
+initial and boundary conditions  and consists mostly of the definition
 of a large number of  tracers.  The meteorological initial and bounday
 conditions are  obtained by  the the ECMWF  global spectral  model IFS
 with an update  frequency of 3h.  Boundary data  for gas-phase species
-are taken from IFS-MOZART  output at 6h temporal resolution.  Multiple
-runs of COSMO-ART were  performed to illustrate the reproducibility of
-the baseline, and quantify  the significant uncertainties in the power
-measurement,   as   dictated   by   the  available   technology   (see
-subsection~\ref{subsec:3.2}).   The run-configuration  incorporates 34
-2-d and 45 3-d fields to be written out every hour and doesn't include
-data assimilation methods.
+are taken from IFS-MOZART output at 6h temporal resolution.  The model
+setup incorporates  34 2-d and 45  3-d fields to be  written out every
+hour and doesn't include data assimilation methods.
 
 This COSMO-ART  version is configured  to deal with a  semi Lagrangian
 horizontal advection scheme  with tricubic interpolation and selective
