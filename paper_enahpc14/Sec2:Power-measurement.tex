@@ -1,5 +1,5 @@
 \subsection{Hardware description}
-\label{subsec:3.1}
+\label{subsec:2.1}
 
 \subsubsection{Monch (CSCS - ETH Zurich)}
 While hardware  platforms mature  and are replaced,  we have  chosen a
@@ -9,7 +9,7 @@ service without upgrade for the duration of the Exa2Green project.  In
 principle at least,  this architecture could be recreated  or found in
 an identical configuration beyond  the lifetime of the project.  Given
 that  the baseline  benchmark  can be  reproduced  within an  expected
-variance   (cf  previous   section),   and  that   the  baseline   run
+variance (see subsection~\ref{subsec:1.2}),  and that the baseline run
 configuration can be  used in all future versions of  the code, a fair
 comparison  will  be  made  between  the baseline  and  the  milestone
 versions of COSMO-ART.
@@ -28,15 +28,8 @@ frequency of 2.2 GHz, themselves  connected by a high speed Infiniband
 network,  based on Mellanox  SX6036 managed  FDR (Fourteen  Data Rate)
 switches, with a 56 Gb/s speed.
 
-A snapshot of the code, which includes, at least conceptually, all the
-information needed  to reproduce the  energy-to-solution benchmarks of
-COSMO-ART, was  produced and run  on a full  rack of 52  nodes without
-hyperthreading (hyperthreading was attempted, but always led to higher
-energy-to-solution), i.e. on a total  of 1040 cores using 20 tasks per
-node.
-
 \subsection{Power-Performance measurement framework}
-\label{subsec:3.2}
+\label{subsec:2.2}
 
 \subsubsection{CSCS - ETH Zurich}
 E3METER  Intelligent Power Strips  (IPS) and  Monitors (IPM)  are high

@@ -1,0 +1,132 @@
+\subsection{Sofware environment}
+\label{subsec:3.1}
+The  software environment  on Monch  is controlled  using  the modules
+framework which gives an easy  and flexible mechanism to access to all
+of  the  CSCS  provided  compilers,  tools and  applications.   It  is
+particularly  useful for  testing code  portability  between different
+compilers  or for  changing  between different  versions  of the  same
+compiler.  INT2LM  and the COSMO-ART model are  implemented in Fortran
+90 for distributed memory parallel computers using the Message Passing
+Interface (MPI).  For  our initial benchmarking, we opted  for the GNU
+compiler (gcc/4.8.1) with the -O3  compiler flag as it generally gives
+a  good  level  of optimization  and  the  code  runs faster  in  this
+configuration  than  when  compiled  with  the  intel  compiler,  also
+available on  Monch.  Besides, we installed  the MPICH2 implementation
+of MPI (mvapich2/1.9) as well  as the commonly used HDF5 (hdf5/1.8.12)
+and NetCDF  (netcdf/4.3.1) libraries in favor of  the traditional GRIB
+library  for  the  management  of  extremely large  and  complex  data
+collections.    Note   that   the  Linux   2.6.32-358.11.1.el6.x86\_64
+operating system was used for all the Monch compute nodes.
+
+\subsection{Run configuration}
+\label{subsec:3.2}
+The COSMO-ART model uses NAMELIST-input to specify runtime parameters
+splitted into several groups:
+
+\begin{itemize}
+\item LMGRID: specifying the domain and the size of the grid,
+\item RUNCTL: parameters for the model run,
+\item TUNING: parameters for tuning physics and dynamics,
+\item DYNCTL: parameters for the adiabatic model,
+\item PHYCTL: parameters for the diabatic model,
+\item COSMO\_ART: parameters for gases and aerosols model,
+\item DIACTL: parameters for the diagnostic calculations,
+\item SATCTL: controlling computation of synthetic satellite images,
+\item IOCTL: controlling the I/O environment,
+\item GRIBIN: controlling the grib input,
+\item GRIBOUT: controlling the grib output,
+\end{itemize}
+
+\noindent
+To run COSMO-ART the following input data are necessary:
+\begin{itemize}
+\item  Gas phase:  Anthropogenic emissions  for different  species and
+  land use data for biogenic emissions and deposition,
+\item Aerosol particles: Anthropogenic emissions,
+\item Mineral dust: Soil specific land use data.
+\end{itemize}
+
+A snapshot of the code, which includes, at least conceptually, all the
+information needed  to reproduce the  energy-to-solution benchmarks of
+COSMO-ART, was  produced and run on a  full rack of 52  nodes on Monch
+(monchc[029-080]),  which represents a  total of  1040 cores  using 20
+tasks per node.  The calculated region was mapped to the participating
+processors  using a 2D-partitioning  strategy. The  distribution along
+the  x and  y coordinates  is defined  in the  namelist  INPUT\_ORG by
+setting:  $nprocx=40$   and  $nprocy=26$,  as  the   total  number  of
+processors has to be equal to $nprocx \times nprocy$.  Besides we take
+$nprocio=0$.   Hyperthreading  is  not  considered in  this  study  as
+previous attempts  of its  use revealed that  it always led  to higher
+energy-to-solution.\\
+
+Multiple production runs of COSMO-ART were performed to illustrate the
+reproducibility  of   the  baseline,  and   quantify  the  significant
+uncertainties in  the power measurement, as dictated  by the available
+technology (see subsection~\ref{subsec:2.2}).
+
+\subsection{Power-measurement results}
+\label{subsec:3.3}
+Measuring  the power  consumption on  one entire  Cray cabinet  is the
+easiest way to calculate energy-to-solution for given applications.
+
+\begin{figure*}
+  \includegraphics[width=0.4\textwidth]{Figs/NRJ_benchmark_Monch.eps}
+  \caption{Isola E1 Rack 2 Total Power and Isola E1 Total Power}
+  \label{fig:1}
+\end{figure*}
+
+The run  was issued successfully  twice, the start time  and execution
+time for both jobs are:
+\begin{itemize}
+\item start=12:51:03, end=13:20:46 $\Rightarrow$ T = 00:29:43 = 1783 s
+\item start=14:28:40, end=14:58:02 $\Rightarrow$ T = 00:29:22 = 1762 s
+\end{itemize}
+
+The power  consumption for  both jobs is  calculated by  averaging the
+corresponding power  measurements from the Excel  file.  Power results
+account for the  Isola E1 Rack 2 Total Power. As  time resolution is 5
+minutes  for the  output  results, the  average  power consumption  is
+computed   by  considering  6   values  for   each  single   run  (see
+Table~\ref{tab:1}).
+
+\begin{table}
+  \begin{center}
+    \caption{}
+    \label{tab:1}
+    \begin{tabular}{lll}
+      \hline\noalign{\smallskip}
+      Time & Measured power (W) & Average power (W)  \\
+      \noalign{\smallskip}\hline\noalign{\smallskip}
+      12:55:00 & 1.2355833333e+04 & 1.265852278e+04 \\ 
+      13:00:00 & 1.2820266667e+04 &  \\
+      13:05:00 & 1.2600743333e+04 &  \\ 
+      13:10:00 & 1.2811580000e+04 &  \\
+      13:15:00 & 1.2609680000e+04 &  \\
+      13:20:00 & 1.2753033333e+04 &  \\
+      \noalign{\smallskip}\hline\noalign{\smallskip}
+      14:30:00 & 1.2019266667e+04 & 1.258640833e+04 \\ 
+      14:35:00 & 1.2632253333e+04 &  \\
+      14:40:00 & 1.2779040000e+04 &  \\
+      14:45:00 & 1.2753180000e+04 &  \\
+      14:50:00 & 1.2610476667e+04 &  \\
+      14:55:00 & 1.2724233333e+04 &  \\
+      \noalign{\smallskip}\hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+The  total  energy to  solution  is  the straightforward  calculation:\\  
+
+Energy-to-solution  =  Integral  of  power consumption  over  the  job
+duration
+
+Often  the  average  power  consumption  times  the  job  duration  is
+sufficient.
+
+Thus, the total energy consumption corresponds to: 
+\begin{itemize}
+\item E  = 1783 x 12658.52278  = 22570146.11674 J $\sim$  22.57 MJ per
+  day of simulation
+\item E  = 1762 x 12586.40833  = 22177251.47746 J $\sim$  22.18 MJ per
+  day of simulation
+\end{itemize}
