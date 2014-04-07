@@ -23,21 +23,31 @@ operating systems.
 \subsection{Run configuration}
 \label{subsec:3.2}
 The COSMO-ART model uses NAMELIST-input to specify runtime parameters
-splitted into several groups:
+splitted into several groups (see Table~\ref{tab:1}). 
 
-\begin{itemize}
-\item LMGRID: specifying the domain and the size of the grid,
-\item RUNCTL: parameters for the model run,
-\item TUNING: parameters for tuning physics and dynamics,
-\item DYNCTL: parameters for the adiabatic model,
-\item PHYCTL: parameters for the diabatic model,
-\item COSMO\_ART: parameters for gases and aerosols model,
-\item DIACTL: parameters for the diagnostic calculations,
-\item SATCTL: controlling computation of synthetic satellite images,
-\item IOCTL: controlling the I/O environment,
-\item GRIBIN: controlling the grib input,
-\item GRIBOUT: controlling the grib output,
-\end{itemize}
+\begin{table}[htbf]
+  \begin{center}
+    \caption{}
+    \label{tab:1}
+    \begin{tabular}{ll}
+      \hline\noalign{\smallskip} 
+      \textbf{Group} & \textbf{Description} \\
+      \noalign{\smallskip}\hline\noalign{\smallskip}
+      LMGRID & Grid domain and size parameters \\
+      RUNCTL & Model run parameters \\
+      TUNING & Physics and dynamics parameters \\
+      DYNCTL & Adiabatic model parameters \\
+      PHYCTL & Diabatic model parameters \\
+      COSMO\_ART & Gases and aerosols model parameters \\
+      DIACTL & Diagnostic calculations parameters \\
+      SATCTL & Synthetic satellite images parameters \\
+      IOCTL & I/O environment parameters \\
+      GRIBIN & GRIB input parameters \\
+      GRIBOUT & GRIB output parameters \\
+     \noalign{\smallskip}\hline
+    \end{tabular}
+  \end{center}
+\end{table}
 
 \noindent
 To run COSMO-ART the following input data are necessary:
@@ -81,11 +91,11 @@ However, the average power consumption times the job duration is often
 sufficient.
 
 \subsubsection{Monch (CSCS - ETH Zurich)}
-\begin{figure*}
+\begin{figure}[htbf]
   \includegraphics[width=0.4\textwidth]{Figs/NRJ_benchmark_Monch.eps}
   \caption{Isola E1 Rack 2 Total Power and Isola E1 Total Power}
   \label{fig:1}
-\end{figure*}
+\end{figure}
 
 The 1-day simulation was issued successfully twice, the start time and
 execution time for both runs are:
@@ -99,15 +109,15 @@ corresponding power  measurements from the Excel  file.  Power results
 account for the  Isola E1 Rack 2 Total Power. As  time resolution is 5
 minutes  for the  output  results, the  average  power consumption  is
 computed   by  considering  6   values  for   each  single   run  (see
-Table~\ref{tab:1}).
+Table~\ref{tab:2}).
 
 \begin{table}
   \begin{center}
     \caption{}
-    \label{tab:1}
+    \label{tab:2}
     \begin{tabular}{lll}
       \hline\noalign{\smallskip}
-      Time & Measured power (W) & Average power (W)  \\
+      \textbf{Time} & \textbf{Measured power (W)} & \textbf{Average power (W)} \\
       \noalign{\smallskip}\hline\noalign{\smallskip}
       12:55:00 & 1.2355833333e+04 & 1.265852278e+04 \\ 
       13:00:00 & 1.2820266667e+04 &  \\
@@ -136,11 +146,11 @@ Thus, the total energy consumption corresponds to:
 \end{itemize}
 
 \subsubsection{Pilatus (CSCS - ETH Zurich)}
-\begin{figure*}
+\begin{figure}[htbf]
   \includegraphics[width=0.4\textwidth]{Figs/NRJ_benchmark_Pilatus.eps}
   \caption{Isola HD Pilatus Total Power}
   \label{fig:2}
-\end{figure*}
+\end{figure}
 
 The 1-day simulation was issued successfully four times and the 2-days
 run only once, the start time and execution time for all jobs are:
@@ -157,15 +167,15 @@ the  corresponding  power  measurements  from the  Excel  file.  Power
 results  account  for  the  Isola  HD Pilatus  Total  Power.  As  time
 resolution  is 5  minutes for  the output  results, the  average power
 consumption is computed by considering  4 values for each single 1-day
-run and 9 values for the 2-days run (see Table~\ref{tab:2}).
+run and 9 values for the 2-days run (see Table~\ref{tab:3}).
 
 \begin{table}
   \begin{center}
     \caption{}
-    \label{tab:2}
+    \label{tab:3}
     \begin{tabular}{lll}
       \hline\noalign{\smallskip}
-      Time & Measured power (W) & Average power (W)  \\
+      \textbf{Time} & \textbf{Measured power (W)} & \textbf{Average power (W)}  \\
       \noalign{\smallskip}\hline\noalign{\smallskip}
        13:10:00 & 1.7824080000e+04 & 1.812201417e+04 \\ 
        13:15:00 & 1.8293650000e+04 &  \\ 
