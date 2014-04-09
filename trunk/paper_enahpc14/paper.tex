@@ -45,7 +45,7 @@
 %\titlerunning{Short form of title} % if too long for running head
 
 \author{Joseph~Charles  \and William~Sawyer  \and  Manuel~F.~Dolz \and
-  Cristiano~Malossi}
+  Sandra~Catalan}
 
 %\authorrunning{Short form of author list} % if too long for running
 %head
@@ -53,18 +53,15 @@
 \institute{J.~Charles, W.~Sawyer 
 	\at Swiss National Supercomputing Centre (CSCS)
 	\\ CH-6900 Lugano, Switzerland  
-	%\\ Tel: +41  (0) 91  610 8216
  	\\ E-mails:~{\{joseph.charles,william.sawyer\}@cscs.ch} 
         \and M.~F.~Dolz 
-        \at Dept. of Informatics, University of Hamburg
-	\\ D-22.527 Hamburg, Germany
-        %\\ Tel: +49 (0) 40 460094-404
+        \at Dept. of Informatics, University of Hamburg (UHAM)
+	\\ DE-22527 Hamburg, Germany
         \\ \email{manuel.dolz@informatik.uni-hamburg.de}  
-        \and C.~Malossi  
-        \at IBM Zurich Research Laboratory 
-        \\  CH-8000 Zurich, Switzerland
-        %\\  Tel: +41 (0) 44 724 8616
-        \\ \email{ACM@zurich.ibm.com}}
+        \and S.~Catalan
+        \at Jaume I University of Castell\'on (UJI)
+	\\ ES-12071 Castell\'on, Spain
+        \\ \email{catalans@icc.uji.es}}  
 
 \date{Received: date / Accepted: date} % The correct dates will be
                                        % entered by the editor
@@ -82,8 +79,8 @@
   deposition,  wet removal,  and sedimentation  of aerosols  are taken
   into account.   The overall performance  of this application  on HPC
   systems is analysed  by a profiling study to  determine hotspots and
-  identify critical paths.   Moreover, we describe measurement devices
-  and  energy-aware   techniques  employed  to   evaluate  the  energy
+  identify  critical  CPU paths.   Moreover,  we describe  measurement
+  devices and energy-aware techniques  employed to evaluate the energy
   footprint of the considered application and to get detailed insights
   about power bottlenecks.  Our motivation is to improve corresponding
   code   sections  to  sustain   high  performance   while  minimizing
@@ -95,7 +92,8 @@
 \keywords{High performance computing  \and Energy-aware computing \and
   Green computing  \and Numerical weather  prediction \and Atmospheric
   chemistry  \and  Aerosols  modelling  \and  Profiling  methods  \and
-  Benchmark analysis \and COSMO-ART coupled model}
+  Benchmark    analysis   \and    COSMO-ART    coupled   model    \and
+  Time-to-solution \and Energy-to-solution \and Manycore}
 % \PACS{PACS code1 \and PACS code2 \and more}
 % \subclass{MSC code1 \and MSC code2 \and more}
 \end{abstract}
@@ -130,7 +128,7 @@
 This  research  was  supported   by  the  Exa2Green  research  project
 co-funded  under the  EU  7th Framework  Program  Future and  Emerging
 Technologies (FET) Proactive Initiative: Minimising Energy Consumption
-of Computing to  the Limit (MINECC).  The authors  would like to thank
+of Computing  to the Limit  (MINECC).  We also  gratefully acknowledge
 the  High  Performance  and  High  Productivity  Computing  Initiative
 (\url{www.hp2c.ch}) for  results that will be  leveraged in subsequent
 code refactoring.

@@ -24,10 +24,12 @@ the   Swiss  Platform   for  Advanced   Scientific   Computing  (PASC,
 \url{http://www.pasc-ch.org/}).   It  is   composed  of  312  standard
 compute  nodes,  24  large-memory  compute nodes  and  24  huge-memory
 compute nodes.   Each standard compute node comprises  2 Intel 10-core
-Ivy Bridge EP E5-2660v2 processors operating at 2.2 GHz, offering 32GB
-of DDR3 1600MHz  RAM, themselves connected by a  high speed Infiniband
-network,  based on Mellanox  SX6036 managed  FDR (Fourteen  Data Rate)
-switches, with a 56 Gb/s speed.
+Ivy Bridge  EP E5-2660v2 processors  operating at 2.2  GHz, themselves
+connected by a high speed Infiniband network, based on Mellanox SX6036
+managed  FDR switches,  with a  56  Gb/s speed.  Each core  has 32  KB
+instruction and 32 KB  data L1 caches and 256 KB of  L2 cache. All the
+10 core  share a 25.6 MB  L3 cache and  the platform has 32GB  of DDR3
+1600MHz RAM.
 
 \subsubsection{Pilatus (CSCS - ETH Zurich)}
 Pilatus is a dual-socket Intel  Sandy-Bridge based cluster used as Piz
@@ -35,28 +37,31 @@ Daint pre-post processing cluster.  It is composed of 42 compute nodes
 with  a total  number of  1344 cores  in hyper-threading  and  2688 GB
 aggregate memory and has 2  high-speed interconnects based on FDR: the
 first is  dedicated to the MPI  traffic and the second  to the storage
-high  speed traffic.  The  2 login  nodes  and the  42 computes  nodes
+high  speed traffic.   The 2  login nodes  and the  42  computes nodes
 consists in  11 twin-pair Intel  E5-Series DALCO r2264i4t  2U scalable
 compute  modules.  Each  module contains  4 compute  nodes based  on 2
 Intel  8-core Intel  Xeon  E5-2670 processors  operating  at 2.6  GHz,
-offering  64GB of  DDR3 1600MHz  RAM, themselves  connected by  a high
-speed  Infiniband  network,  based  on  Mellanox  SX6036  managed  FDR
-(Fourteen Data Rate) switches, with a 56 Gb/s speed.
+themselves  connected by  a high  speed Infiniband  network,  based on
+Mellanox SX6036 managed FDR switches,  with a 56 Gb/s speed. Each core
+has  32 KB  instruction and  32 KB  data L1  caches and  256 KB  of L2
+cache. All the 8 core share a 20 MB L3 cache and the platform has 64GB
+of DDR3 1600MHz RAM.
 
 \subsection{Power-Performance Measurement}
 \label{subsec:2.2}
 
 \subsubsection{CSCS - ETH Zurich}
-E3METER  Intelligent Power Strips  (IPS) and  Monitors (IPM)  are high
-quality electricity meters which enable to monitor and optimize energy
-consumption of datacenters or large facilities.  A central data logger
-- the  E3METER Data Concentrator  - aggregates  all measured  data and
-makes them available in various forms (SNMP, Web, etc). Data transfers
-between E3METER  IPS and E3METER Concentrator  use reliable narrowband
-powerline  communication (PLC)  technology which  avoids the  need for
-extra cabling.  It has  one internal temperature sensor. Two dedicated
+Hardware platforms in our experiment include E3METER Intelligent Power
+Strips  (IPS) and Monitors  (IPM) which  are high  quality electricity
+meters  that enable  to  monitor and  optimize  energy consumption  of
+datacenters or large facilities.  A  central data logger - the E3METER
+Data  Concentrator  - aggregates  all  measured  data  and makes  them
+available in  various forms (SNMP,  Web, etc). Data  transfers between
+E3METER IPS and E3METER Concentrator use reliable narrowband powerline
+communication  (PLC)  technology  which  avoids  the  need  for  extra
+cabling.   It  has one  internal  temperature  sensor.  Two  dedicated
 extension  ports  can be  used  to  measure  external temperature  and
-humidity  through E3METER  remote sensors.  It  features non-intrusive
+humidity  through E3METER remote  sensors.  It  features non-intrusive
 voltage, current and frequency measurement through current transformer
 with an accuracy of 1\%.
 
