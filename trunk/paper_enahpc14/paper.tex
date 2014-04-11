@@ -45,7 +45,7 @@
 %\titlerunning{Short form of title} % if too long for running head
 
 \author{Joseph~Charles  \and William~Sawyer  \and  Manuel~F.~Dolz \and
-  Sandra~Catal\'an}
+  Sandra~Catalan}
 
 %\authorrunning{Short form of author list} % if too long for running
 %head
@@ -58,7 +58,7 @@
         \at Dept. of Informatics, University of Hamburg (UHAM)
 	\\ DE-22527 Hamburg, Germany
         \\ \email{manuel.dolz@informatik.uni-hamburg.de}  
-        \and S.~Catal\'an
+        \and S.~Catalan
         \at Jaume I University of Castell\'on (UJI)
 	\\ ES-12071 Castell\'on, Spain
         \\ \email{catalans@icc.uji.es}}  
@@ -93,46 +93,45 @@
   Green computing  \and Numerical weather  prediction \and Atmospheric
   chemistry  \and  Aerosols  modelling  \and  Profiling  methods  \and
   Benchmark    analysis   \and    COSMO-ART    coupled   model    \and
-  Time-to-solution \and Energy-to-solution \and Manycore}
+  Time-to-solution \and Energy-to-solution \and Xeon processor}
 % \PACS{PACS code1 \and PACS code2 \and more}
 % \subclass{MSC code1 \and MSC code2 \and more}
 \end{abstract}
 
 \section{Introduction}
+\label{intro}
+\input{Introduction.tex}
+
+\section{Related work}
 \label{sec:1}
-\input{Sec1:Introduction.tex}
+\input{Sec1:Related.tex}
 
 \section{The COSMO-ART model system}
 \label{sec:2}
 \input{Sec2:COSMO-ART.tex}
 
-\section{Experimental setup}
+\section{Power-performance measurement framework}
 \label{sec:3}
-\input{Sec3:Power-measurement.tex}
+\input{Sec3:Measurement-framework.tex}
 
 \section{Evaluation}
 \label{sec:4}
 \input{Sec4:Evaluation.tex}
 
-\section{Related work}
-\label{sec:5}
-\input{Sec5:Related.tex}
-
 \section{Conclusion}
-\label{sec:6}
-\label{Sec6:Conclusions.tex}
+\label{concl}
 \input{Conclusion.tex}
 
 %\paragraph{Paragraph headings} Use paragraph headings as needed.
 
 \begin{acknowledgements}
-This  research  was  supported   by  the  Exa2Green  research  project
-co-funded  under the  EU  7th Framework  Program  Future and  Emerging
-Technologies (FET) Proactive Initiative: Minimising Energy Consumption
-of Computing  to the Limit  (MINECC).  We also  gratefully acknowledge
-the  High  Performance  and  High  Productivity  Computing  Initiative
-(\url{www.hp2c.ch}) for  results that will be  leveraged in subsequent
-code refactoring.
+The research  leading to these  results is supported by  the Exa2Green
+project  co-financed by  the European  Commission under  7th Framework
+Programme Future and Emerging Technologies (FET) Proactive Initiative:
+Minimising Energy  Consumption of Computing to the  Limit (MINECC). We
+also gratefully acknowledge the High Performance and High Productivity
+Computing  Initiative  (\url{www.hp2c.ch}) for  results  that will  be
+leveraged in subsequent code refactoring.
 \end{acknowledgements}
 
 \DeclareRobustCommand\IPCClongname{ - Intergovernmental Panel on Climate Change}
