@@ -81,18 +81,54 @@ without  any  previous spin-up  simulations.   The calculation  domain
 corresponds to  the CORDEX-EU-44  domain and is  covered by a  grid of
 $222\times   216$    points   with   a    horizontal   resolution   of
 $0.22\,^{\circ}$,  i.e.  50  km in  both directions,  and  40 vertical
-layers.   Boundary  and initial  conditions,  emmissions and  external
+layers.   Boundary  and  initial  conditions, emissions  and  external
 parameters  were obtained by  the INT2LM  pre-processing interpolation
 tool, which interpolate  data from a coarse-grid driving  model to the
 rotated    latitude-longitude   grid    of   the    COSMO-Model,   and
 INT2LM\_trcr\_ART,  which  interpolates  aerosol  or  gaseous  species
 initial and boundary conditions  and consists mostly of the definition
-of a large number of  tracers.  The meteorological initial and bounday
-conditions are  obtained by  the the ECMWF  global spectral  model IFS
-with an update  frequency of 3h.  Boundary data  for gas-phase species
-are taken from IFS-MOZART output at 6h temporal resolution.  The model
-setup incorporates  34 2-d and 45  3-d fields to be  written out every
-hour and doesn't include data assimilation methods.
+of a large number of  tracers. In particular when using COSMO-ART, the
+following input data are necessary:
+
+\begin{itemize}
+\item  Gas phase:  Anthropogenic emissions  for different  species and
+  land use data for biogenic emissions and deposition,
+\item Aerosol particles: Anthropogenic emissions,
+\item Mineral dust: Soil specific land use data.
+\end{itemize}
+
+The meteorological initial and  bounday conditions are obtained by the
+the ECMWF  global spectral model IFS  with an update  frequency of 3h.
+Boundary data  for gas-phase species are taken  from IFS-MOZART output
+at   6h  temporal   resolution.   NAMELIST-input   specifying  runtime
+parameters    splitted   into    several   groups    are    given   in
+Table~\ref{tab:1}.  The model  setup incorporates  34 2-d  and  45 3-d
+fields  to  be  written  out  every  hour  and  doesn't  include  data
+assimilation methods.
+
+\begin{table}[htbf]
+  \begin{center}
+    \caption{}
+    \label{tab:1}
+    \begin{tabular}{ll}
+      \hline\noalign{\smallskip} 
+      \textbf{Group} & \textbf{Description} \\
+      \noalign{\smallskip}\hline\noalign{\smallskip}
+      LMGRID & Grid domain and size parameters \\
+      RUNCTL & Model run parameters \\
+      TUNING & Physics and dynamics parameters \\
+      DYNCTL & Adiabatic model parameters \\
+      PHYCTL & Diabatic model parameters \\
+      COSMO\_ART & Gases and aerosols model parameters \\
+      DIACTL & Diagnostic calculations parameters \\
+      SATCTL & Synthetic satellite images parameters \\
+      IOCTL & I/O environment parameters \\
+      GRIBIN & GRIB input parameters \\
+      GRIBOUT & GRIB output parameters \\
+     \noalign{\smallskip}\hline
+    \end{tabular}
+  \end{center}
+\end{table}
 
 This COSMO-ART  version is configured  to deal with a  semi Lagrangian
 horizontal advection scheme  with tricubic interpolation and selective
