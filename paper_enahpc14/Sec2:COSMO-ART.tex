@@ -1,16 +1,13 @@
 \subsection{Model Description}
 \label{subsec:1.1}
-COSMO-ART  (ART  stands  for   Aerosols  and  Reactive  Trace  gases),
-developed  at  KIT  Karlsruhe  \citep{Vogel-2009}, is  a  regional  to
-continental scale model coupled  online to the COSMO numerical weather
-prediction (NWP) and climate model \citep{Baldauf-2011}. It allows the
-online calculation of reactive  trace substances and their interaction
-with  the atmosphere.   Physical processes  like  transport, turbulent
-diffusion,  and  dry and  wet  deposition  are  treated together  with
-photochemistry and aerosol dynamics using the modal approach. Detailed
-model description  can be found in the  aforementioned publications as
-well    as   in   \citep{Stanelle-2010,    Bangert-2012,   Knote-2011,
-  Knote-2013}.
+The  model  system COSMO-ART  described  in  \citep{Vogel-2009}, is  a
+regional  to  continental scale  model  coupled  online  to the  COSMO
+numerical weather  prediction and climate  model \citep{Baldauf-2011}.
+It  incorporates  sophisticated  modules  for  gaseous  chemistry  and
+aerosol dynamics  and allows the online calculation  of reactive trace
+substances    and    their    interaction    with    the    atmosphere
+\citep{Knote-2011}.  Detailed  model   description  can  be  found  in
+\citep{Stanelle-2010, Bangert-2012, Knote-2011, Knote-2013}.
 
 \subsection{Model Setup}
 \label{subsec:1.2}
@@ -78,11 +75,11 @@ This COSMO-ART version is configured with a semi Lagrangian horizontal
 advection  scheme with  tricubic interpolation  and  selective filling
 diffusion  option  in  combination   with  the  dynamical  core  using
 Runge-Kutta time stepping \citep{}.  It  also makes use of the Kinetic
-PreProcessor  solver  \citep{}   for  the  resolution  of  atmospheric
-chemistry ordinary  differential equations.  Concerning  the modelling
-of wet  deposition in aerosols,  the baseline has only  indirect cloud
-feedbacks  but  doesn't  include  in-cloud  scavenging  (rainout)  and
-below-cloud    scavenging    (washout)    yet.     Amongst    physical
+PreProcessor solver (KPP) for  the resolution of atmospheric chemistry
+ordinary  differential equations \citep{Damian-2002}.   Concerning the
+modelling  of  wet  deposition  in  aerosols, the  baseline  has  only
+indirect  cloud  feedbacks  but  doesn't include  in-cloud  scavenging
+(rainout) and below-cloud  scavenging (washout) yet.  Amongst physical
 parameterisations,   precipitation  formation   is   performed  by   a
 two-moment  cloud  microphysics scheme  instead  of  a classical  bulk
 microphysics scheme.

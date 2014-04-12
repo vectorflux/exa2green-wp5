@@ -1,59 +1,44 @@
-Comprehensive  scientific assessments  of climate-warming  trends over
-the  past 50  years have  shown  that the  state and  dynamics of  the
-Earth's climate system have  undergone unprecedented major changes, as
-evidenced  by  increases  in   global  average  atmosphere  and  ocean
-temperatures,  widespread melting  of  snow and  ice,  and rising  sea
-levels.  The  suspected culprit for  this change are  human-induced or
-anthropogenic factors,  such as the greenhouse gas  emissions from the
-burning of  fossil fuels,  which may be  trapping more  incoming solar
-radiation in the earth system.
-
-One  factor   overwhelmingly  affects  the   uncertainty  in  defining
-anthropogenic  radiative  forcing:  the  effects  of  aerosols  (small
-airborne liquid,  solid or mixed  particles, \citealp{Putaud-2010}) in
-the  atmosphere.  Although  they  are not  considered a  heat-trapping
-greenhouse   gas  and   have  shorter   atmospheric   lifetimes,  they
-significantly affected the atmospheric  radiative fluxes over the last
-150    years   \citep{Koch-2009,   IPCC-2013}.     Enhanced   aerosols
-concentrations can impact the climate system by reflecting (e.g.  pure
-sulfates  and  nitrates)  or  absorbing  (e.g.   black  carbon)  solar
-radiation  and  thereby exert  a  cooling  or  warming effect  on  the
-Earth-atmosphere   system,  causing   a  so-called   direct  radiative
-forcing     \citep{Charlson-1991,    Haywood-2000,    Ramanathan-2001,
-Liao-2005, Bangert-2012, Lundgren-2013}.
+While anthropogenic greenhouse gas emissions are driving unprecedented
+major  climate  changes  since   the  mid  20th  Century,  one  factor
+overwhelmingly  affects  the  uncertainty  in  defining  human-induced
+radiative  forcing:  the  effects   of  aerosols  in  the  atmosphere.
+Although they  are not considered  a heat-trapping greenhouse  gas and
+have  shorter  atmospheric lifetimes,  they  significantly modify  the
+global   radiation   budget   \citep{IPCC-2013}.   Enhanced   aerosols
+concentrations impact the climate  system by scattering and absorption
+of   solar   radiation,    thereby   exerting   a   direct   radiative
+forcing  \citep{Liao-2005,  Bangert-2012,  Lundgren-2013}, or  by  the
+modification of  cloud properties, cloud fraction  and surface albedo,
+causing  a negative  indirect  radiative forcing  \citep{Haywood-2000,
+Lohmann-2005,     VandenHeever-2011,     Rosenfeld-2013}.      Despite
+considerable  progress in  global aerosol  modelling \citep{Mann-2013}
+and    measurement-based    assessments   \citep{Myhre-2009},    large
+uncertainties    remain    in    current    estimates    of    aerosol
+forcing   \citep{Myhre-2013,    IPCC-2013,   Lee-2013,   Randles-2013,
+Rosenfeld-2013, Sherwood-2013, Stier-2013}.
 
 Hence to  improve our understanding of  aerosol-cloud interactions and
-reduce  uncertainties  of aerosol  effects  in  climate, the  research
-community is making a  concerted international effort to represent the
-underlying chemical  processes through models.  These  models, such as
-ART (Aerosol Reactive Transport), developed at the Karlsruhe Institute
-of Technology  (KIT), offer  a key opportunity  to reduce  the climate
-uncertainty,  particularly on  the  regional scale  \citep{Knote-2011,
-Bangert-2011, Knote-2013}.   These models can be  coupled with climate
-models, such as the  regional weather forecast model COSMO (Consortium
-for  Small-scale  Modelling), jointly  developed  by  a consortium  of
-European weather centers including  the German weather service DWD and
-MeteoSwiss,  and used  in the  climate version  (COSMO-CLM) by  a wide
-research community.  The extended  COSMO-ART model provides a detailed
-description of  air pollution chemistry and aerosol  processes, and is
-mainly designed to study air quality and aerosol meteorology feedbacks
-on short, episodic to annual time scales.  It is capable of simulating
-aerosol  distributions as well  as their  interactions over  Europe as
-well as other regional domains.
+reduce  uncertainties  in  aerosol  radiative forcing  estimates,  the
+research  community  is making  a  concerted  international effort  to
+represent  the  underlying physical,  chemical  and aerosol  dynamical
+processes through numerical chemical  transport models (CTMs), such as
+ART (Aerosols  and Reactive Trace  gases), developed at  the Karlsruhe
+Institute   of  Technology   (KIT)   \citep{Vogel-2009,  Bangert-2011,
+Knote-2013}. This  regional scale model system is  online coupled with
+the  operational weather  forecast  model COSMO  \citep{Baldauf-2011},
+jointly developed by a consortium of European weather centers and used
+in the climate version (COSMO-CLM)  by a wide research community.  
 
-COSMO-ART is  computationally much more demanding than  the COSMO core
-since a  large number of additional  tracers and processes  have to be
-considered.  Thus this model is currently severely-limited in terms of
-applicability and expensive in terms of energy consumption.  COSMO has
-recently  been  ported  to  GPUs  within the  framework  of  the  High
-Performance  and  High  Productivity  Computing (HP2C)  Initiative  to
-optimize    it    for     computational    and    energy    efficiency
-(\url{http://www.hp2c.ch/}).    Although   these   developments   will
-facilitate the  application of COSMO for  numerical weather prediction
-and climate simulations,  they do little to address  the coupling with
-the ART  model extension, for which significant  investments are still
-required to take it to a similar level. The efficiency of ART is being
-addressed        in       the        EU        Exa2Green       project
+The extended  COSMO-ART model  is computationally much  more demanding
+than the  COSMO core  since a large  number of additional  tracers and
+processes  have  to  be  considered.   Thus this  model  is  currently
+severely-limited in  terms of applicability and expensive  in terms of
+energy consumption.   Although COSMO has recently been  ported to GPUs
+within  the framework of  the High  Performance and  High Productivity
+Computing  (HP2C)  Initiative to  optimize  it  for computational  and
+energy efficiency (\url{http://www.hp2c.ch/}), significant investments
+in  ART  are still  required  to  take it  to  a  similar level.   The
+efficiency of COSMO-ART is being addressed in the EU Exa2Green project
 (\url{http://exa2green.eu/}). The  ultimate goal of the  project is to
 deliver a  prototype code, which  provides an energy efficiency  of at
 least five times of the  baseline value.  Such an implementation would
@@ -61,19 +46,16 @@ allow  the  community  to  investigate critical  questions  at  higher
 resolution  and   over  longer  periods,   at  reduced  cost   to  the
 environment.
 
-In  Sec.~\ref{sec:1}, we  briefly introduce  the  regional atmospheric
-model COSMO-ART \citep{Vogel-2009} that accounts for feedbacks between
-chemistry,  aerosols, radiation, and  clouds and  additionally specify
-its technical setup related to the investigated performance and energy
-evaluation  methods.   Sec.~\ref{sec:2}  describes the  different  HPC
-systems   and  associated  power   measurement  equipments   used  for
-conducting the benchmarking study and presents energy-aware techniques
-employed  to   determine  the  energy  footprint   of  the  considered
-application.   Sec.~\ref{sec:3}  gathers  benchmark results  from  the
-Exa2Green  project and  highlights  areas where  improvements will  be
-necessary for the subsequent  baseline refactoring.  Some related work
-will  be  discussed  in  Sec.~\ref{sec:4} Finally,  we  conclude  with
-practical  guidelines to identifying  energy saving  opportunities and
-give  directions for further  developments of  the modeling  system in
-Sec.~\ref{concl}.
-
+Some  related work  will  be discussed  in  Sec.~\ref{sec:1}. Then  in
+Sec.~\ref{sec:2}, we briefly  introduce the regional atmospheric model
+COSMO-ART \citep{Vogel-2009}  and specify its  technical setup related
+to  the  investigated   performance  and  energy  evaluation  methods.
+Sec.~\ref{sec:3} describes different power measurement equipments used
+for  conducting  this  benchmarking  study and  presents  energy-aware
+techniques  employed   to  determine  the  energy   footprint  of  the
+considered  application.  Sec.~\ref{sec:4}  gathers  benchmark results
+from  the Exa2Green  project and  highlights areas  where improvements
+will be  necessary for the subsequent  baseline refactoring.  Finally,
+we  conclude with  practical guidelines  to identifying  energy saving
+opportunities  and give  directions  for further  developments of  the
+modeling system in Sec.~\ref{concl}.
