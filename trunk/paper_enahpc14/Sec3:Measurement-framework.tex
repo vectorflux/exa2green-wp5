@@ -27,27 +27,27 @@ recorded in 5 minutes interval periods.
 \subsubsection{University of Hamburg}
 To assess the  performance and the energy efficiency  of COSMO-ART, we
 employ   a    version   of   the    integrated   framework   presented
-in~\cite{energy13}  that  works in  combination  with Extrae  and
-Paraver,   which  are   profiling/tracing   and  visualization   tools,
-respectively.
+in~\cite{energy13} that works in  combination with Extrae and Paraver,
+which are profiling/tracing and visualization tools, respectively.
+
 %The left part of the \vref{fig:Lustre} offers a graphical representation of
 %the Lustre architecture; the right depicts the tracing and profiling framework.
-To  use our  approach,  COSMO-ART is  compiled  using the  Extrae
-compiler wrappers, which automatically  instrument the Fortran code of
-the  model. Next,  COSMO-ART is  run  on the  nodes, thus  dissipating
-certain  amount of  power.  These  nodes are connected  to power 
-measurement  devices that  account for  the dissipated power/consumed 
-energy and  send the power data  to the tracing  server. The client, 
-meanwhile, sends start/stop primitives in order to gather captured data
-by the wattmeters onto the tracing server, where an  instance of the 
-\pmlib server  is running.
+To use our  approach, COSMO-ART is compiled using  the Extrae compiler
+wrappers,  which  automatically instrument  the  Fortran  code of  the
+model. Next, COSMO-ART  is run on the nodes,  thus dissipating certain
+amount  of power.   These  nodes are  connected  to power  measurement
+devices that account for the dissipated power/consumed energy and send
+the power  data to  the tracing server.  The client,  meanwhile, sends
+start/stop  primitives  in  order  to  gather  captured  data  by  the
+wattmeters onto  the tracing server,  where an instance of  the \pmlib
+server is running.
 
-Once COSMO-ART run is finished, a file containing the power profile is 
-created using the  power   data  received from  the  tracing   server and
-the  instrumentation post-processing generates  the performance trace files.
-All these files are combined then in Paraver which allows us to visualize 
-the performance trace and the power profile of COSMO-ART all together.
-
+Once COSMO-ART run is finished, a file containing the power profile is
+created using the power data  received from the tracing server and the
+instrumentation post-processing generates the performance trace files.
+All  these files  are  combined then  in  Paraver which  allows us  to
+visualize the performance trace and the power profile of COSMO-ART all
+together.
 
 %Once COSMO-ART run is finished, the VampirTrace \pmlib plugin receives
 %the  power   data  from  the  tracing   server.   The  instrumentation
