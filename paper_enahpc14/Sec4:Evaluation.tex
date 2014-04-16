@@ -1,18 +1,18 @@
-In  this  section, we  present  a  performance  and energy  efficiency
+In  this section,  we  describe a  performance  and energy  efficiency
 evaluation  of  different  achitectures  when  running  the  COSMO-ART
 baseline.  We  start by  specifying our measurement  methodology along
 with the metrics used to  analyse the results on all platforms.  Then,
 we detail the environment  setup gathering the considered HPC systems,
-the software  environment and the runtime  configuration.  Finally, we
-discuss  benchmark   results  and  power-performance   traces  of  the
-application.
+the  software  environment and  the  run  configuration.  Finally,  we
+discuss benchmark  results and  power-performance traces of  the model
+system.
 
 \subsection{Measurement methodology}
 \label{subsec:4.1}
 We  approach  the  assessment  of  the energy  footprint  and  overall
 performance    of    COSMO-ART    with    two    important    metrics:
 \textit{time-to-solution}       and       \textit{energy-to-solution}.
-Time-to-Solution  refers   to  the  total  wall  clock   time  of  the
+Time-to-solution  refers   to  the  total  wall  clock   time  of  the
 application execution time. Energy-to-solution is the amount of energy
 spent  to achieve  results.  Energy  consumption of  CSCS  clusters is
 assessed  by sampling  the instantaneous  peak power  during execution
@@ -75,15 +75,14 @@ of Pilatus  constituted of 42 standard  compute nodes (pilatus[03-44])
 was considered.
 
 \subsubsection{Tintorrum (UJI)}
-Tintorrum, which is installed at the Jaume I University (UJI),  is an 
-heterogeneous cluster composed of 28 compute nodes. For our experiments
-only a subset of these nodes were considered. This set is composed of 
-16 nodes, each of which includes two Intel Xeon E5645 hexa-core processors at 
-2.40 GHz connected via Infiniband QDR (Mellanox MTS3600 switch). 
-Each core has 32 KB instruction and 32 KB data L1 caches and 
-256 KB L2 cache. The 6 cores share a 12 MB L3 cache and the platform has 
-288 GB of DDR3 1333 MHz.
-
+Tintorrum, which  is installed at the  Jaume I University  (UJI), is a
+heterogeneous  cluster   composed  of  28  compute   nodes.   For  our
+experiments only a subset of  these nodes were considered. This set is
+composed  of 16 nodes,  each of  which includes  two Intel  Xeon E5645
+hexa-core  processors  at  2.40   GHz  connected  via  Infiniband  QDR
+(Mellanox MTS3600 switch).  Each core  has 32 KB instruction and 32 KB
+data L1 caches and 256 KB L2 cache. The 6 cores share a 12 MB L3 cache
+and the platform has 288 GB of DDR3 1333 MHz.
  
 \subsubsection{Sofware environment}
 INT2LM  and the  COSMO-ART model  are  implemented in  Fortran 90  for
