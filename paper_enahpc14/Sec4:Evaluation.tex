@@ -38,7 +38,11 @@ versions   of    COSMO-ART.    In   this    study,   a   complementary
 energy-to-solution  benchmarking  comparison  is  carried out  on  the
 ``Pilatus'' cluster based  on Intel's previous-generation Sandy Bridge
 processors, conventional  in HPC  systems and known  to be  more power
-consuming.
+consuming.   Finally a  full tracing  experiment is  conducted  on the
+``Tintorrum''  cluster using  an integrated  framework, to  capture an
+overall  power profile  at a  much finer  resolution and  to  get more
+insights  into  the  MPI  blocking  and polling  influences  on  power
+savings.
 
 \subsubsection{Monch (CSCS - ETH Zurich)}
 Monch, which is installed  at the Swiss National Supercomputing Center
@@ -47,32 +51,33 @@ Ivy Bridge-EP based cluster, utilised from people that are part of the
 Swiss    Platform   for    Advanced   Scientific    Computing   (PASC,
 \url{http://www.pasc-ch.org/}). It is composed of 312 standard compute
 nodes, 24 large-memory compute nodes and 24 huge-memory compute nodes.
-Each standard  compute node comprises two Intel  Ivy Bridge-EP E5-2660
-v2 ten-core processors operating at 2.2 GHz, themselves connected by a
-high speed  InfiniBand network, based  on Mellanox SX6036  managed FDR
-switches, with a  56 Gb/s speed.  Each core has  32 KB instruction and
-32 KB data L1  caches and 256 KB of L2 cache. All  the 10 core share a
-25 MB L3 cache and the platform has 32GB of DDR3 1600 MHz RAM. For our
-energy-to-solution benchmark,  a full rack of Monch  constituted of 52
-standard  compute   nodes  (monchc[029-080])  was   considered.
+Each standard  compute node comprises  two Intel Ivy  Bridge Efficient
+Performance (EP)  E5-2660 v2 ten-core processors operating  at 2.2 GHz
+base  clock speed,  themselves connected  by a  high  speed InfiniBand
+network based on Mellanox SX6036  managed FDR switches, with a 56 Gb/s
+speed.  Each core  has 32 KB instruction and 32 KB  data L1 caches and
+256 KB  of L2 cache. All  the 10 core share  a 25 MB L3  cache and the
+platform has  32GB of  DDR3 1600 MHz  RAM. For  our energy-to-solution
+benchmark, a  full rack  of Monch constituted  of 52  standard compute
+nodes (monchc[029-080]) was considered.
 
 \subsubsection{Pilatus (CSCS - ETH Zurich)}
 Pilatus,  which  is installed  at  the  Swiss National  Supercomputing
-Center (CSCS)  of ETH Zurich,  is a dual-socket Intel  Sandy Bridge-EP
-based cluster  used as Piz  Daint pre-post processing cluster.   It is
-composed of 42 compute nodes  and has 2 high-speed interconnects based
-on FDR:  the first is dedicated to  the MPI traffic and  the second to
-the storage high speed traffic.  The 2 login nodes and the 42 computes
-nodes  consists in  11  twin-pair Intel  E5-Series  DALCO r2264i4t  2U
-scalable compute modules.  Each  module contains 4 compute nodes based
-on two Intel Xeon E5-2670  eight-core processors operating at 2.6 GHz,
-themselves  connected by  a high  speed InfiniBand  network,  based on
-Mellanox SX6036 managed FDR switches,  with a 56 Gb/s speed. Each core
-has 32 KB instruction and 32 KB data L1 caches and 256 KB of L2 cache.
-All the  8 core share a  20 MB L3 cache  and the platform  has 64GB of
-DDR3 1600 MHz  RAM. For our energy-to-solution benchmark,  a full rack
-of Pilatus  constituted of 42 standard  compute nodes (pilatus[03-44])
-was considered.
+Center (CSCS) of  ETH Zurich, is a dual-socket  eight-core Intel Sandy
+Bridge EP based cluster used as Piz Daint pre-post processing cluster.
+It is composed of 42  compute nodes and has 2 high-speed interconnects
+based on FDR: the first is dedicated to the MPI traffic and the second
+to  the storage  high speed  traffic.  The  2 login  nodes and  the 42
+computes nodes consists in 11 twin-pair Intel E5-Series DALCO r2264i4t
+2U  scalable compute modules.   Each module  contains 4  compute nodes
+based on two  Intel Xeon E5-2670 processors operating  at 2.6 GHz base
+clock speed,  themselves connected by a high  speed InfiniBand network
+based  on  Mellanox  SX6036  managed  FDR switches,  with  a  56  Gb/s
+speed. Each  core has 32 KB instruction  and 32 KB data  L1 caches and
+256 KB  of L2 cache.  All  the 8 core share  a 20 MB L3  cache and the
+platform has  64GB of  DDR3 1600 MHz  RAM. For  our energy-to-solution
+benchmark, a full  rack of Pilatus constituted of  42 standard compute
+nodes (pilatus[03-44]) was considered.
 
 \subsubsection{Tintorrum (UJI)}
 Tintorrum, which  is installed at the  Jaume I University  (UJI), is a
@@ -88,9 +93,9 @@ and the platform has 288 GB of DDR3 1333 MHz.
 INT2LM  and the  COSMO-ART model  are  implemented in  Fortran 90  for
 distributed  memory  parallel  computers  using  the  Message  Passing
 Interface (MPI)  and are purely  MPI-parallel.  The software  stack on
-both many-core  platforms was  controlled using the  modules framework
-which gives  an easy and  flexible mechanism to  access to all  of the
-CSCS  provided compilers,  tools  and applications.   For our  initial
+both  many-core  CSCS  platforms  was  controlled  using  the  modules
+framework which gives an easy  and flexible mechanism to access to all
+of the  provided compilers, tools  and applications.  For  our initial
 benchmarking,  we opted  for  the GNU  compiler  (gcc/4.8.1 on  Monch,
 gcc/4.8.2 on Pilatus) with the -O3 compiler flag as it generally gives
 a  good  level  of optimization  and  the  code  runs faster  in  this
