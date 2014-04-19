@@ -1,0 +1,107 @@
+In this section we provide a brief description of the HPC supercomputers
+used to obtain the COSMO-ART baseline. For our power measurement we have chosen state-of-the-art Intel and IBM platforms;
+both architectures could be recreated or found in an identical configuration
+beyond the lifetime of the project.  Given that the baseline benchmark
+can be reproduced  within an expected variance, and  that the baseline
+run configuration  can be used in  all future versions of  the code, a
+fair comparison  will be made  between the baseline and  the future milestone
+versions   of    COSMO-ART. In addition, a   complementary energy-to-solution  benchmarking  comparison  is  carried out  on  the
+``Pilatus'' cluster based  on Intel's previous-generation Sandy Bridge
+processors, conventional  in HPC  systems and known  to be  more power
+consuming.   Finally a  full tracing  experiment is  conducted  on the
+``Tintorrum''  cluster using  an integrated  framework, to  capture an
+overall  power profile  at a  much finer  resolution and  to  get more
+insights  into  the  MPI  blocking  and polling  influences  on  power
+savings.
+
+
+
+% In  this section,  we  describe a  performance  and energy  efficiency
+% evaluation  of  different  achitectures  when  running  the  COSMO-ART
+% baseline.  We  start by  specifying our measurement  methodology along
+% with the metrics used to  analyse the results on all platforms.  Then,
+% we detail the environment  setup gathering the considered HPC systems,
+% the  software  environment and  the  run  configuration.  Finally,  we
+% discuss benchmark  results and  power-performance traces of  the model
+% system.
+
+
+% \subsection{Environment setup}
+% \label{subsec:4.2}
+% While hardware  platforms mature  and are replaced,  we have  chosen a
+% state-of-the-art  Intel's  third-generation   Core  (aka  Ivy  Bridge)
+% processing platform (called ``Monch'')  for our power measurements, as
+% it  is slated  to stay  in service  without hardware  upgrade  for the
+% duration  of  the Exa2Green  project.   In  principle  at least,  this
+% architecture could be recreated or found in an identical configuration
+% beyond the lifetime of the project.  Given that the baseline benchmark
+% can be reproduced  within an expected variance, and  that the baseline
+% run configuration  can be used in  all future versions of  the code, a
+% fair comparison  will be made  between the baseline and  the milestone
+% versions   of    COSMO-ART.    In   this    study,   a   complementary
+% energy-to-solution  benchmarking  comparison  is  carried out  on  the
+% ``Pilatus'' cluster based  on Intel's previous-generation Sandy Bridge
+% processors, conventional  in HPC  systems and known  to be  more power
+% consuming.   Finally a  full tracing  experiment is  conducted  on the
+% ``Tintorrum''  cluster using  an integrated  framework, to  capture an
+% overall  power profile  at a  much finer  resolution and  to  get more
+% insights  into  the  MPI  blocking  and polling  influences  on  power
+% savings.
+
+\subsection{Monch (CSCS - ETH Zurich)}
+Monch, which is installed  at the Swiss National Supercomputing Center
+(CSCS) of ETH Zurich, is  a 10 rack NEC-provided and dual-socket Intel
+Ivy Bridge-EP based cluster, utilised from people that are part of the
+Swiss    Platform   for    Advanced   Scientific    Computing   (PASC,
+\url{http://www.pasc-ch.org/}). It is composed of 312 standard compute
+nodes, 24 large-memory compute nodes and 24 huge-memory compute nodes.
+Each standard  compute node comprises  two Intel Ivy  Bridge Efficient
+Performance (EP)  E5-2660 v2 ten-core processors operating  at 2.2 GHz
+base  clock speed,  themselves connected  by a  high  speed InfiniBand
+network based on Mellanox SX6036  managed FDR switches, with a 56 Gb/s
+speed.  Each core  has 32 KB instruction and 32 KB  data L1 caches and
+256 KB  of L2 cache. All  the 10 core share  a 25 MB L3  cache and the
+platform has  32GB of  DDR3 1600 MHz  RAM. For  our energy-to-solution
+benchmark, a  full rack  of Monch constituted  of 52  standard compute
+nodes (monchc[029-080]) was considered.
+
+\subsection{Pilatus (CSCS - ETH Zurich)}
+Pilatus,  which  is installed  at  the  Swiss National  Supercomputing
+Center (CSCS) of  ETH Zurich, is a dual-socket  eight-core Intel Sandy
+Bridge EP based cluster used as Piz Daint pre-post processing cluster.
+It is composed of 42  compute nodes and has 2 high-speed interconnects
+based on FDR: the first is dedicated to the MPI traffic and the second
+to  the storage  high speed  traffic.  The  2 login  nodes and  the 42
+computes nodes consists in 11 twin-pair Intel E5-Series DALCO r2264i4t
+2U  scalable compute modules.   Each module  contains 4  compute nodes
+based on two  Intel Xeon E5-2670 processors operating  at 2.6 GHz base
+clock speed,  themselves connected by a high  speed InfiniBand network
+based  on  Mellanox  SX6036  managed  FDR switches,  with  a  56  Gb/s
+speed. Each  core has 32 KB instruction  and 32 KB data  L1 caches and
+256 KB  of L2 cache.  All  the 8 core share  a 20 MB L3  cache and the
+platform has  64GB of  DDR3 1600 MHz  RAM. For  our energy-to-solution
+benchmark, a full  rack of Pilatus constituted of  42 standard compute
+nodes (pilatus[03-44]) was considered.
+
+\subsection{Tintorrum (UJI)}
+Tintorrum, which  is installed at the  Jaume I University  (UJI), is a
+heterogeneous  cluster   composed  of  28  compute   nodes.   For  our
+experiments only a subset of  these nodes were considered. This set is
+composed  of 16 nodes,  each of  which includes  two Intel  Xeon E5645
+hexa-core  processors  at  2.40   GHz  connected  via  Infiniband  QDR
+(Mellanox MTS3600 switch).  Each core  has 32 KB instruction and 32 KB
+data L1 caches and 256 KB L2 cache. The 6 cores share a 12 MB L3 cache
+and the platform has 288 GB of DDR3 1333 MHz.
+
+\subsection{Blue Gene/Q (IBM Research -- Zurich)}
+The IBM Blue~Gene/Q~(BG/Q) supercomputer~\cite{IBMRedBookBGQHardware} is the
+third-generation computer architecture in the Blue~Gene family. It is composed
+by one or more compute racks, where each rack contains 1024 16-core compute cards,
+with a peak performance of 209~TFLOPS per rack. Each compute card contains 16~IBM~Blue~Gene/Q
+PowerPC~A2 core processors and 16 GB of memory. The chip has 16~cores (with
+up to 4~threads per core) at~1.60~GHz, with 16~kB~L1 cache each. In addition,
+it has 32~MB~L2 shared cache, and 2~controllers which provide access to 2~RAM banks
+of 8~GB each, both at~1333~MHz. Moreover, each core has an L1~prefetcher that is shared by
+the threads on the core. The network topology for Blue Gene/Q is a five-dimensional torus,
+with direct links between the nearest neighbors in the $\pm$A, $\pm$B, $\pm$C, $\pm$D, and $\pm$E
+directions and 40~GBps bandwidth.
