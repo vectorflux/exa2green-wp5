@@ -5,7 +5,7 @@ baseline execution.
 \subsection{Framework description}
 \label{subsec:3.1}
 
-\subsubsection{E3METER metering products}
+\subsubsection{CSCS - E3METER metering products}
 Supercomputer  clusters considered  for our  experiments at  the Swiss
 National Supercomputing Center of  ETH Zurich (CSCS) are equipped with
 E3METER Intelligent  Power Strips (IPS)  and Monitors (IPM)  which are
@@ -18,7 +18,7 @@ technology,  all metering  and power  quality data  from each  IPS are
 centrally collected by the E3METER Data Concentrator, via the existing
 power cables thus  avoiding the need for extra  cabling.  This data is
 made  available  via SNMP,  HTTP,  TELNET  through  the built-in  Fast
-Ethernet  port.   Time  synchronization  is guaranteed  by  using  NTP
+Ethernet  port.   Time  synchronisation  is guaranteed  by  using  NTP
 servers.   Measured data  is accessed  through the  open  source Cacti
 software including  the E3METER  Cacti Plugin to  scan the  entire PLC
 network and monitor  in real-time the power usage  of individual rack,
@@ -37,16 +37,16 @@ wrappers,  which  automatically instrument  the  Fortran  code of  the
 model. Next, COSMO-ART  is run on the nodes,  thus dissipating certain
 amount  of power.   These  nodes are  connected  to power  measurement
 devices that account for the dissipated power/consumed energy and send
-the power  data to  the tracing server.  The client,  meanwhile, sends
+the power  data to the  tracing server.  The client,  meanwhile, sends
 start/stop  primitives  in  order  to  gather  captured  data  by  the
-wattmeters onto  the tracing server,  where an instance of  the \pmlib
+watt-meters onto the  tracing server, where an instance  of the \pmlib
 server is running.
 
 Once COSMO-ART run is finished, a file containing the power profile is
 created using the power data  received from the tracing server and the
 instrumentation post-processing generates the performance trace files.
 All  these files  are  combined then  in  Paraver which  allows us  to
-visualize the performance trace and the power profile of COSMO-ART all
+visualise the performance trace and the power profile of COSMO-ART all
 together.
 
 %Once COSMO-ART run is finished, the VampirTrace \pmlib plugin receives
