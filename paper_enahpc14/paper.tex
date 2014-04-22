@@ -19,7 +19,6 @@
 \smartqed
 %
 \usepackage{graphicx}
-\usepackage[USenglish]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{hyperref}
 \usepackage[round, sort&compress, numbers]{natbib}
@@ -28,7 +27,6 @@
 \usepackage{units}
 \usepackage{color}
 \usepackage{xspace}
-%\usepackage{cite}
 %
 \DeclareRobustCommand\IPCClongname{}
 %
@@ -38,26 +36,17 @@
 % Insert the name of "your journal" with
 % \journalname{myjournal}
 %
-
-
-%
-\def\plusNoSpace{\texttt{+}}
-\def\plus{\texttt{+}\xspace}
-\def\minusNoSpace{\texttt{-}}
-\def\minus{\texttt{-}\xspace}
-\def\cpp{C{}\plusNoSpace\plusNoSpace\xspace}
-
 \begin{document}
 
-\title{Evaluating the Performance  and Energy Efficiency of COSMO-ART,
-  a Coupled Numerical Weather Forecast and Chemical Transport Model\thanks{IBM, the IBM~logo, ibm.com, and Blue~Gene/Q are trademarks or registered trademarks of International Business Machines Corporation in the United~States, other countries, or both.}}
-% \thanks{This work was supported by the EU Project FP7 318793 ``EXA2GREEN''}}
-%\subtitle{Write here subtitle}
+\title{Evaluating the Performance and Energy Efficiency of COSMO-ART,
+  a Coupled Numerical Weather Forecast and Chemical Transport Model.}
+%\thanks{}
+%\subtitle{}
 
 %\titlerunning{Short form of title} % if too long for running head
 
 \author{Joseph~Charles \and William~Sawyer \and Manuel~F.~Dolz \and
-  Sandra~Catal\'an \and A.~Cristiano~I.~Malossi \and Costas~Bekas}
+  Sandra~Catal\'an}
 
 %\authorrunning{Short form of author list} % if too long for running
 %head
@@ -74,10 +63,6 @@
         \at Jaume I University of Castell\'on (UJI)
 	\\ ES-12071 Castell\'on, Spain
         \\ \email{catalans@icc.uji.es}
-        \and A.~C.~I.~Malossi, C.~Bekas
-        \at IBM Research -- Zurich
-        \\ CH-8803 R\"uschlikon, Switzerland
-        \\ E-mails:~{\{acm,bek\}@zurich.ibm.com}
 }
 
 \date{Received: date / Accepted: date} % The correct dates will be
@@ -127,10 +112,6 @@
 \section{The COSMO-ART model system}
 \label{sec:2}
 \input{Sec2:COSMO-ART.tex}
-
-\section{HPC Supercomputers}
-\label{sec:5}
-\input{Sec5:Supercomputers.tex}
 
 \section{Power-performance measurement framework}
 \label{sec:3}

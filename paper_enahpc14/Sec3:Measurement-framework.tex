@@ -1,11 +1,11 @@
-In this section,  we present three different frameworks  deployed on HPC
+In this section,  we present two different frameworks  deployed on HPC
 systems  to  measure the  power  consumption  and  performance of  the
 baseline execution.
 
-%\subsection{Framework description}
-%\label{subsec:3.1}
+\subsection{Framework description}
+\label{subsec:3.1}
 
-\subsection{E3METER metering products}
+\subsubsection{E3METER metering products}
 Supercomputer  clusters considered  for our  experiments at  the Swiss
 National Supercomputing Center of  ETH Zurich (CSCS) are equipped with
 E3METER Intelligent  Power Strips (IPS)  and Monitors (IPM)  which are
@@ -24,13 +24,7 @@ software including  the E3METER  Cacti Plugin to  scan the  entire PLC
 network and monitor  in real-time the power usage  of individual rack,
 recorded in 5 minutes interval periods.
 
-\textbf{MALOSSI: I MOVED THIS PART HERE, SINCE IT IS RELATED TO CSCS MACHINES: IT NEEDS TO BE INTEGRATED IN THE TEXT ABOVE}
-Energy  consumption of  CSCS  clusters is
-assessed  by sampling  the instantaneous  peak power  during execution
-which  is then  averaged  and multiplied  by  the time-to-solution  to
-determine energy-to-solution.
-
-\subsection{University of Hamburg}
+\subsubsection{University of Hamburg}
 To assess the  performance and the energy efficiency  of COSMO-ART, we
 employ   a    version   of   the    integrated   framework   presented
 in~\cite{energy13} that works in  combination with Extrae and Paraver,
@@ -71,11 +65,3 @@ together.
 %servers.   Finally,   using  the   Vampir   visualization  tool,   the
 %power-performance traces  can be easily  analyzed through a  series of
 %plots and statistics.
-
-\subsection{IBM BG/Q integrated power measurement system}
-The IBM Blue~Gene/Q~(BG/Q) supercomputer is equipped with internal hardware sensors
-that provide 8~power measures for each node board (32~node cards, 512~cores), including total power, chip power, DDR~DIMM power, and network power.
-Therefore, no additional hardware tools are required to obtain power measurements.
-In order to instrument the code and collect power measurements in a file we use the MonEQ library~\cite{SeanWallace2013},
-which provides a simple interface to start and stop power measurement in specific regions of the code.
-Energy is computed a posteriori as the product of average power and time-to-solution.
