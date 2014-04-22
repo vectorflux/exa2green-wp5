@@ -16,7 +16,7 @@ intense development such as COSMO-ART is a challenging task because of
 the  absolute necessity that  results must  be reproducible  within an
 expected variance for the duration of the Exa2Green project. To define
 a baseline,  it was necessary  to find a run-configuration  capable of
-being  recreated in  lal subsequent  versions.  Here  we give  a brief
+being  recreated in  all subsequent  versions.  Here  we give  a brief
 overview of the model setup  for our performance and energy efficiency
 evaluation.
 
@@ -40,14 +40,15 @@ at  6h temporal resolution.  The model  setup incorporates  34~2-D and
 45~3-D  fields to  be written  out every  hour and  is devoid  of data
 assimilation methods.
 
-The  considered  COSMO-ART model  system  is  configured  with a  semi
-Lagrangian horizontal advection scheme with tricubic interpolation and
-selective filling  diffusion option in combination  with the dynamical
-core  using Runge-Kutta  time  stepping \citep{COSMO-PartI-2011}.   It
-also  makes use  of  the  Kinetic PreProcessor  solver  (KPP) for  the
-resolution  of atmospheric  chemistry ordinary  differential equations
-\citep{Damian-2002}.   Concerning the modelling  of wet  deposition in
-aerosols, the baseline has only  indirect cloud feedbacks but does not
-include  in-cloud  scavenging  (rainout)  and  below-cloud  scavenging
-(washout)  yet.   Amongst  physical  parameterisations,  precipitation
-formation is performed by a two-moment cloud microphysics.
+The   considered  COSMO-ART   model  system   is  configured   with  a
+semi-Lagrangian    horizontal   advection    scheme    with   tricubic
+interpolation  and selective filling  diffusion option  in combination
+with   the   dynamical    core   using   Runge-Kutta   time   stepping
+\citep{COSMO-PartI-2011}.    It  also   makes  use   of   the  Kinetic
+PreProcessor solver (KPP) for  the resolution of atmospheric chemistry
+ordinary  differential equations \citep{Damian-2002}.   Concerning the
+modelling  of  wet  deposition  in  aerosols, the  baseline  has  only
+indirect  cloud feedbacks  but  does not  include in-cloud  scavenging
+(rainout) and below-cloud  scavenging (washout) yet.  Amongst physical
+parameterisations,   precipitation  formation   is   performed  by   a
+two-moment cloud microphysics.
