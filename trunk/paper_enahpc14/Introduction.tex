@@ -29,11 +29,11 @@ model COSMO \citep{Baldauf-2011}, jointly developed by a consortium of
 European weather  centers and used in the  climate version (COSMO-CLM)
 by a wide research community.
 
-The extended  COSMO-ART model  is computationally much  more demanding
-than COSMO  since a large  number of additional tracers  and processes
-have to  be considered.  Thus the model  is currently severely-limited
-in  terms   of  applicability  and   expensive  in  terms   of  energy
-consumption.    Although   COSMO   has   recently   been   ported   to
+The extended atmospheric model  COSMO-ART is computationally much more
+demanding than  COSMO since a  large number of additional  tracers and
+processes  have  to  be  considered.   Thus  the  model  is  currently
+severely-limited in  terms of applicability and expensive  in terms of
+energy  consumption.   Although  COSMO  has recently  been  ported  to
 GPUs  \citep{Gysi-2014, Lapillonne-2014} within  the framework  of the
 High Performance and High  Productivity Computing (HP2C) Initiative to
 optimise    it    for     computational    and    energy    efficiency
@@ -47,17 +47,15 @@ allow  the  community  to  investigate critical  questions  at  higher
 resolution  and   over  longer  periods,   at  reduced  cost   to  the
 environment.
 
-This  work is organized  as follows:  in Sec.~\ref{sec:1}  we describe
-related  work,  then in  Sec.~\ref{sec:2},  we  briefly introduce  the
-regional atmospheric  model COSMO-ART and specify  its technical setup
-related to the investigated performance and energy evaluation methods.
-Sec.~\ref{sec:5} describes the HPC  supercomputers used to compute the
-baseline.  Sec.~\ref{sec:3}   describes  different  power  measurement
-equipment  used for  conducting this  benchmarking study  and presents
-energy-aware techniques employed to  determine the energy footprint of
-the   considered  application.   Sec.~\ref{sec:4}   gathers  benchmark
-results  from  the  Exa2Green   project  and  highlights  areas  where
-improvements   will   be  necessary   for   the  subsequent   baseline
-refactoring.   Finally,  we  conclude  with  practical  guidelines  to
-identifying energy saving opportunities  and give an outlook to future
-research in Sec.~\ref{concl}.
+This  work is  organized as  follows: in  Sec.~\ref{sec:1} we  give an
+overview  of  related  work,   then  in  Sec.~\ref{sec:2}  we  briefly
+introduce  COSMO-ART and specify  its technical  setup related  to the
+investigated  performance  and  energy  evaluation  methods.   In  the
+subsequent Sec.~\ref{sec:3},  we describe different  power measurement
+equipments as well as energy-aware techniques employed to conduct this
+benchmarking  study.  Sec.~\ref{sec:4}  presents  the performance  and
+energy  requirements  of the  baseline  on  various architectures  and
+highlights  areas  where  improvements   will  be  necessary  for  the
+subsequent baseline refactoring.   Finally, we conclude with practical
+guidelines  to identifying  energy  saving opportunities  and give  an
+outlook to future research in Sec.~\ref{concl}.
