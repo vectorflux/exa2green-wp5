@@ -85,21 +85,18 @@ data L1 caches and 256 KB L2 cache. The 6 cores share a 12 MB L3 cache
 and the platform has 288 GB of DDR3 1333 MHz.
  
 \subsubsection{Sofware environment}
-INT2LM  and the  COSMO-ART model  are  implemented in  Fortran 90  for
-distributed  memory  parallel  computers  using  the  Message  Passing
-Interface (MPI)  and are purely  MPI-parallel.  The software  stack on
-both  many-core  CSCS  platforms  was  controlled  using  the  modules
-framework which gives an easy  and flexible mechanism to access to all
-of the  provided compilers, tools  and applications.  For  our initial
-benchmarking,  we opted  for  the GNU  compiler  (gcc/4.8.1 on  Monch,
-gcc/4.8.2 on Pilatus) with the -O3 compiler flag as it generally gives
-a  good  level  of optimisation  and  the  code  runs faster  in  this
-configuration  than when  compiled with  the intel  compiler (14.0.1).
-Besides, we installed the  MPICH2 implementation of MPI (mvapich2/1.9)
-as  well  as  the  commonly  used HDF5  (1.8.12)  and  NetCDF  (4.3.1)
-libraries in favor of the  traditional GRIB library for the management
-of extremely  large and complex data collections.   All computes nodes
-have    an   operating   system    based   on    GNU/Linux   featuring
+The COSMO-ART baseline  is a pure MPI based  Fortran~90 code currently
+running on distributed multi-core systems only.  The software stack on
+both CSCS  platforms was controlled using the  modules framework which
+gives an easy and flexible mechanism  to access to all of the provided
+compilers, tools  and applications.  For our  initial benchmarking, we
+opted for the GNU compiler  (gcc/4.8.1 on Monch, gcc/4.8.2 on Pilatus)
+using the -O3  compiler flag in favor of  the intel compiler (14.0.1),
+delivering inferior performance.  In addition, we installed the MPICH2
+implementation of MPI (mvapich2/1.9) as well as the commonly used HDF5
+(1.8.12) and NetCDF (4.3.1)  libraries for the management of extremely
+large  and  complex data  collections.   All  computes  nodes have  an
+operating      system      based      on      GNU/Linux      featuring
 ``2.6.32-358.11.1.el6.x86\_64''      kernel      in     Monch      and
 ``3.0.101-0.15-default'' kernel in Pilatus.
 
@@ -113,10 +110,10 @@ processors using  a 2D-partitioning strategy.   The distribution along
 the $x$  and $y$ coordinates  was defined by setting:  $nprocx=40$ and
 $nprocy=26$ for  Monch and $nprocx=28$ and $nprocy=24$  as $nprocx$ is
 usually  kept  bigger than  $nprocy$.   Besides,  as  this version  of
-COSMO-ART  doesn't  make  use   of  the  GRIB  library,  we  specified
-$nprocio=0$ for  GRIB I/O.  Hyperthreading  is not considered  in this
-study as previous  attempts of its use revealed that  it always led to
-higher energy-to-solution.\\
+COSMO-ART  doesn't  make  use  of  the traditional  GRIB  library,  we
+specified $nprocio=0$ for GRIB  I/O.  Hyperthreading is not considered
+in this study as previous attempts  of its use revealed that it always
+led to higher energy-to-solution.\\
 
 \subsection{Experimental results}
 \label{subsec:4.3}
@@ -172,11 +169,11 @@ Table~\ref{tab:3}.
 In Figure~\ref{fig:3}, we compare both time-to-solution (right y-axis)
 and  energy-to-solution (left  y-axis) metrics  on both  platforms. As
 expected,  Xeon  E5 outperforms  Ivy  Bridge  EP,  being roughly  1.3x
-faster.   The  reason  for  that  is two-fold:  it  has  higher  clock
-frequency than  Ivy Bridge (2.6  GHz against 2.2  GHz) and it  aims at
-computing speed regardless to  energy consumption. In our experiments,
-Ivy Bridge EP showed  the best energy-to-solution, reducing the energy
-consumption of Xeon E5 by approximately $7\%$.
+faster.   The reason for  that is  two-fold: (1)  it has  higher clock
+frequency than Ivy  Bridge (2.6 GHz against 2.2 GHz),  and (2) it aims
+at  computing   speed  regardless   to  energy  consumption.   In  our
+experiments,  Ivy  Bridge   EP  showed  the  best  energy-to-solution,
+reducing the energy consumption of Xeon E5 by approximately $7\%$.
 
 \begin{figure}[htbf]
   \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART.eps}
