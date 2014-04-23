@@ -23,6 +23,8 @@ measurement, as dictated by the available technology.
 
 \subsection{Environment setup}
 \label{subsec:4.2}
+
+\subsubsection{HPC platforms}
 We have  chosen a state-of-the-art Intel's  third-generation Core (aka
 Ivy  Bridge) processing platform  at CSCS  (called ``Monch'')  for our
 power  measurements,  which  is  slated  to stay  in  service  without
@@ -42,7 +44,9 @@ University (UJI) using an  integrated framework, to capture an overall
 power profile at a much finer resolution and to get more insights into
 the MPI blocking and polling influences on power savings.
 
-\subsubsection{CSCS - Monch}
+\paragraph{CSCS - Monch} 
+~\\
+\vskip -1em
 Monch is  a 10 rack  NEC-provided and dual-socket Intel  Ivy Bridge-EP
 based  cluster, utilised  by  scientists  who are  part  of the  Swiss
 Platform     for      Advanced     Scientific     Computing     (PASC,
@@ -58,7 +62,9 @@ platform has  32GB of  DDR3 1600 MHz  RAM. For  our energy-to-solution
 benchmark, a  full rack  of Monch constituted  of 52  standard compute
 nodes (monchc[029-080]) was considered.
 
-\subsubsection{CSCS - Pilatus}
+\paragraph{CSCS - Pilatus} 
+~\\
+\vskip -1em
 Pilatus  is  a dual-socket  eight-core  Intel  Sandy  Bridge EP  based
 cluster used as Piz Daint pre-post processing cluster.  It is composed
 of 42 compute  nodes and has 2 high-speed  interconnects based on FDR:
@@ -75,7 +81,9 @@ cache.  All  the 8 core share  a 20 MB  L3 cache and the  platform has
 full  rack  of  Pilatus  constituted  of  42  standard  compute  nodes
 (pilatus[03-44]) was considered.
 
-\subsubsection{UJI - Tintorrum}
+\paragraph{UJI - Tintorrum} 
+~\\
+\vskip -1em
 Tintorrum  is a heterogeneous  cluster composed  of 28  compute nodes.
 For our experiments only a subset of these nodes were considered. This
 set is  composed of 16  nodes, each of  which includes two  Intel Xeon
@@ -176,8 +184,22 @@ experiments,  Ivy  Bridge   EP  showed  the  best  energy-to-solution,
 reducing the energy consumption of Xeon E5 by approximately $7\%$.
 
 \begin{figure}[htbf]
-  \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART.eps}
-  \caption{Time-to-solution and  energy-to-solution comparison between
+  \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART-0.eps}
+  \caption{Time-to-solution and energy-to-solution comparison between
     Xeon E5 and Ivy Bridge-EP architectures}
+  \label{fig:3}
+\end{figure}
+
+\begin{figure}[htbf]
+  \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART-1.eps}
+  \caption{Time-to-solution and energy-to-solution on Tintorrum -
+    Polling mode}
+  \label{fig:3}
+\end{figure}
+
+\begin{figure}[htbf]
+  \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART-2.eps}
+  \caption{Time-to-solution and energy-to-solution on Tintorrum -
+    Blocking mode}
   \label{fig:3}
 \end{figure}
