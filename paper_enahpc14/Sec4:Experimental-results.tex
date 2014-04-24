@@ -1,0 +1,155 @@
+In  this section,  we  describe a  performance  and energy  efficiency
+evaluation  of  different  achitectures  when  running  the  COSMO-ART
+baseline.  We  start by  specifying our measurement  methodology along
+with the metrics used to  analyse the results on all platforms.  Then,
+we detail the environment  setup gathering the considered HPC systems,
+the  software  environment and  the  run  configuration.  Finally,  we
+discuss benchmark  results and  power-performance traces of  the model
+system.
+
+\subsection{Measurement methodology}
+\label{subsec:4.1}
+
+We  approach  the  assessment  of  the energy  footprint  and  overall
+performance    of    COSMO-ART    with    two    important    metrics:
+\textit{time-to-solution} (TTS) and \textit{energy-to-solution} (ETS).
+TTS refers to  the total wall clock time  of the application execution
+time. ETS  is the amount of  energy spent to  achieve results.  Energy
+consumption  is  assessed by  sampling  the  instantaneous peak  power
+during execution which  is then averaged and multiplied  by the TTS to
+determine  ETS.   Whenever   possible,  multiple  production  runs  of
+COSMO-ART  were performed  to  illustrate the  reproducibility of  the
+baseline,  and quantify  the  significant uncertainties  in the  power
+measurement, as dictated by the available technology.
+
+\subsection{Time-energy analysis of COSMO-ART}
+\label{subsec:4.2}
+
+\begin{figure}[htbf]
+  \begin{center}
+    \includegraphics[width=0.48\textwidth]{Figs/NRJ_benchmark_Monch.eps}
+    \caption{Monch: Isola E1 Rack 2 Total Power}
+    \label{fig:1}
+  \end{center}
+\end{figure}
+
+\begin{figure}[htbf]
+  \begin{center}
+    \includegraphics[width=0.48\textwidth]{Figs/NRJ_benchmark_Pilatus.eps}
+    \caption{Pilatus: Isola HD Total Power}
+    \label{fig:2}
+  \end{center}
+\end{figure}
+
+Figures~\ref{fig:1} and  \ref{fig:2} account respectively  for Monch's
+Isola E1  Rack 2  and Pilatus' Isola  HD total power  measurements for
+1-day or 2-days simulations. On  the Intel Ivy Bridge EP based cluster
+(i.e. Monch), the 1-day simulation  was issued only twice due to usage
+restrictions. As time resolution was set to one update every 5 minutes
+for  power sampling,  the average  power consumption  was  computed by
+considering 6 values for each single  run.  On the Intel Xeon E5 based
+cluster (i.e.   Pilatus), the 1-day  simulation was issued  four times
+and a 2-days  run only once. Similarly, the  average power consumption
+was computed by  considering 4 values for each single  1-day run and 9
+values  for the  2-days  run. Corresponding  results  are gathered  in
+Table~\ref{tab:3}.
+
+\begin{table}[htbf]
+  \begin{center}
+    \caption{Average power consumption (W) of the platforms}
+    \label{tab:3}
+    \begin{tabular}{ccc}
+      \hline\noalign{\smallskip}
+      \textbf{Simulation time} & \textbf{Xeon E5} & \textbf{Ivy Bridge EP} \\
+      \noalign{\smallskip}\hline\noalign{\smallskip}
+      \textbf{1 day} & 18122.01417 & 12658.52278 \\ 
+      & 17979.61083 & 12586.40833 \\
+      & 18065.45167 & - \\
+      & 17973.02833 & - \\
+      \noalign{\smallskip}\hline\noalign{\smallskip}
+      \textbf{2 days} & 17997.57815 & - \\
+      \noalign{\smallskip}\hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+In Figure~\ref{fig:3}, we compare both time-to-solution (right y-axis)
+and  energy-to-solution (left  y-axis) metrics  on both  platforms. As
+expected,  Xeon  E5 outperforms  Ivy  Bridge  EP,  being roughly  1.3x
+faster.   The reason for  that is  two-fold: (1)  it has  higher clock
+frequency than Ivy  Bridge (2.6 GHz against 2.2 GHz),  and (2) it aims
+at  computing   speed  regardless   to  energy  consumption.   In  our
+experiments,  Ivy  Bridge   EP  showed  the  best  energy-to-solution,
+reducing the energy consumption of Xeon E5 by approximately $7\%$.
+
+\begin{figure}[htbf]
+  \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART-0.eps}
+  \caption{Time-to-solution and energy-to-solution comparison between
+    Xeon E5 and Ivy Bridge-EP architectures}
+  \label{fig:3}
+\end{figure}
+
+\begin{figure}[htbf]
+  \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART-1.eps}
+  \caption{Time-to-solution and energy-to-solution on Tintorrum -
+    Polling mode}
+  \label{fig:4}
+\end{figure}
+
+\begin{figure}[htbf]
+  \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART-2.eps}
+  \caption{Time-to-solution and energy-to-solution on Tintorrum -
+    Polling mode}
+  \label{fig:5}
+\end{figure}
+
+\begin{figure}[htbf]
+  \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART-3.eps}
+  \caption{Time-to-solution and Power on Tintorrum - Polling mode}
+  \label{fig:6}
+\end{figure}
+
+\begin{figure}[htbf]
+  \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART-4.eps}
+  \caption{Time-to-solution and Power on Tintorrum - Blocking mode}
+  \label{fig:7}
+\end{figure}
+
+\subsection{Power-performance tracing of COSMO-ART}
+\label{subsec:4.3}
+
+\begin{figure*}[htbf]
+  \centering
+  \includegraphics[width=0.78\textwidth]{Figs/23_24_blq1_stat1.eps}
+  \caption{blabla}
+  \label{fig:8}
+\end{figure*}
+
+\begin{figure*}[htbf]
+  \centering
+  \scalebox{0.5}{\input{Figs/24hour.pstex_t}}
+  \caption{24 hours simulation trace using the MPI blocking mode on Tintorrum.}
+  \label{fig:9}
+\end{figure*}
+
+\begin{figure*}[htbf]
+  \centering
+  \scriptsize
+  MPI polling mode\\
+  \scalebox{0.5}{\input{Figs/11_12_blq0_figure.pstex_t}}\\
+  MPI blocking mode\\
+  \scalebox{0.5}{\input{Figs/11_12_blq1_figure.pstex_t}}
+  \caption{1 hour simulation (11h-12h) trace using the MPI blocking mode on Tintorrum.}
+  \label{fig:10}
+\end{figure*}
+
+\begin{figure*}[htbf]
+  \centering
+  \scriptsize
+  MPI polling mode\\
+  \scalebox{0.5}{\input{Figs/23_24_blq0_figure.pstex_t}}\\
+  MPI blocking mode\\
+  \scalebox{0.5}{\input{Figs/23_24_blq1_figure.pstex_t}}
+  \caption{1 hour simulation (23h-24h) trace using the MPI blocking mode on Tintorrum.}
+  \label{fig:11}
+\end{figure*}

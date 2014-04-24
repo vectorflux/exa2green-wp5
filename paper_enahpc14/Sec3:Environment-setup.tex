@@ -1,0 +1,165 @@
+\subsection{Hardware platforms}
+\label{subsec:3.1}
+
+We have  chosen a state-of-the-art Intel's  third-generation Core (aka
+Ivy  Bridge) processing platform  at CSCS  (called ``Monch'')  for our
+power  measurements,  which  is  slated  to stay  in  service  without
+hardware  upgrade  for the  duration  of  the  Exa2Green project.   In
+principle at least,  this architecture could be recreated  or found in
+an identical configuration beyond  the lifetime of the project.  Since
+the baseline benchmark can  be reproduced within an expected variance,
+and  that the baseline  run configuration  can be  used in  all future
+versions  of the  code, a  fair comparison  will be  made  between the
+baseline and  the milestone versions  of COSMO-ART.  In this  study, a
+complementary  energy-to-solution benchmarking  comparison  is carried
+out   on  the   ``Pilatus''  cluster   at  CSCS,   based   on  Intel's
+previous-generation  Sandy  Bridge  processors,  conventional  in  HPC
+systems and known to be  more power consuming.  Finally a full tracing
+experiment is  conducted on the  ``Tintorrum'' cluster at the  Jaume I
+University (UJI) using an  integrated framework, to capture an overall
+power profile at a much finer resolution and to get more insights into
+the MPI blocking and polling influences on power savings.
+
+\subsubsection{CSCS - Monch}
+Monch is  a 10 rack  NEC-provided and dual-socket Intel  Ivy Bridge-EP
+based  cluster, utilised  by  scientists  who are  part  of the  Swiss
+Platform     for      Advanced     Scientific     Computing     (PASC,
+\url{http://www.pasc-ch.org/}). It is composed of 312 standard compute
+nodes, 24 large-memory compute nodes and 24 huge-memory compute nodes.
+Each standard  compute node comprises  two Intel Ivy  Bridge Efficient
+Performance (EP)  E5-2660 v2 ten-core processors operating  at 2.2 GHz
+base  clock speed,  themselves connected  by a  high  speed InfiniBand
+network based on Mellanox SX6036  managed FDR switches, with a 56 Gb/s
+speed.  Each core  has 32 KB instruction and 32 KB  data L1 caches and
+256  KB of L2  cache. All  10 cores  share a  25 MB  L3 cache  and the
+platform has  32GB of  DDR3 1600 MHz  RAM. For  our energy-to-solution
+benchmark, a  full rack  of Monch constituted  of 52  standard compute
+nodes (monchc[029-080]) was considered.
+
+\subsubsection{CSCS - Pilatus} 
+Pilatus  is  a dual-socket  eight-core  Intel  Sandy  Bridge EP  based
+cluster used as Piz Daint pre-post processing cluster.  It is composed
+of 42 compute  nodes and has 2 high-speed  interconnects based on FDR:
+the  first is  dedicated to  the  MPI traffic  and the  second to  the
+storage high  speed traffic.   The 2 login  nodes and the  42 computes
+nodes  consists in  11  twin-pair Intel  E5-Series  DALCO r2264i4t  2U
+scalable compute modules.  Each  module contains 4 compute nodes based
+on two Intel  Xeon E5-2670 processors operating at  2.6 GHz base clock
+speed, themselves  connected by a high speed  InfiniBand network based
+on Mellanox  SX6036 managed FDR switches,  with a 56  Gb/s speed. Each
+core has 32 KB  instruction and 32 KB data L1 caches  and 256 KB of L2
+cache.  All  the 8 core share  a 20 MB  L3 cache and the  platform has
+64GB of  DDR3 1600 MHz  RAM.  For our energy-to-solution  benchmark, a
+full  rack  of  Pilatus  constituted  of  42  standard  compute  nodes
+(pilatus[03-44]) was considered.
+
+\subsubsection{UJI - Tintorrum} 
+Tintorrum  is a heterogeneous  cluster composed  of 28  compute nodes.
+For our experiments only a subset of these nodes were considered. This
+set is  composed of 16  nodes, each of  which includes two  Intel Xeon
+E5645 hexa-core  processors at 2.40  GHz connected via  Infiniband QDR
+(Mellanox MTS3600 switch).  Each core  has 32 KB instruction and 32 KB
+data L1 caches and 256 KB L2 cache. The 6 cores share a 12 MB L3 cache
+and the platform has 288 GB of DDR3 1333 MHz.
+
+\subsection{Software environment}
+\label{subsec:3.2}
+
+The COSMO-ART baseline  is a pure MPI based  Fortran~90 code currently
+running on distributed multi-core systems only.  The software stack on
+both CSCS  platforms was controlled using the  modules framework which
+gives an easy and flexible mechanism  to access to all of the provided
+compilers, tools  and applications.  For our  initial benchmarking, we
+opted for the GNU compiler  (gcc/4.8.1 on Monch, gcc/4.8.2 on Pilatus)
+using the -O3  compiler flag in favor of  the intel compiler (14.0.1),
+delivering inferior performance.  In addition, we installed the MPICH2
+implementation of MPI (mvapich2/1.9) as well as the commonly used HDF5
+(1.8.12) and NetCDF (4.3.1)  libraries for the management of extremely
+large  and  complex data  collections.   All  computes  nodes have  an
+operating      system      based      on      GNU/Linux      featuring
+``2.6.32-358.11.1.el6.x86\_64''      kernel      in     Monch      and
+``3.0.101-0.15-default'' kernel in Pilatus.
+
+\subsubsection{Run configuration}
+A snapshot of the code, which includes, at least conceptually, all the
+information needed  to reproduce the  energy-to-solution benchmarks of
+COSMO-ART, was produced and run on a 1040 cores using 20 MPI tasks per
+node on  Monch and  on a  1344 cores using  16 MPI  tasks per  node on
+Pilatus.   The  calculated  region  was mapped  to  the  participating
+processors using  a 2D-partitioning strategy.   The distribution along
+the $x$  and $y$ coordinates  was defined by setting:  $nprocx=40$ and
+$nprocy=26$ for  Monch and $nprocx=28$ and $nprocy=24$  as $nprocx$ is
+usually  kept  bigger than  $nprocy$.   Besides,  as  this version  of
+COSMO-ART  doesn't  make  use  of  the traditional  GRIB  library,  we
+specified $nprocio=0$ for GRIB  I/O.  Hyperthreading is not considered
+in this study as previous attempts  of its use revealed that it always
+led to higher energy-to-solution.\\
+
+\subsection{Power-performance measurement framework}
+\label{subsec:3.3}
+
+We present  here two different  frameworks deployed on HPC  systems to
+measure  the  power  consumption   and  performance  of  the  baseline
+execution.
+
+\subsubsection{CSCS - E3METER metering products}
+Supercomputer  clusters considered  for our  experiments at  the Swiss
+National Supercomputing Center (CSCS)  of ETH Zurich are equipped with
+E3METER Intelligent  Power Strips (IPS)  and Monitors (IPM)  which are
+high   quality   electricity  meters   released   by  Riedo   Networks
+(\url{http://riedonetworks.com/}),  that  enable  to monitor  and  log
+power  consumption of  the  IT infrastructure  as  well as  constantly
+analyze  line  voltage,  current,  power-factor,  frequency  with  1\%
+accuracy.   Using reliable  narrowband  powerline communication  (PLC)
+technology,  all metering  and power  quality data  from each  IPS are
+centrally collected by the E3METER Data Concentrator, via the existing
+power cables thus  avoiding the need for extra  cabling.  This data is
+made  available  via SNMP,  HTTP,  TELNET  through  the built-in  Fast
+Ethernet  port.   Time  synchronisation  is guaranteed  by  using  NTP
+servers.   Measured data  is accessed  through the  open  source Cacti
+software including  the E3METER  Cacti Plugin to  scan the  entire PLC
+network and monitor  in real-time the power usage  of individual rack,
+recorded in 5 minutes interval periods.
+
+\subsubsection{UHAM - UJI}
+To assess the  performance and the energy efficiency  of COSMO-ART, we
+employ   a    version   of   the    integrated   framework   presented
+in~\cite{energy13} that works in  combination with Extrae and Paraver,
+which are profiling/tracing and visualization tools, respectively.
+
+%The left part of the \vref{fig:Lustre} offers a graphical representation of
+%the Lustre architecture; the right depicts the tracing and profiling framework.
+To use our  approach, COSMO-ART is compiled using  the Extrae compiler
+wrappers,  which  automatically instrument  the  Fortran  code of  the
+model. Next, COSMO-ART  is run on the nodes,  thus dissipating certain
+amount  of power.   These  nodes are  connected  to power  measurement
+devices that account for the dissipated power/consumed energy and send
+the power  data to the  tracing server.  The client,  meanwhile, sends
+start/stop  primitives  in  order  to  gather  captured  data  by  the
+watt-meters onto the  tracing server, where an instance  of the \pmlib
+server is running.
+
+Once COSMO-ART run is finished, a file containing the power profile is
+created using the power data  received from the tracing server and the
+instrumentation post-processing generates the performance trace files.
+All  these files  are  combined then  in  Paraver which  allows us  to
+visualise the performance trace and the power profile of COSMO-ART all
+together.
+
+%Once COSMO-ART run is finished, the VampirTrace \pmlib plugin receives
+%the  power   data  from  the  tracing   server.   The  instrumentation
+%post-processing generates  the performance trace files  and the \pmlib
+%plugin inserts the power data into them.
+
+%In  addition  to the  power  measurements,  we  also account  for  the
+%resource utilization values  of the nodes: CPU load,  memory usage and
+%storage device utilization. % and network utilization.
+
+%We  run special  \pmlib  server  instances on  the  server nodes  that
+%retrieve these  values from the \texttt{proc}  file system (leveraging
+%the  \texttt{psutil} Python library).   Thus, \pmlib  plugin instances
+%running  with the  instrumented  application connect  with the  \pmlib
+%servers.   Finally,   using  the   Vampir   visualization  tool,   the
+%power-performance traces  can be easily  analyzed through a  series of
+%plots and statistics.
+
