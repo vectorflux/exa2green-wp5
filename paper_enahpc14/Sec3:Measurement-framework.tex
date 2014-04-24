@@ -24,30 +24,25 @@ software including  the E3METER  Cacti Plugin to  scan the  entire PLC
 network and monitor  in real-time the power usage  of individual rack,
 recorded in 5 minutes interval periods.
 
-\subsubsection{UHAM - UJI}
+\subsubsection{Power-performance measurement framework at UJI}
+
 To assess the  performance and the energy efficiency  of COSMO-ART, we
-employ   a    version   of   the    integrated   framework   presented
-in~\cite{energy13} that works in  combination with Extrae and Paraver,
+employ   a    version   of   the \pmlib power measurement framework~\cite{energy13} that works in  combination with Extrae and Paraver~\ref{paraver},
 which are profiling/tracing and visualization tools, respectively.
 
-%The left part of the \vref{fig:Lustre} offers a graphical representation of
-%the Lustre architecture; the right depicts the tracing and profiling framework.
-To use our  approach, COSMO-ART is compiled using  the Extrae compiler
-wrappers,  which  automatically instrument  the  Fortran  code of  the
-model. Next, COSMO-ART  is run on the nodes,  thus dissipating certain
-amount  of power.   These  nodes are  connected  to power  measurement
-devices that account for the dissipated power/consumed energy and send
-the power  data to the  tracing server.  The client,  meanwhile, sends
-start/stop  primitives  in  order  to  gather  captured  data  by  the
-watt-meters onto the  tracing server, where an instance  of the \pmlib
-server is running.
+To use our approach, COSMO-ART is compiled using the Extrae library, 
+which  automatically instruments the Fortran  code of  the
+model in order to generate traces that record, e.g., MPI calls.
+Next, COSMO-ART  is run on the nodes,  thus dissipating certain
+amount  of power. These nodes are connected to power measurement devices that account
+for the dissipated power/consumed energy and send the power data to the tracing server. 
+The client,  meanwhile, sends start/stop  primitives  in  order  to  gather  captured  data  by  these PDUs onto the  tracing server, where an instance  of the \pmlib server is running.
 
-Once COSMO-ART run is finished, a file containing the power profile is
-created using the power data  received from the tracing server and the
-instrumentation post-processing generates the performance trace files.
-All  these files  are  combined then  in  Paraver which  allows us  to
-visualise the performance trace and the power profile of COSMO-ART all
-together.
+Once COSMO-ART run is finished, trace files containing the power profile 
+using the power data  received from the tracing server and the
+instrumentation trace files are generated.
+Afterwards, the combination of both trace files in Paraver allows us 
+to visualise and correlate the performance trace with the power profile of COSMO-ART.
 
 %Once COSMO-ART run is finished, the VampirTrace \pmlib plugin receives
 %the  power   data  from  the  tracing   server.   The  instrumentation

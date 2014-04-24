@@ -1,8 +1,8 @@
 %!PS-Adobe-3.0 EPSF-3.0
 %%Title: 24hour.fig
 %%Creator: fig2dev Version 3.2 Patchlevel 5d
-%%CreationDate: Thu Apr 24 14:47:04 2014
-%%BoundingBox: 0 0 744 197
+%%CreationDate: Thu Apr 24 19:02:58 2014
+%%BoundingBox: 0 0 744 199
 %Magnification: 1.0000
 %%EndComments
 %%BeginProlog
@@ -81,8 +81,8 @@ end
 
 /pageheader {
 save
-newpath 0 197 moveto 0 0 lineto 744 0 lineto 744 197 lineto closepath clip newpath
--69.9 462.7 translate
+newpath 0 199 moveto 0 0 lineto 744 0 lineto 744 199 lineto closepath clip newpath
+-69.9 463.2 translate
 1 -1 scale
 $F2psBegin
 10 setmiterlimit
