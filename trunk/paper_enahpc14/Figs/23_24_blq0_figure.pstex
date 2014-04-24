@@ -1,8 +1,8 @@
 %!PS-Adobe-3.0 EPSF-3.0
 %%Title: 23_24_blq0_figure.fig
 %%Creator: fig2dev Version 3.2 Patchlevel 5d
-%%CreationDate: Thu Apr 24 14:46:48 2014
-%%BoundingBox: 0 0 788 256
+%%CreationDate: Thu Apr 24 18:56:33 2014
+%%BoundingBox: 0 0 794 221
 %Magnification: 1.0000
 %%EndComments
 %%BeginProlog
@@ -81,8 +81,8 @@ end
 
 /pageheader {
 save
-newpath 0 256 moveto 0 0 lineto 788 0 lineto 788 256 lineto closepath clip newpath
--26.3 462.7 translate
+newpath 0 221 moveto 0 0 lineto 794 0 lineto 794 221 lineto closepath clip newpath
+-20.5 437.7 translate
 1 -1 scale
 $F2psBegin
 10 setmiterlimit
@@ -166,8 +166,8 @@ systemdict /colorimage known { /cnt 3 def } { /cnt 1 def } ifelse
   grestore
 } bind def
 n gs
-1125 3285 tr
-7.291280 -10.928571 sc
+1170 3510 tr
+7.263451 -9.128571 sc
 0 -350 tr
 0 0 tr
 sa

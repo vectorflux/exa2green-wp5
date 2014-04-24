@@ -1,8 +1,8 @@
 %!PS-Adobe-3.0 EPSF-3.0
-%%Title: 11_12_blq0_figure.fig
+%%Title: /home/dolz/Dropbox/2014-EnA-HPC/paper_enahpc14/Figs/11_12_blq0_figure.fig
 %%Creator: fig2dev Version 3.2 Patchlevel 5d
-%%CreationDate: Thu Apr 24 15:46:21 2014
-%%BoundingBox: 0 0 788 256
+%%CreationDate: Thu Apr 24 19:01:01 2014
+%%BoundingBox: 0 0 796 218
 %Magnification: 1.0000
 %%EndComments
 %%BeginProlog
@@ -81,8 +81,8 @@ end
 
 /pageheader {
 save
-newpath 0 256 moveto 0 0 lineto 788 0 lineto 788 256 lineto closepath clip newpath
--26.3 462.7 translate
+newpath 0 218 moveto 0 0 lineto 796 0 lineto 796 218 lineto closepath clip newpath
+-17.6 463.2 translate
 1 -1 scale
 $F2psBegin
 10 setmiterlimit
@@ -166,8 +166,8 @@ systemdict /colorimage known { /cnt 3 def } { /cnt 1 def } ifelse
   grestore
 } bind def
 n gs
-1125 3285 tr
-7.286774 -10.928571 sc
+1125 3960 tr
+7.286774 -9.000000 sc
 0 -350 tr
 0 0 tr
 sa
