@@ -92,16 +92,17 @@ Xeon E5 by approximately 7\,\%.
 \label{subsec:4.3}
 
 A full tracing experiment is conducted on \tinto in order to capture an overall power
-profile at a much finer resolution. In this sense, we also analyze the contribution of the MPI library to the energy consumption and how the use of the blocking versus polling message-passing policies can potentially render energy savings.
+profile at a much finer resolution. First we run \cosmoart for a full-day simulation
+and analyze the power consumption. Second we correlate performance with
+power traces of two 1-hor time frames during the day: midday (from 11h-12h) and
+midnight (23-24h).
 
-Specifically, the OpenMPI 1.6.5 library leveraged in \tinto, features two operation modes, 
-blocking and modes, which can be selected before \cosmoart is launched.
-In the polling configuration (the detault mode) ``MPI'' continually polls
+For all the experiments we also analyze the contribution of the MPI library to the energy consumption and how the use of the blocking versus polling message-passing policies can potentially render energy savings. Specifically, the OpenMPI 1.6.5 library installed in \tinto, features two operation modes, blocking and modes, which can be selected before \cosmoart is launched. In the polling configuration (the detault mode) ``MPI'' continually polls
 the netwrok interface to check for the completion of an event (e.g. send or receive).
-
-
 This usually yields low latency but high CPU utilization. Thus, can one expcet that this mode attanins the best performance, possibley at the cost a higher energy usage. In the blocking
 mode, the CPU is yield to other processes/threads if there are no incoming messages.
+
+
 
 
 \begin{figure*}[htbf]
