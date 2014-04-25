@@ -53,16 +53,12 @@ run. Corresponding results are gathered in Table~\ref{tab:3}.
   \begin{center}
     \caption{Average power consumption (W) of the platforms}
     \label{tab:3}
-    \begin{tabular}{ccc}
+    \begin{tabular}{cccc}
       \hline\noalign{\smallskip}
-      \textbf{Simulation time} & \textbf{Xeon E5} & \textbf{Ivy Bridge EP} \\
+      \textbf{\scriptsize{Xeon E5}} & \textbf{\scriptsize{Ivy Bridge}} & \textbf{\scriptsize{Xeon  E5645}} & \textbf{\scriptsize{Xeon  E5645}}\\
+      & & \textbf{\scriptsize{(Polling)}} & \textbf{\scriptsize{(Blocking)}} \\
       \noalign{\smallskip}\hline\noalign{\smallskip}
-      \textbf{1 day} & 18122.01417 & 12658.52278 \\ 
-      & 17979.61083 & 12586.40833 \\
-      & 18065.45167 & - \\
-      & 17973.02833 & - \\
-      \noalign{\smallskip}\hline\noalign{\smallskip}
-      \textbf{2 days} & 17997.57815 & - \\
+      18035.0 & 12622.5 & 3713.6 & 3651.8 \\ 
       \noalign{\smallskip}\hline
     \end{tabular}
   \end{center}
@@ -80,14 +76,15 @@ Xeon E5 by approximately $7\%$.
 \begin{figure}[htbf]
   \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART-0.eps}
   \caption{Time-to-solution and energy-to-solution comparison between
-    Xeon E5 and Ivy Bridge-EP architectures}
+    Xeon E5 and Ivy Bridge-EP architectures for a 24h simulation}
   \label{fig:3}
 \end{figure}
 
 \begin{figure}[htbf]
   \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART-5.eps}
   \caption{Mean time-to-solution and energy-to-solution on
-    \textsc{Tintorrum} - MPI Polling and Blocking modes}
+    \textsc{Tintorrum} for a 24h simulation - MPI Polling and Blocking
+    modes}
   \label{fig:4}
 \end{figure}
 
