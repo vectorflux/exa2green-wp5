@@ -1,5 +1,5 @@
 \begin{picture}(0,0)%
-\includegraphics{Figs/11_12_blq1_figure.pstex}%
+\includegraphics{11_12_blq1_figure.pstex}%
 \end{picture}%
 \setlength{\unitlength}{4144sp}%
 %
@@ -26,6 +26,6 @@
 }}}}
 \put(1306,-6406){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}0\,s}%
 }}}}
-\put(12691,-6406){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}576.82\,s}%
+\put(12691,-6406){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}721.69\,s}%
 }}}}
 \end{picture}%
