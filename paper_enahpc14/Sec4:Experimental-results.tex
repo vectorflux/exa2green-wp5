@@ -23,7 +23,7 @@ dictated by the available technology.
 \begin{figure}[htbf]
   \begin{center}
     \includegraphics[width=0.48\textwidth]{Figs/NRJ_benchmark_Monch.eps}
-    \caption{\textsc{Monch}: Isola E1 Rack 2 Total Power}
+    \caption{\textsc{Monch}: Isola E1 Rack 2 Total Power.}
     \label{fig:1}
   \end{center}
 \end{figure}
@@ -31,7 +31,7 @@ dictated by the available technology.
 \begin{figure}[htbf]
   \begin{center}
     \includegraphics[width=0.48\textwidth]{Figs/NRJ_benchmark_Pilatus.eps}
-    \caption{\textsc{Pilatus}: Isola HD Total Power}
+    \caption{\textsc{Pilatus}: Isola HD Total Power.}
     \label{fig:2}
   \end{center}
 \end{figure}
@@ -64,14 +64,14 @@ run. Corresponding results are gathered in Table~\ref{tab:3}.
   \end{center}
 \end{table}
 
-In  Figure~\ref{fig:3}, we  compare both  TTS (right  y-axis)  and ETS
-(left  y-axis)  metrics  on  both  platforms.  As  expected,  Xeon  E5
+In  Figure~\ref{fig:3}, we  compare both  TTS (right  Y-axis)  and ETS
+(left  Y-axis)  metrics  on  both  platforms.  As  expected,  Xeon  E5
 outperforms Ivy Bridge EP, being  roughly 1.3x faster.  The reason for
-that is  two-fold: (1) it has  higher clock frequency  than Ivy Bridge
-(2.6  GHz  against  2.2 GHz),  and  (2)  it  aims at  computing  speed
+that is  two-fold: \emph{i}) it has  higher clock frequency  than Ivy Bridge
+(2.6  GHz  against  2.2 GHz),  and  \emph{ii})  it  aims at  computing  speed
 regardless to  energy consumption.  In our experiments,  Ivy Bridge EP
 showed the best energy-to-solution, reducing the energy consumption of
-Xeon E5 by approximately $7\%$.
+Xeon E5 by approximately 7\,\%.
 
 \begin{figure}[htbf]
   \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART-0.eps}
@@ -88,8 +88,16 @@ Xeon E5 by approximately $7\%$.
   \label{fig:4}
 \end{figure}
 
-\subsection{Power-performance tracing of \textsc{Cosmo-art}}
+\subsection{Power-performance tracing of \cosmoart}
 \label{subsec:4.3}
+
+OpenMPI 1.6.5, the communication library tested in \tinto, features two operation modes, 
+blocking and modes, which can be selected when the application is launched.
+In the polling configuration (the detault mode) ``MPI'' continually polls
+the netwrok interface to check for the completion of an event (e.g. send or receive).
+This usually yields low latency but high CPU utilization. Thus, can one expcet that this mode attanins the best performance, possibley at the cost a higher energy usage. In the blocking
+mode, the CPU is yield to other processes/threads if there are no incoming messages.
+
 
 \begin{figure*}[htbf]
   \centering
@@ -109,13 +117,13 @@ Xeon E5 by approximately $7\%$.
 \begin{figure*}[htbf]
   \centering
   \scriptsize
-  MPI polling mode\\
+  Simulation of 1 hour during midday (from 11h to 12h) leveraging the polling MPI policy\\
   \scalebox{0.5}{\input{Figs/11_12_blq0_figure.pstex_t}}\\
-  MPI blocking mode\\
+  Simulation of 1 hour during midday (from 11h to 12h) leveraging the blocking MPI policy\\
   \scalebox{0.5}{\input{Figs/11_12_blq1_figure.pstex_t}}\\
-  MPI polling mode\\
+  Simulation of 1 hour during midnight (from 23h to 24h) leveraging the polling MPI policy\\
   \scalebox{0.5}{\input{Figs/23_24_blq0_figure.pstex_t}}\\
-  MPI blocking mode\\
+  Simulation of 1 hour during midnight (from 23h to 24h) leveraging the blocking MPI policy\\
   \scalebox{0.5}{\input{Figs/23_24_blq1_figure.pstex_t}}\\
   \caption{1 hour simulation (23h-24h) trace using the MPI blocking
     mode on \textsc{Tintorrum}.}
