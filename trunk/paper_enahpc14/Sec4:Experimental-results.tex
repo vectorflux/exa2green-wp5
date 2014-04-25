@@ -15,11 +15,13 @@ performed  to  illustrate the  reproducibility  of  the baseline,  and
 quantify the  significant uncertainties  in the power  measurement, as
 dictated by the available technology.
 
-For all the experiments we also analyze the contribution of the MPI library to the energy consumption and how the use of the blocking versus polling message-passing policies can potentially render energy savings. Specifically, the OpenMPI 1.6.5 library installed in \tinto, features two operation modes, blocking and modes, which can be selected before \cosmoart is launched. In the polling configuration (the detault mode) ``MPI'' continually polls
-the netwrok interface to check for the completion of an event (e.g. send or receive).
-This usually yields low latency but high CPU utilization. Thus, can one expcet that this mode attanins the best performance, possibley at the cost a higher energy usage. In the blocking
+For the experiments with \tinto platform, we also analyze the contribution of the MPI library to the energy consumption and how the use of the blocking versus polling message-passing policies can potentially render energy savings. Specifically, the OpenMPI 1.6.5 library, 
+features two operation modes, blocking and polling, which can be selected before \cosmoart
+is launched. In the polling configuration (the detault mode) ``MPI'' continually polls
+the network interface to check for the completion of an event (e.g. send or receive).
+This usually yields low latency but high CPU utilization. Thus, one can expcet that this mode 
+attains the best performance, possibly at the cost a higher energy usage. In the blocking
 mode, the CPU is yield to other processes/threads if there are no incoming messages.
-
 
 \subsection{Time-power-energy analysis of \cosmoart}
 \label{subsec:4.2}
@@ -132,7 +134,7 @@ taking place during the daylight hours but not during night. In this case peak p
 dissipation is about 3821\,W. Looking at the power profile using the blocking MPI policy, we 
 can easily observe that the pattern is repeated favoring the reduction of power during 
 nighttime hours in a more  noticeable way. The peak power dissipation in this mode is 3768\,W, 
-which means a reduction of 50\,W in total or, in other words, 1,\% of reductuon in the peak 
+which means a reduction of 50\,W in total or, in other words, 1\,\% of reductuon in the peak 
 power. Also, we observe power  drops in each hour simulated, basically related to periods in 
 which the processes were performing blocking-waits instead of polling-waits, thus yielding the 
 CPU to a low usage during this phases. Our final observation is the reduction in execution time 
