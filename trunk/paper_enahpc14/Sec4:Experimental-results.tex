@@ -94,7 +94,7 @@ Xeon E5 by approximately 7\,\%.
 A full tracing experiment is conducted on \tinto in order to capture an overall power
 profile at a much finer resolution. First we run \cosmoart for a full-day simulation
 and analyze the power consumption. Second we correlate performance with
-power traces of two 1-hor time frames during the day: midday (from 11h-12h) and
+power traces of two 1-hor time frames during the day: mid-day (from 11h-12h) and
 midnight (23-24h).
 
 For all the experiments we also analyze the contribution of the MPI library to the energy consumption and how the use of the blocking versus polling message-passing policies can potentially render energy savings. Specifically, the OpenMPI 1.6.5 library installed in \tinto, features two operation modes, blocking and modes, which can be selected before \cosmoart is launched. In the polling configuration (the detault mode) ``MPI'' continually polls
@@ -102,14 +102,9 @@ the netwrok interface to check for the completion of an event (e.g. send or rece
 This usually yields low latency but high CPU utilization. Thus, can one expcet that this mode attanins the best performance, possibley at the cost a higher energy usage. In the blocking
 mode, the CPU is yield to other processes/threads if there are no incoming messages.
 
-In order to obtain an initial overview of the power dissipation of the system model, we run a
-full-day simulation of \cosmoart and capture the power profiles leveraging the two
-stated MPI policies, polling and blocking. Figure~\ref{fig:9} shows the power profiles
-of two \cosmoart runs featuring both MPI waiting modes. The first observation is that,
-for the polling MPI policy 
-
-The first observation is that 
-
+In order to obtain an initial overview of the power dissipation of the system model, Figure~\ref{fig:9} depicts the power profiles of a full-day simulation of \cosmoart leveraging the  polling and blocking MPI policies on the top and bottom plots, respectively. The power profiles shown account for the sum of dissipated power of the 16 nodes used in \tinto captured with our PDUs. The first observation for the polling MPI policy is the quite plain power profile it generated. However the first and last hours of the day along a 24h simulation, dissipate slightly less power than the hours than the mid-day hours. We relate these variations due to the chemical reactions and aerosols, computed by ART, that are taking place during the daylight hours but not during night. In this case peak power dissipation is about 3821\,W.
+Looking at the power profile using the blocking MPI policy, we can easily observe
+that this pattern is repeated favoring the reduction of power during nighttime hours in a more noticeable way. 
 
 
 \begin{figure*}[htbf]
