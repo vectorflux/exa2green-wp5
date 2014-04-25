@@ -7,60 +7,54 @@ allowing a  fair comparison between the baseline  and future milestone
 versions of \textsc{Cosmo-art}.
 
 \begin{itemize}
-\item \textsc{Monch (CSCS)} is a 10 rack NEC-provided cluster composed
-  of 312 compute  nodes and utilised by members  of the Swiss Platform
-  for Advanced Scientific  Computing (PASC) project \citep{PASC}. Each
-  node comprises  two Intel Ivy Bridge EP  E5-2660 ten-core processors
-  operating at  2.2 GHz connected  via InfiniBand Mellanox  SX6036 and
-  FDR switches (56 Gb/s speed), and is equipped with 32GB of DDR3 1600
-  MHz  RAM.   For our  experiments,  a  full  rack constituted  of  52
+\item \textsc{Monch} is a 10 rack NEC-provided cluster composed
+  of 312 compute  nodes and utilized by members  of the Swiss Platform
+  for Advanced Scientific  Computing (PASC) project~\citep{PASC} at CSCS. Each
+  node comprises two Intel Ivy Bridge EP  E5-2660 ten-core processors
+  operating at  2.2 GHz, equipped with 32\,GB of DDR3 1600\,MHz  RAM and connected  via InfiniBand Mellanox  SX6036 and FDR switches. For our  experiments, 
+  a full rack constituted  of  52
   standard compute  nodes was used.  \textsc{Monch} is  slated to stay
   in  service  without  hardware  upgrade  for  the  duration  of  the
   Exa2Green  project,  allowing   an  identical  configuration  to  be
   recreated for future assessments of the baseline.\\
 
-\item \textsc{Pilatus (CSCS)} is  a dual-socket eight-core Intel Sandy
+\item \textsc{Pilatus} is a dual-socket eight-core Intel Sandy
   Bridge EP based cluster composed of 42 compute nodes and used as Piz
   Daint pre-post  processing cluster at  CSCS.  The 2 login  nodes and
   the 42 computes nodes consists in 11 twin-pair Intel E5-Series DALCO
   r2264i4t 2U scalable compute modules. Each module contains 4 compute
-  nodes based  on two Intel  Xeon E5-2670 processors operating  at 2.6
-  GHz connected  via InfiniBand Mellanox  SX6036 and FDR  switches (56
-  Gb/s speed), and is equipped with 64GB of DDR3 1600 MHz RAM. For our
+  nodes based  on two Intel Xeon E5-2670 processors operating  at 2.6\,GHz 
+  connected  via InfiniBand Mellanox SX6036 and FDR  switches (56
+  Gb/s speed), and is equipped with 64GB of DDR3 1600\,MHz RAM. For our
   experiments, a  full rack constituted  of 42 standard  compute nodes
   was  used. \textsc{Pilatus}  is based  on  Intel's second-generation
   processors, conventional in  HPC systems and known to  be more power
   consuming than Ivy Bridge successor.\\
 
-\item \textsc{Tintorrum (UJI)} is  a heterogeneous cluster composed of
-  28 compute nodes.  For our  experiments only a subset of these nodes
-  were considered.   This set is composed  of 16 nodes,  each of which
-  includes  two Intel  Xeon  E5645 hexa-core  processors  at 2.40  GHz
-  connected via  Infiniband QDR (Mellanox MTS3600  switch).  Each core
-  has  32 KB  instruction  and 32  KB data  L1  caches and  256 KB  L2
-  cache. The 6 cores  share a 12 MB L3 cache and  the platform has 288
-  GB  of DDR3 1333  MHz.  A  full tracing  experiment is  conducted on
-  \textsc{Tintorrum}, to  capture an overall  power profile at  a much
-  finer resolution, and to get more insights into the MPI blocking and
-  polling influences on power savings.
+\item \textsc{Tintorrum} is  a heterogeneous cluster composed of
+  28 compute nodes at UJI. For our  experiments only a subset of 16 nodes was considered,  
+  Each of nodes of this subset includes a dual-socket hexa-core Intel Xeon E5645 processors 
+  running at 2.40\,GHz, equipped with 288\,GB  of DDR3 1333\,MHz and connected via Infiniband QDR with a Mellanox MTS3600 switch. A  full tracing  experiment is  conducted on
+  \textsc{Tintorrum} in order to  capture an overall  power profile at a much
+  finer resolution. Also we analize the contribution of the MPI library
+  to the energy consumption and how the use of the blocking versus polling
+  message-passing policies can potentially render energy savings.
 \end{itemize}
 
-\subsection{Power-performance measurement framework}
+\subsection{Power measurement framework}
 \label{subsec:3.3}
 
-We present  here two different  frameworks deployed on HPC  systems to
-measure  the  power  consumption   and  performance  of  the  baseline
-execution.
+We present here the two different  frameworks deployed on the testbed HPC systems to
+measure  performance and  power  consumption of the baseline execution of COSMO-ART
 
-\subsubsection{CSCS - E3METER metering products}
+\subsubsection{E3METER metering framework}
 
-Supercomputer  clusters considered  for our  experiments at  the Swiss
-National Supercomputing Center (CSCS)  of ETH Zurich are equipped with
+Supercomputer  clusters considered  for our  experiments at CSCS of ETH Zurich are equipped with
 E3METER Intelligent  Power Strips (IPS)  and Monitors (IPM)  which are
 high   quality   electricity  meters   released   by  Riedo   Networks
 \citep{Riedonetworks},   that  enable   to  monitor   and   log  power
 consumption  of the IT  infrastructure as  well as  constantly analyze
-line  voltage,  current, power-factor,  frequency  with 1\%  accuracy.
+line  voltage,  current, power-factor,  frequency  with 1\,\%  accuracy.
 Using  reliable narrowband  powerline communication  (PLC) technology,
 all  metering and  power  quality  data from  each  IPS are  centrally
 collected  by the E3METER  Data Concentrator,  via the  existing power
@@ -72,18 +66,16 @@ including the E3METER Cacti Plugin  to scan the entire PLC network and
 monitor in real-time the power usage of individual rack, recorded in 5
 minutes interval periods.
 
-\subsubsection{UHAM - UJI}
+\subsubsection{Power-performance measurement framework}
 
 For our experiments at Jaume I University (UJI), we employed a version
-of the integrated framework presented in~\cite{energy13} that works in
-combination with  Extrae and Paraver, which  are profiling/tracing and
+of the integrated framework presented in~\cite{energy13} that employs the \pmlib library in
+combination with Extrae and Paraver, which  are profiling/tracing and
 visualization tools, respectively.
 
-%The left part of the \vref{fig:Lustre} offers a graphical representation of
-%the Lustre architecture; the right depicts the tracing and profiling framework.
-\textsc{Cosmo-art}  is compiled  using the  Extrae  compiler wrappers,
+\textsc{COSMO-ART}  is compiled  using the  Extrae  compiler wrappers,
 which automatically  instrument the Fortran code of  the model.  Next,
-\textsc{Cosmo-art}  is  run on  the  nodes,  thus dissipating  certain
+\textsc{COSMO-ART}  is  run on  the  nodes,  thus dissipating  certain
 amount  of power.   These  nodes are  connected  to power  measurement
 devices that account for the dissipated power/consumed energy and send
 the power  data to the  tracing server.  The client,  meanwhile, sends
@@ -98,37 +90,18 @@ All  these files  are  combined then  in  Paraver which  allows us  to
 visualise   the   performance  trace   and   the   power  profile   of
 \textsc{Cosmo-art} all together.
 
-%Once \textsc{Cosmo-art} run is finished, the VampirTrace \pmlib plugin receives
-%the  power   data  from  the  tracing   server.   The  instrumentation
-%post-processing generates  the performance trace files  and the \pmlib
-%plugin inserts the power data into them.
-
-%In  addition  to the  power  measurements,  we  also account  for  the
-%resource utilization values  of the nodes: CPU load,  memory usage and
-%storage device utilization. % and network utilization.
-
-%We  run special  \pmlib  server  instances on  the  server nodes  that
-%retrieve these  values from the \texttt{proc}  file system (leveraging
-%the  \texttt{psutil} Python library).   Thus, \pmlib  plugin instances
-%running  with the  instrumented  application connect  with the  \pmlib
-%servers.   Finally,   using  the   Vampir   visualization  tool,   the
-%power-performance traces  can be easily  analyzed through a  series of
-%plots and statistics.
-
 \subsection{Software environment}
 \label{subsec:3.2}
 
 The \textsc{Cosmo-art}  baseline is a  pure MPI based  Fortran~90 code
 currently  running  on   distributed  multi-core  systems  only.   The
-software stack on both CSCS platforms was controlled using the modules
+software stack on the platforms was controlled using the modules
 framework which gives an easy  and flexible mechanism to access to all
 of the  provided compilers, tools  and applications.  For  our initial
-benchmarking,   we  opted   for   the  GNU   compiler  (gcc/4.8.1   on
-\textsc{Monch}, gcc/4.8.2 on  \textsc{Pilatus}) using the -O3 compiler
-flag  in favor  of the  intel compiler  (14.0.1),  delivering inferior
-performance.  In  addition, we installed the  MPICH2 implementation of
-MPI  (mvapich2/1.9) as  well as  the commonly  used HDF5  (1.8.12) and
-NetCDF  (4.3.1) libraries for  the management  of extremely  large and
+benchmarking,   we  opted   for   the  GNU   compiler  gcc-4.8.1   on
+\textsc{Monch} and gcc-4.8.2 on  \textsc{Pilatus} and \textsc{Tintorrum}) using the -O3 compiler
+flag  in favor  of the  Intel compilers 14.0.1,  delivering inferior
+performance.  In  addition, we installed the following implementations of MPI: MVAPICH2 1.9 on \textsc{Monch} and \textsc{Pilatus} and  OpenMPI 1.6.5 on \textsc{Tintorrum}. On the other hand, we  used HDF5 1.8.12 and NetCDF  (4.3.1) libraries for  the management  of extremely  large and
 complex data collections.  All computes nodes have an operating system
 based on GNU/Linux featuring ``2.6.32-358.11.1.el6.x86\_64'' kernel in
 \textsc{Monch}     and      ``3.0.101-0.15-default''     kernel     in
@@ -136,7 +109,7 @@ based on GNU/Linux featuring ``2.6.32-358.11.1.el6.x86\_64'' kernel in
 
 A snapshot of the code,  which includes at least conceptually, all the
 information needed  to reproduce the  energy-to-solution benchmarks of
-\textsc{Cosmo-art}, was produced and run  on a 1040 cores using 20~MPI
+\textsc{COSMO-ART}, was produced and run  on a 1040 cores using 20~MPI
 tasks  per node on  \textsc{Monch} and  on a  1344 cores  using 16~MPI
 tasks per node on  \textsc{Pilatus}.  The calculated region was mapped
 to the participating processors using a 2D-partitioning strategy.  The
