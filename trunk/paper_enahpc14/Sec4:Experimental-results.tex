@@ -86,15 +86,14 @@ one.
 \begin{figure}[htbf]
   \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART-0.eps}
   \caption{Time-to-solution and energy-to-solution comparison between
-    Xeon E5 and Ivy Bridge-EP architectures for a 24h simulation}
+    Xeon E5 and Ivy Bridge-EP architectures for a 24h simulation.}
   \label{fig:3}
 \end{figure}
 
 \begin{figure}[htbf]
   \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART-5.eps}
   \caption{Mean time-to-solution and energy-to-solution on
-    \textsc{Tintorrum} for a 24h simulation - MPI Polling and Blocking
-    modes}
+    \textsc{Tintorrum} for a 24h simulation using the polling and blocking MPI policies.}
   \label{fig:4}
 \end{figure}
 
@@ -117,6 +116,7 @@ Looking at the power profile using the blocking MPI policy, we can easily observ
 that the pattern is repeated favoring the reduction of power during nighttime hours in a more noticeable way. The peak power dissipation in this mode is 3768\,W, which means a reduction of 50\,W in total or, in other words, 1,\% of reductuon in the peak power. Also, we observe power drops in each hour simulated, basically related to periods in which the processes were performing blocking-waits instead of polling-waits, thus yielding the CPU to a low usage during this phases. Our final observation is the reduction in execution time when the blocking MPI policy is leveraged. One can expect that the costs of the interruptions used in the blocking can lead to an increase of the total execution time, however, applications with extensive computing may show better perforamnce with the blocking mode. This plays in favour for our results since the energy consumed is also less by just changing the behavior of
 the OpenMPI library from the polling to the blocking policy.
 
+To gain insights about 
 
 \begin{figure*}[htbf]
   \centering
