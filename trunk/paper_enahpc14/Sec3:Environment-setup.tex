@@ -42,7 +42,7 @@ versions of \cosmoart.
 \label{subsec:3.3}
 
 We present here the two different  frameworks deployed on the testbed HPC systems to
-measure  performance and  power  consumption of the baseline execution of COSMO-ART
+measure  performance and  power  consumption of the baseline execution of \cosmoart
 
 \subsubsection{E3METER metering framework}
 
@@ -91,13 +91,13 @@ currently  running  on   distributed  multi-core  systems  only.   The
 software stack on the platforms was controlled using the modules
 framework which gives an easy  and flexible mechanism to access to all
 of the  provided compilers, tools  and applications.  For  our initial
-benchmarking,   we  opted   for   the  GNU   compiler  gcc-4.8.1   on
-\monch and gcc-4.8.2 on  \pilat and \tinto) using the -O3 compiler
+benchmarking,   we  opted   for   the  GNU   compiler  GCC 4.8.1   on
+\monch and GCC 4.8.2 on  \pilat and \tinto) using the -O3 compiler
 flag  in favor  of the  Intel compilers 14.0.1,  delivering inferior
 performance.  In  addition, we installed the following implementations of MPI: MVAPICH2 1.9 on \monch and \pilat and  OpenMPI 1.6.5 on \tinto. On the other hand, we  used HDF5 1.8.12 and NetCDF  (4.3.1) libraries for  the management  of extremely  large and
 complex data collections.  All computes nodes have an operating system
-based on GNU/Linux featuring ``2.6.32-358.11.1.el6.x86\_64'' kernel in
-\monch, ``3.0.101-0.15-default'' in \pilat and ``2.6.18-238.19.1.el5.x86\_64'' in \tinto.
+based on GNU/Linux featuring ``2.6.32-358.11.1.el6'' kernel in
+\monch, ``3.0.101-0.15-default'' in \pilat and ``2.6.18-238.19.1.el5'' in \tinto.
 
 A snapshot of the code,  which includes at least conceptually, all the
 information needed  to reproduce the  energy-to-solution benchmarks of
