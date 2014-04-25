@@ -102,19 +102,49 @@ A full tracing experiment is conducted on \tinto in order to capture an overall 
 profile at a much finer resolution. First we run \cosmoart for a full-day simulation
 and analyze the power consumption. Second we correlate performance with
 power traces of two 1-hor time frames during the day: mid-day (from 11h-12h) and
-midnight (23-24h). All the experiments were performed using 192 \cosmoart processes
+midnight (23h-24h). All the experiments were performed using 192 \cosmoart processes
 mapping 12 processes in each of node.
 
-For all the experiments we also analyze the contribution of the MPI library to the energy consumption and how the use of the blocking versus polling message-passing policies can potentially render energy savings. Specifically, the OpenMPI 1.6.5 library installed in \tinto, features two operation modes, blocking and modes, which can be selected before \cosmoart is launched. In the polling configuration (the detault mode) ``MPI'' continually polls
+For all the experiments we also analyze the contribution of the MPI library to the energy 
+consumption and how the use of the blocking versus polling message-passing policies can 
+potentially render energy savings. Specifically, the OpenMPI 1.6.5 library installed in \tinto, 
+features two operation modes, blocking and modes, which can be selected before \cosmoart is 
+launched. In the polling configuration (the detault mode) ``MPI'' continually polls
 the netwrok interface to check for the completion of an event (e.g. send or receive).
 This usually yields low latency but high CPU utilization. Thus, can one expcet that this mode attanins the best performance, possibley at the cost a higher energy usage. In the blocking
 mode, the CPU is yield to other processes/threads if there are no incoming messages.
 
-In order to obtain an initial overview of the power dissipation of the system model, we have obtained the power profiles using our \pmlib framework of a full-day simulation of \cosmoart leveraging the polling and blocking MPI policies, these results are depicted in the top/bottom plots of Figure~\ref{fig:9}, respectvely. o, captured with our PDUs. The first observation for the polling MPI policy is the quite plain power profile it generates. However, the first and last hours of the full-day simulation dissipate slightly less power than the mid-day hours. We relate these variations due to the chemical reactions and aerosols, computed by ART, that are taking place during the daylight hours but not during night. In this case peak power dissipation is about 3821\,W.
-Looking at the power profile using the blocking MPI policy, we can easily observe
-that the pattern is repeated favoring the reduction of power during nighttime hours in a more noticeable way. The peak power dissipation in this mode is 3768\,W, which means a reduction of 50\,W in total or, in other words, 1,\% of reductuon in the peak power. Also, we observe power drops in each hour simulated, basically related to periods in which the processes were performing blocking-waits instead of polling-waits, thus yielding the CPU to a low usage during this phases. Our final observation is the reduction in execution time when the blocking MPI policy is leveraged in contrast with the polling MPI. One can expect that the costs of the interruptions used in the blocking can lead to an increase of the total execution time, however, applications with extensive computing may show better perforamnce with the blocking mode. This plays in favour for our results since the energy consumed is also less by just changing the behavior of the OpenMPI library from the polling to the blocking policy.
+In order to obtain an initial overview of the power dissipation of the system model, we have 
+obtained the power profiles using our \pmlib framework of a full-day simulation of \cosmoart 
+leveraging the polling and blocking MPI policies, these results are depicted in the top/bottom 
+plots of Figure~\ref{fig:9}, respectvely. o, captured with our PDUs. The first observation for 
+the polling MPI policy is the quite plain power profile it generates. However, the first and 
+last hours of the full-day simulation dissipate slightly less power than the mid-day hours. We 
+relate these variations due to the chemical reactions and aerosols, computed by ART, that are 
+taking place during the daylight hours but not during night. In this case peak power 
+dissipation is about 3821\,W. Looking at the power profile using the blocking MPI policy, we 
+can easily observe that the pattern is repeated favoring the reduction of power during 
+nighttime hours in a more  noticeable way. The peak power dissipation in this mode is 3768\,W, 
+which means a reduction of 50\,W in total or, in other words, 1,\% of reductuon in the peak 
+power. Also, we observe power  drops in each hour simulated, basically related to periods in 
+which the processes were performing blocking-waits instead of polling-waits, thus yielding the 
+CPU to a low usage during this phases. Our final observation is the reduction in execution time 
+when the blocking MPI policy is leveraged in contrast with the polling MPI. One can expect that 
+the costs of the interruptions used in the blocking can lead to an increase of the total 
+execution time, however, applications with extensive computing may show better perforamnce with 
+the blocking mode. This plays in favour for our results since the energy consumed is also less 
+by just changing the behavior of the OpenMPI library from the polling to the blocking policy.
 
-To gain insights about 
+To gain more insights about the power-performance behavior of \cosmoart, we also have conducted 
+experiments that show power-performance traces of 1 hour simulation. We limited the simulation 
+time to this bound since the pattern of the computation performed by \cosmoart is repeated each 
+hour, also because the weight of a full-day simulation trace can not be easily handled using 
+our machines and memory available (about 45\,GB per trace file). To soften the problem we 
+shrink the simulations to 1 hour during mid-day (11h-12h) and midnight (23h-24h), in which 
+\cosmoart perform different internal computations, as shown in Figure~\ref{fig:9}. At the same
+time we also leverage the two stated MPI policies: polling and waiting modes.
+
+
 
 \begin{figure*}[htbf]
   \centering
