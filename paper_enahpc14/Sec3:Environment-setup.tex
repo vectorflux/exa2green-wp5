@@ -73,24 +73,21 @@ visualization tools, respectively.
 \textsc{COSMO-ART}  is compiled  using the  Extrae  compiler wrappers,
 which automatically  instrument the Fortran code of  the model.  Next,
 \textsc{COSMO-ART}  is  run on  the  nodes,  thus dissipating  certain
-amount  of power.   These  nodes are  connected  to power  measurement
-devices that account for the dissipated power/consumed energy and send
-the power  data to the  tracing server.  The client,  meanwhile, sends
-start/stop  primitives  in  order  to  gather  captured  data  by  the
-watt-meters onto the  tracing server, where an instance  of the \pmlib
-server is running.
+amount  of power.   These  nodes are connected to power distribution units (PDUs)
+APC8653 that account for the dissipated power of at 1\,Hz, these data is afterwards sent
+to the  tracing server. The client,  meanwhile, sends start/stop  primitives  in  order  to  gather  captured  data  by  the watt-meters onto the  tracing server, where an instance  of the \pmlib server is running.
 
 Once  the run  is finished,  a file  containing the  power  profile is
 created using the power data  received from the tracing server and the
 instrumentation post-processing generates the performance trace files.
 All  these files  are  combined then  in  Paraver which  allows us  to
 visualise   the   performance  trace   and   the   power  profile   of
-\textsc{Cosmo-art} all together.
+\textsc{COSMO-ART} all together.
 
 \subsection{Software environment}
 \label{subsec:3.2}
 
-The \textsc{Cosmo-art}  baseline is a  pure MPI based  Fortran~90 code
+The \textsc{COSMO-ART}  baseline is a  pure MPI based  Fortran~90 code
 currently  running  on   distributed  multi-core  systems  only.   The
 software stack on the platforms was controlled using the modules
 framework which gives an easy  and flexible mechanism to access to all
