@@ -73,14 +73,8 @@ regardless to  energy consumption.  In our experiments,  Ivy Bridge EP
 showed the best energy-to-solution, reducing the energy consumption of
 Xeon E5 by approximately 7\,\%.
 
-The 24 hours simulation time-to-solution and energy-to-solution 
-results for Tintorrum are shown in Figure~\ref{fig:4}.  As expected, the mean energy
-consumed by COSMO-ART when using the MPI blocking mode is less than that
-consumed by the polling mode. This is due to the blocking-waits performed by the cores
-while using the blocking mode, in contrast of the polling-waits that take place when
-polling mode is used. From the point of view of time, the results are quite
-surprising since the blocking mode was expected to take less time than the polling
-one.
+The TTS and ETS results for a full-day simulation on \tinto are shown in Figure~\ref{fig:4}.  As expected, the mean energy consumed by COSMO-ART when using the blocking MPI policy is about 2\,W less than that consumed by the polling mode. This is due to the blocking-waits performed by the CPU cores while using the blocking mode, in contrast of the polling-waits that take place when polling mode is used. From the point of view of the execution time, there is a slight reduction when the blocking MPI policy is leveraged. One can expect that the costs of the interruptions used in the blocking MPI policy can lead to an increase of the total execution time, however, applications with extensive computing may show better perforamnce with the blocking modes. This plays in favour for our results since the energy consumed is also less by just changing the behavior of the OpenMPI library from the polling to the blocking policy.
+
 
 
 \begin{figure}[htbf]
@@ -113,8 +107,7 @@ mode, the CPU is yield to other processes/threads if there are no incoming messa
 
 In order to obtain an initial overview of the power dissipation of the system model, Figure~\ref{fig:9} depicts the power profiles of a full-day simulation of \cosmoart leveraging the  polling and blocking MPI policies on the top and bottom plots, respectively. The power profiles shown account for the sum of dissipated power of the 16 nodes used in \tinto, captured with our PDUs. The first observation for the polling MPI policy is the quite plain power profile it generates. However, the first and last hours of the day along a 24h simulation, dissipate slightly less power than the hours than the mid-day hours. We relate these variations due to the chemical reactions and aerosols, computed by ART, that are taking place during the daylight hours but not during night. In this case peak power dissipation is about 3821\,W.
 Looking at the power profile using the blocking MPI policy, we can easily observe
-that the pattern is repeated favoring the reduction of power during nighttime hours in a more noticeable way. The peak power dissipation in this mode is 3768\,W, which means a reduction of 50\,W in total or, in other words, 1,\% of reductuon in the peak power. Also, we observe power drops in each hour simulated, basically related to periods in which the processes were performing blocking-waits instead of polling-waits, thus yielding the CPU to a low usage during this phases. Our final observation is the reduction in execution time when the blocking MPI policy is leveraged. One can expect that the costs of the interruptions used in the blocking can lead to an increase of the total execution time, however, applications with extensive computing may show better perforamnce with the blocking mode. This plays in favour for our results since the energy consumed is also less by just changing the behavior of
-the OpenMPI library from the polling to the blocking policy.
+that the pattern is repeated favoring the reduction of power during nighttime hours in a more noticeable way. The peak power dissipation in this mode is 3768\,W, which means a reduction of 50\,W in total or, in other words, 1,\% of reductuon in the peak power. Also, we observe power drops in each hour simulated, basically related to periods in which the processes were performing blocking-waits instead of polling-waits, thus yielding the CPU to a low usage during this phases. Our final observation is the reduction in execution time when the blocking MPI policy is leveraged in contrast with the polling MPI. One can expect that the costs of the interruptions used in the blocking can lead to an increase of the total execution time, however, applications with extensive computing may show better perforamnce with the blocking mode. This plays in favour for our results since the energy consumed is also less by just changing the behavior of the OpenMPI library from the polling to the blocking policy.
 
 To gain insights about 
 
