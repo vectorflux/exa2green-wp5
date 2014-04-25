@@ -1,13 +1,13 @@
 While anthropogenic greenhouse gas emissions are driving unprecedented
-major  climate  changes  since   the  mid  20th  Century,  one  factor
+major  climate  changes  since   the  mid-20$^{th}$  Century,  one  factor
 overwhelmingly  affects  the  uncertainty  in  defining  human-induced
 radiative  forcing:  the  effects   of  aerosols  in  the  atmosphere.
-Although they  are not considered  a heat-trapping greenhouse  gas and
-have  shorter  atmospheric lifetimes,  they  significantly modify  the
+Although they  are not considered  heat-trapping greenhouse  gases and
+have  shorter  atmospheric lifetimes,  aerosols  significantly modify  the
 global   radiation   budget   \citep{IPCC-2013}.   Enhanced   aerosols
 concentrations impact the climate  system by scattering and absorption
 of solar radiation, thereby exerting a direct radiative forcing; or by
-the  modification  of cloud  properties,  cloud  fraction and  surface
+modifying cloud  properties,  cloud  fraction and  surface
 albedo,  causing  a  negative  indirect  radiative  forcing.   Despite
 considerable  progress in  global aerosol  modelling \citep{Mann-2013}
 and  measurement-based  assessments,  large  uncertainties  remain  in
@@ -22,19 +22,19 @@ chemical  and aerosol dynamical  processes through  numerical chemical
 transport  models (CTMs)  such  as ART  (Aerosols  and Reactive  Trace
 gases),   developed   at  the   Karlsruhe   Institute  of   Technology
 (KIT)  \citep{Vogel-2009,  Bangert-2011,  Knote-2013}.  This  regional
-scale model  system is coupled  with the operational  weather forecast
+scale modelling system is coupled  with the operational  weather forecast
 model  \textsc{Cosmo}  \citep{Baldauf-2011},  jointly developed  by  a
-consortium of European weather centers and used in the climate version
-by a wide research community.
+consortium of European weather centers and also used in a climate version
+by the wider research community.
 
-The extended  atmospheric model \textsc{Cosmo-art}  is computationally
+The extended  atmospheric model \textsc{Cosmo-art}  is com\-put\-ationally
 much  more  demanding than  \textsc{Cosmo}  since  a  large number  of
 additional  tracers and  processes have  to be  considered.   Thus the
 model  is currently  severely-limited  in terms  of applicability  and
 expensive in terms of energy consumption.  Although \textsc{Cosmo} has
 recently been ported to GPUs \citep{Gysi-2014, Lapillonne-2014} within
 the framework of the  High Performance and High Productivity Computing
-(HP2C) Initiative  \citep{HP2C}, to optimise it  for computational and
+(HP2C) Initiative  \citep{HP2C} to optimise it  for computational and
 energy efficiency,  significant investments in ART  are still required
 to take it  to a similar level.  The  efficiency of \textsc{Cosmo-art}
 is being  addressed in the  EU Exa2Green project  \citep{EXA2GREEN} to
@@ -53,6 +53,6 @@ equipments   and  software  environment   employed  to   conduct  this
 benchmarking study.  Sec.~\ref{sec:4}  presents performance and energy
 requirements  of the  baseline on  these architectures  and highlights
 areas where improvements will be necessary for the subsequent baseline
-refactoring.   Finally,  we  conclude  with  practical  guidelines  to
-identifying energy saving opportunities  and give an outlook to future
-research in Sec.~\ref{concl}.
+refactoring.   Finally,  we  conclude in Sec.~\ref{concl} with some 
+implications for the Exa2Green project and give an outlook for future
+research.
