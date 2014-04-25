@@ -4,35 +4,35 @@
 Benchmarks presented  in this work  were performed on  three different
 platforms  and can  be reproduced  within an  expected  variance, thus
 allowing a  fair comparison between the baseline  and future milestone
-versions of \textsc{COSMO-ART}.
+versions of \cosmoart.
 
 \begin{itemize}
-\item \textsc{Monch} is a 10 rack NEC-provided cluster composed
+\item \monch is a 10 rack NEC-provided cluster composed
   of 312 compute  nodes %and utilized by members  of the Swiss Platform
   %for Advanced Scientific  Computing (PASC) project~\citep{PASC}
    at CSCS. Each
   node comprises two Intel Ivy Bridge EP  E5-2660 ten-core processors
   operating at  2.2 GHz, equipped with 32\,GB of DDR3 1600\,MHz  RAM and connected  via InfiniBand Mellanox  SX6036 and FDR switches. For our  experiments, 
-  a full rack constituted of 52 nodes was used. \textsc{Monch} is  slated to stay
+  a full rack constituted of 52 nodes was used. \monch is  slated to stay
   in  service  without  hardware  upgrade  for  the  duration  of  the
   Exa2Green  project,  allowing   an  identical  configuration  to  be
   recreated for future assessments of the baseline.\\
 
-\item \textsc{Pilatus} is a dual-socket eight-core Intel Sandy
+\item \pilat is a dual-socket eight-core Intel Sandy
   Bridge EP based cluster composed of 42 compute nodes %and used as Piz Daint pre-post  processing cluster 
   at  CSCS.  The 2 login  nodes and
   the 42 computes nodes consists in 11 twin-pair Intel E5-Series DALCO
   r2264i4t 2U scalable compute modules. Each module contains 4 compute
   nodes based  on two Intel Xeon E5-2670 processors operating  at 2.6\,GHz equipped with 64GB of DDR3 1600\,MHz RAM and connected  via InfiniBand Mellanox SX6036 and FDR switches. 
   For our  experiments, a  full rack constituted  of 42 standard  compute nodes
-  was used. \textsc{Pilatus}  is based  on  Intel's second-generation
+  was used. \pilat  is based  on  Intel's second-generation
   processors, conventional in  HPC systems and known to  be more power
   consuming than Ivy Bridge successor.\\
 
-\item \textsc{Tintorrum} is  a heterogeneous cluster composed of
+\item \tinto is  a heterogeneous cluster composed of
   28 compute nodes at UJI. For our  experiments only a subset of 16 homogeneous nodes was considered. Each of them is composed dual-socket Intel Xeon E5645 hexa-core processors 
   running at 2.40\,GHz, equipped with 288\,GB  of DDR3 1333\,MHz and connected via Infiniband QDR with a Mellanox MTS3600 switch. A  full tracing  experiment is  conducted on
-  \textsc{Tintorrum} in order to  capture an overall  power profile at a much
+  \tinto in order to  capture an overall  power profile at a much
   finer resolution. In this sense, we also analyze the contribution of the MPI library
   to the energy consumption and how the use of the blocking versus polling
   message-passing policies can potentially render energy savings.
@@ -63,52 +63,50 @@ including the E3METER Cacti Plugin  to scan the entire PLC network and
 monitor in real-time the power usage of individual rack, recorded in 5
 minutes interval periods.
 
-\subsubsection{Power-performance measurement framework}
+\subsubsection{Power-performance tracing framework}
 
 For our experiments at Jaume I University (UJI), we employed a version
 of the integrated framework presented in~\cite{energy13} that employs the \pmlib library in
 combination with Extrae and Paraver, which  are profiling/tracing and
 visualization tools, respectively.
 
-\textsc{COSMO-ART}  is compiled  using the  Extrae  compiler wrappers,
+\cosmoart  is compiled  using the  Extrae  compiler wrappers,
 which automatically  instrument the Fortran code of  the model.  Next,
-\textsc{COSMO-ART}  is  run on  the  nodes,  thus dissipating  certain
+\cosmoart  is  run on  the  nodes,  thus dissipating  certain
 amount  of power.   These  nodes are connected to power distribution units (PDUs)
-APC8653 that account for the dissipated power of at 1\,Hz, these data is afterwards sent
-to the  tracing server. The client,  meanwhile, sends start/stop  primitives  in  order  to  gather  captured  data  by  the watt-meters onto the  tracing server, where an instance  of the \pmlib server is running.
+APC8653 that account for the dissipated power with a sampling frequency of 1\,Hz. The power data captured of these PDUs is afterwards collected by the tracing server. The client,  meanwhile, sends start/stop  primitives  in  order  to  gather  captured  data  by  the watt-meters onto the  tracing server, where an instance  of the \pmlib server is running.
 
 Once  the run  is finished,  a file  containing the  power  profile is
 created using the power data  received from the tracing server and the
 instrumentation post-processing generates the performance trace files.
 All  these files  are  combined then  in  Paraver which  allows us  to
 visualise   the   performance  trace   and   the   power  profile   of
-\textsc{COSMO-ART} all together.
+\cosmoart all together.
 
 \subsection{Software environment}
 \label{subsec:3.2}
 
-The \textsc{COSMO-ART}  baseline is a  pure MPI based  Fortran~90 code
+The \cosmoart  baseline is a  pure MPI based  Fortran~90 code
 currently  running  on   distributed  multi-core  systems  only.   The
 software stack on the platforms was controlled using the modules
 framework which gives an easy  and flexible mechanism to access to all
 of the  provided compilers, tools  and applications.  For  our initial
 benchmarking,   we  opted   for   the  GNU   compiler  gcc-4.8.1   on
-\textsc{Monch} and gcc-4.8.2 on  \textsc{Pilatus} and \textsc{Tintorrum}) using the -O3 compiler
+\monch and gcc-4.8.2 on  \pilat and \tinto) using the -O3 compiler
 flag  in favor  of the  Intel compilers 14.0.1,  delivering inferior
-performance.  In  addition, we installed the following implementations of MPI: MVAPICH2 1.9 on \textsc{Monch} and \textsc{Pilatus} and  OpenMPI 1.6.5 on \textsc{Tintorrum}. On the other hand, we  used HDF5 1.8.12 and NetCDF  (4.3.1) libraries for  the management  of extremely  large and
+performance.  In  addition, we installed the following implementations of MPI: MVAPICH2 1.9 on \monch and \pilat and  OpenMPI 1.6.5 on \tinto. On the other hand, we  used HDF5 1.8.12 and NetCDF  (4.3.1) libraries for  the management  of extremely  large and
 complex data collections.  All computes nodes have an operating system
 based on GNU/Linux featuring ``2.6.32-358.11.1.el6.x86\_64'' kernel in
-\textsc{Monch}     and      ``3.0.101-0.15-default''     kernel     in
-\textsc{Pilatus}.
+\monch, ``3.0.101-0.15-default'' in \pilat and ``2.6.18-238.19.1.el5.x86\_64'' in \tinto.
 
 A snapshot of the code,  which includes at least conceptually, all the
 information needed  to reproduce the  energy-to-solution benchmarks of
-\textsc{COSMO-ART}, was produced and run  on a 1040 cores using 20~MPI
-tasks  per node on  \textsc{Monch} and  on a  1344 cores  using 16~MPI
-tasks per node on  \textsc{Pilatus}.  The calculated region was mapped
+\cosmoart, was produced and run  on a 1040 cores using 20~MPI
+tasks  per node on  \monch and  on a  1344 cores  using 16~MPI
+tasks per node on  \pilat.  The calculated region was mapped
 to the participating processors using a 2D-partitioning strategy.  The
 distribution along the $x$ and $y$ coordinates was defined by setting:
-$nprocx=40$  and $nprocy=26$  for \textsc{Monch}  and  $nprocx=28$ and
+$nprocx=40$  and $nprocy=26$  for \monch  and  $nprocx=28$ and
 $nprocy=24$  as  $nprocx$  is   usually  kept  bigger  than  $nprocy$.
 Besides,  as this  version doesn't  make use  of the  traditional GRIB
 library, we  specified $nprocio=0$  for GRIB I/O.   Hyperthreading was
