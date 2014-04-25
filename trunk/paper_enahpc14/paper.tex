@@ -18,17 +18,20 @@
 %
 \smartqed
 %
+\usepackage[numbers]{natbib}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage[T1]{fontenc}
-\usepackage{hyperref}
-\usepackage[round, sort&compress, numbers]{natbib}
 \usepackage{multirow}
-\usepackage{graphicx}
-\usepackage{units}
-\usepackage{color}
+\usepackage{rotating}
+\usepackage{algorithm}
+\usepackage{algorithmic}
 \usepackage{colortbl}
+\usepackage{url}
 \usepackage{xspace}
-\usepackage{epsfig}
+
+
 %
 \DeclareRobustCommand\IPCClongname{}
 \setcounter{secnumdepth}{5}
@@ -46,7 +49,7 @@
 \begin{document}
 
 \title{Evaluating the Performance and Energy Efficiency of the
-  \textsc{COSMO-ART} model system}
+  \textsc{COSMO-ART} Model System}
 %\thanks{}
 %\subtitle{}
 
@@ -88,16 +91,19 @@
   time and  energy to  solution of the  considered application  and to
   gain detailed insights into power and performance requirements.  Our
   motivation  is to  improve  corresponding code  sections to  sustain
-  performance  while minimising energy-to-solution.   This preliminary
+  performance  while minimizing energy-to-solution.   This preliminary
   work  sets the  basis for  subsequent studies  to  tackle challenges
   related  to  energy  efficient  high performance  computing  in  the
-  framework of the Exa2Green project \citep{EXA2GREEN}.
+  framework of the Exa2Green project \cite{EXA2GREEN}.
 
-\keywords{High performance computing  \and Energy-aware computing \and
-  Green computing  \and Numerical weather  prediction \and Atmospheric
-  chemistry  \and  Aerosol  modelling  \and  Profiling  methods  \and
-  Benchmark  analysis  \and   \textsc{COSMO-ART}  coupled  model  \and
-  Time-to-solution \and Energy-to-solution \and Xeon processor}
+\keywords{High performance computing  \and Energy-aware computing
+  %Green computing  
+  \and Numerical weather  prediction \and Atmospheric
+  chemistry  \and  Aerosol  modelling \and
+  Benchmark  analysis  \and 
+  \cosmoart  coupled  model \and  
+  Power-performance profiling and tracing tools  \and
+  Energy-saving techniques}
 % \PACS{PACS code1 \and PACS code2 \and more} 
 % \subclass{MSC code1 \and MSC code2 \and more}
 \end{abstract}
@@ -106,23 +112,23 @@
 \label{intro}
 \input{Introduction.tex}
 
-\section{Related work}
+\section{Related Work}
 \label{sec:1}
 \input{Sec1:Related.tex}
 
-\section{The \textsc{COSMO-ART} model system}
+\section{The \textsc{COSMO-ART} Model System}
 \label{sec:2}
 \input{Sec2:COSMO-ART.tex}
 
-\section{Environment setup}
+\section{Environment Setup}
 \label{sec:3}
 \input{Sec3:Environment-setup.tex}
 
-\section{Experimental results}
+\section{Experimental Results}
 \label{sec:4}
 \input{Sec4:Experimental-results.tex}
 
-\section{Conclusion}
+\section{Concluding Remarks}
 \label{concl}
 \input{Conclusion.tex}
 
@@ -132,9 +138,9 @@
 The research  leading to these  results is supported by  the Exa2Green
 project  co-financed by  the European  Commission under  7th Framework
 Programme Future and Emerging Technologies (FET) Proactive Initiative:
-Minimising Energy  Consumption of Computing to the  Limit (MINECC). We
+Minimizing Energy  Consumption of Computing to the  Limit (MINECC). We
 also gratefully acknowledge the High Performance and High Productivity
-Computing Initiative  \citep{HP2C} for results that  will be leveraged
+Computing Initiative  \cite{HP2C} for results that  will be leveraged
 in subsequent code refactoring.
 \end{acknowledgements}
 

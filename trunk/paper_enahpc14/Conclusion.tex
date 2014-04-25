@@ -5,11 +5,11 @@ benchmarks illustrate  that the  best time-to-solution does  not imply
 the best energy-to-solution: an Intel Sandybridge (2.6 GHz) system has
 lower  time-to-solution but  higher energy-to-solution  than  an Intel
 Ivybridge  (2.2  GHz) system,  although  the  two  metrics are  indeed
-strongly  correlated.   A   tool  utilising  Paraver/Extrae  with  new
-extensions  for power  consumption  was successfully  applied to  this
-non-trivial application.  The  resulting profiles indicate that simple
-changes, such as making use of an MPI version based on blocking rather
-than polling, can reduce power consumption significantly.
+strongly  correlated. On the other hand, the usage of energy-friendly MPI waiting techniques analzyed with our power-performance framework over a series of runs of \cosmoart on \tinto and
+power traces demonstrate that it is possible to reduce both
+power dissipation and energy-to-solution while maintaining (or even decreasing) the time-to-solution. The  resulting profiles indicate that simple
+changes, such as making use of the blocking MPI policy rather
+than the polling is possible to slightly reduce both power dissipation and energy consumption (by 2\,\%).
 
 This  reproducible  benchmark provides  a  baseline  for ongoing  work
 package within  the EU-funded Exa2Green to  minimise power consumption
