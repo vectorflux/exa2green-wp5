@@ -11,7 +11,7 @@ versions of \cosmoart.
   of 312 compute  nodes. %and utilised by members  of the Swiss Platform
   %for Advanced Scientific  Computing (PASC) project~\citep{PASC}
   Each node is comprised of two Intel Ivy Bridge EP  E5-2660 ten-core processors
-  operating at  2.2 GHz, equipped with 32\,GB of DDR3 1600\,MHz  RAM and connected  via InfiniBand Mellanox  SX6036 and FDR switches. For our  experiments, 
+  operating at  2.2 GHz, equipped with 32GB of DDR3 1600\,MHz  RAM and connected  via InfiniBand Mellanox  SX6036 and FDR switches. For our  experiments, 
   a full rack constituted of 52 nodes was used. \monch is  slated to stay
   in  service  without  hardware  upgrade  for  the  duration  of  the
   Exa2Green  project,  allowing   an  identical  configuration  to  be
@@ -19,18 +19,18 @@ versions of \cosmoart.
 
 \item \pilat is a dual-socket eight-core Intel Sandy
   Bridge EP based cluster at  CSCS composed of 42 compute nodes. %and used as Piz Daint pre-post  processing cluster 
-  The 2 login  nodes and
-  the 42 computes nodes are consolidated into 11 twin-pair Intel E5-Series DALCO
+  The 2 login and
+  42 compute nodes are consolidated into 11 twin-pair Intel E5-Series DALCO
   r2264i4t 2U scalable compute modules, each containing 4 compute
   nodes based  on two Intel Xeon E5-2670 processors operating  at 2.6\,GHz equipped with 64GB of DDR3 1600\,MHz RAM and connected  via InfiniBand Mellanox SX6036 and FDR switches. 
   For our  experiments, a  full rack constituted  of 42 standard  compute nodes
   was used. \pilat  is based  on  Intel's second-generation
   processors, conventional in  HPC systems and known to  be more power
-  consuming than Ivy Bridge successor.\\
+  consuming than its Ivy Bridge successor.\\
 
 \item \tinto is  a heterogeneous cluster composed of
   28 compute nodes at UJI. For our  experiments only a subset of 16 homogeneous nodes was considered. Each of them is composed dual-socket Intel Xeon E5645 hexa-core processors 
-  running at 2.40\,GHz, equipped with 24\,GB  of DDR3 1333\,MHz and connected via Infiniband QDR with a Mellanox MTS3600 switch. 
+  running at 2.40\,GHz, equipped with 24\,GB  of DDR3 1333\,MHz and connected via Infiniband QDR with a Mellanox MTS\-3600 switch. 
 
   % A  full tracing  experiment is  conducted on
   % \tinto in order to  capture an overall  power profile at a much
@@ -57,7 +57,7 @@ Using  reliable narrowband  powerline communication  (PLC) technology,
 all  metering and  power  quality  data from  each  IPS are  centrally
 collected  by the E3METER  Data Concentrator,  via the  existing power
 cables thus  avoiding the need for  extra cabling.  This  data is made
-available via  SNMP, HTTP, TELNET  through the built-in  Fast Ethernet
+available via  SNMP, HTTP and TELNET  through the built-in  Fast Ethernet
 port.   Time  synchronisation  is  guaranteed by  using  NTP  servers.
 Measured  data is  accessed  through the  open  source Cacti  software
 including the E3METER Cacti Plugin  to scan the entire PLC network and
@@ -83,7 +83,7 @@ This file is finally loaded in Paraver in order to visualise the performance tra
 \subsection{Software environment}
 \label{subsec:3.2}
 
-The \cosmoart  baseline is a  pure MPI based  Fortran~90 code
+The \cosmoart  baseline is a  pure MPI-based  Fortran~90 code
 currently  running  on   distributed  multi-core  systems  only.   The
 software stack on the platforms was controlled using the modules
 framework which gives an easy  and flexible mechanism to access to all
