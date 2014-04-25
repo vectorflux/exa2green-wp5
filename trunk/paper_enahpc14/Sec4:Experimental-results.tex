@@ -102,6 +102,13 @@ the netwrok interface to check for the completion of an event (e.g. send or rece
 This usually yields low latency but high CPU utilization. Thus, can one expcet that this mode attanins the best performance, possibley at the cost a higher energy usage. In the blocking
 mode, the CPU is yield to other processes/threads if there are no incoming messages.
 
+In order to obtain an initial overview of the power dissipation of the system model, we run a
+full-day simulation of \cosmoart and capture the power profiles leveraging the two
+stated MPI policies, polling and blocking. Figure~\ref{fig:9} shows the power profiles
+of two \cosmoart runs featuring both MPI waiting modes. The first observation is that,
+for the polling MPI policy 
+
+The first observation is that 
 
 
 
