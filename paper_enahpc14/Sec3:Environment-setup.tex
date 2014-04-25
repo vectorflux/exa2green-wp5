@@ -4,7 +4,7 @@
 Benchmarks presented  in this work  were performed on  three different
 platforms  and can  be reproduced  within an  expected  variance, thus
 allowing a  fair comparison between the baseline  and future milestone
-versions of COSMO-ART.
+versions of \textsc{Cosmo-art}.
 
 \begin{itemize}
 \item \textsc{Monch (CSCS)} is a 10 rack NEC-provided cluster composed
@@ -81,23 +81,24 @@ visualization tools, respectively.
 
 %The left part of the \vref{fig:Lustre} offers a graphical representation of
 %the Lustre architecture; the right depicts the tracing and profiling framework.
-COSMO-ART  is  compiled  using  the Extrae  compiler  wrappers,  which
-automatically  instrument  the  Fortran   code  of  the  model.  Next,
-COSMO-ART  is run  on the  nodes, thus  dissipating certain  amount of
-power.  These  nodes are connected  to power measurement  devices that
-account for  the dissipated power/consumed  energy and send  the power
-data to  the tracing server.  The client,  meanwhile, sends start/stop
-primitives in  order to gather  captured data by the  watt-meters onto
-the tracing server, where an instance of the \pmlib server is running.
+\textsc{Cosmo-art}  is compiled  using the  Extrae  compiler wrappers,
+which automatically  instrument the Fortran code of  the model.  Next,
+\textsc{Cosmo-art}  is  run on  the  nodes,  thus dissipating  certain
+amount  of power.   These  nodes are  connected  to power  measurement
+devices that account for the dissipated power/consumed energy and send
+the power  data to the  tracing server.  The client,  meanwhile, sends
+start/stop  primitives  in  order  to  gather  captured  data  by  the
+watt-meters onto the  tracing server, where an instance  of the \pmlib
+server is running.
 
 Once  the run  is finished,  a file  containing the  power  profile is
 created using the power data  received from the tracing server and the
 instrumentation post-processing generates the performance trace files.
 All  these files  are  combined then  in  Paraver which  allows us  to
-visualise the performance trace and the power profile of COSMO-ART all
-together.
+visualise   the   performance  trace   and   the   power  profile   of
+\textsc{Cosmo-art} all together.
 
-%Once COSMO-ART run is finished, the VampirTrace \pmlib plugin receives
+%Once \textsc{Cosmo-art} run is finished, the VampirTrace \pmlib plugin receives
 %the  power   data  from  the  tracing   server.   The  instrumentation
 %post-processing generates  the performance trace files  and the \pmlib
 %plugin inserts the power data into them.
@@ -117,27 +118,28 @@ together.
 \subsection{Software environment}
 \label{subsec:3.2}
 
-The COSMO-ART baseline  is a pure MPI based  Fortran~90 code currently
-running on distributed multi-core systems only.  The software stack on
-both CSCS  platforms was controlled using the  modules framework which
-gives an easy and flexible mechanism  to access to all of the provided
-compilers, tools  and applications.  For our  initial benchmarking, we
-opted for the GNU  compiler (gcc/4.8.1 on \textsc{Monch}, gcc/4.8.2 on
-\textsc{Pilatus}) using  the -O3 compiler  flag in favor of  the intel
-compiler (14.0.1),  delivering inferior performance.   In addition, we
-installed the  MPICH2 implementation of MPI (mvapich2/1.9)  as well as
-the commonly used  HDF5 (1.8.12) and NetCDF (4.3.1)  libraries for the
-management  of  extremely large  and  complex  data collections.   All
-computes nodes  have an operating system based  on GNU/Linux featuring
-``2.6.32-358.11.1.el6.x86\_64''    kernel   in    \textsc{Monch}   and
-``3.0.101-0.15-default'' kernel in \textsc{Pilatus}.
+The \textsc{Cosmo-art}  baseline is a  pure MPI based  Fortran~90 code
+currently  running  on   distributed  multi-core  systems  only.   The
+software stack on both CSCS platforms was controlled using the modules
+framework which gives an easy  and flexible mechanism to access to all
+of the  provided compilers, tools  and applications.  For  our initial
+benchmarking,   we  opted   for   the  GNU   compiler  (gcc/4.8.1   on
+\textsc{Monch}, gcc/4.8.2 on  \textsc{Pilatus}) using the -O3 compiler
+flag  in favor  of the  intel compiler  (14.0.1),  delivering inferior
+performance.  In  addition, we installed the  MPICH2 implementation of
+MPI  (mvapich2/1.9) as  well as  the commonly  used HDF5  (1.8.12) and
+NetCDF  (4.3.1) libraries for  the management  of extremely  large and
+complex data collections.  All computes nodes have an operating system
+based on GNU/Linux featuring ``2.6.32-358.11.1.el6.x86\_64'' kernel in
+\textsc{Monch}     and      ``3.0.101-0.15-default''     kernel     in
+\textsc{Pilatus}.
 
 A snapshot of the code,  which includes at least conceptually, all the
 information needed  to reproduce the  energy-to-solution benchmarks of
-COSMO-ART, was produced and run on a 1040 cores using 20~MPI tasks per
-node on \textsc{Monch} and on a 1344 cores using 16~MPI tasks per node
-on  \textsc{Pilatus}.   The  calculated   region  was  mapped  to  the
-participating  processors  using   a  2D-partitioning  strategy.   The
+\textsc{Cosmo-art}, was produced and run  on a 1040 cores using 20~MPI
+tasks  per node on  \textsc{Monch} and  on a  1344 cores  using 16~MPI
+tasks per node on  \textsc{Pilatus}.  The calculated region was mapped
+to the participating processors using a 2D-partitioning strategy.  The
 distribution along the $x$ and $y$ coordinates was defined by setting:
 $nprocx=40$  and $nprocy=26$  for \textsc{Monch}  and  $nprocx=28$ and
 $nprocy=24$  as  $nprocx$  is   usually  kept  bigger  than  $nprocy$.

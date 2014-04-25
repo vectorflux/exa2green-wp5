@@ -23,30 +23,31 @@ transport  models (CTMs)  such  as ART  (Aerosols  and Reactive  Trace
 gases),   developed   at  the   Karlsruhe   Institute  of   Technology
 (KIT)  \citep{Vogel-2009,  Bangert-2011,  Knote-2013}.  This  regional
 scale model  system is coupled  with the operational  weather forecast
-model COSMO \citep{Baldauf-2011}, jointly developed by a consortium of
-European weather  centers and used in the  climate version (COSMO-CLM)
+model  \textsc{Cosmo}  \citep{Baldauf-2011},  jointly developed  by  a
+consortium of European weather centers and used in the climate version
 by a wide research community.
 
-The extended atmospheric model  COSMO-ART is computationally much more
-demanding than  COSMO since a  large number of additional  tracers and
-processes  have  to  be  considered.   Thus  the  model  is  currently
-severely-limited in  terms of applicability and expensive  in terms of
-energy  consumption.   Although  COSMO  has recently  been  ported  to
-GPUs  \citep{Gysi-2014, Lapillonne-2014} within  the framework  of the
-High    Performance   and    High   Productivity    Computing   (HP2C)
-Initiative \citep{HP2C},  to optimise it for  computational and energy
-efficiency, significant investments in  ART are still required to take
-it to a similar level.  The efficiency of COSMO-ART is being addressed
-in the  EU Exa2Green project \citep{EXA2GREEN} to  deliver a prototype
-code, which  provides an energy efficiency  of at least  five times of
-the baseline value.  Such  an implementation would allow the community
-to investigate critical questions at higher resolution and over longer
-periods, at reduced cost to the environment.
+The extended  atmospheric model \textsc{Cosmo-art}  is computationally
+much  more  demanding than  \textsc{Cosmo}  since  a  large number  of
+additional  tracers and  processes have  to be  considered.   Thus the
+model  is currently  severely-limited  in terms  of applicability  and
+expensive in terms of energy consumption.  Although \textsc{Cosmo} has
+recently been ported to GPUs \citep{Gysi-2014, Lapillonne-2014} within
+the framework of the  High Performance and High Productivity Computing
+(HP2C) Initiative  \citep{HP2C}, to optimise it  for computational and
+energy efficiency,  significant investments in ART  are still required
+to take it  to a similar level.  The  efficiency of \textsc{Cosmo-art}
+is being  addressed in the  EU Exa2Green project  \citep{EXA2GREEN} to
+deliver a  prototype code, which  provides an energy efficiency  of at
+least five times of the  baseline value.  Such an implementation would
+allow  the  community  to  investigate critical  questions  at  higher
+resolution  and   over  longer  periods,   at  reduced  cost   to  the
+environment.
 
 This  work is  organized as  follows: in  Sec.~\ref{sec:1} we  give an
 overview  of  related  work,   then  in  Sec.~\ref{sec:2}  we  briefly
-introduce  COSMO-ART and specify  its technical  setup related  to the
-investigated   performance   and   energy  evaluation   methods.    In
+introduce \textsc{Cosmo-art}  and specify its  technical setup related
+to  the investigated  performance and  energy evaluation  methods.  In
 Sec.~\ref{sec:3}   we  describe   HPC  platforms,   power  measurement
 equipments   and  software  environment   employed  to   conduct  this
 benchmarking study.  Sec.~\ref{sec:4}  presents performance and energy
