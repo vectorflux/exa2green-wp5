@@ -4,36 +4,33 @@
 Benchmarks presented  in this work  were performed on  three different
 platforms  and can  be reproduced  within an  expected  variance, thus
 allowing a  fair comparison between the baseline  and future milestone
-versions of \textsc{Cosmo-art}.
+versions of \textsc{COSMO-ART}.
 
 \begin{itemize}
 \item \textsc{Monch} is a 10 rack NEC-provided cluster composed
-  of 312 compute  nodes and utilized by members  of the Swiss Platform
-  for Advanced Scientific  Computing (PASC) project~\citep{PASC} at CSCS. Each
+  of 312 compute  nodes %and utilized by members  of the Swiss Platform
+  %for Advanced Scientific  Computing (PASC) project~\citep{PASC}
+   at CSCS. Each
   node comprises two Intel Ivy Bridge EP  E5-2660 ten-core processors
   operating at  2.2 GHz, equipped with 32\,GB of DDR3 1600\,MHz  RAM and connected  via InfiniBand Mellanox  SX6036 and FDR switches. For our  experiments, 
-  a full rack constituted  of  52
-  standard compute  nodes was used.  \textsc{Monch} is  slated to stay
+  a full rack constituted of 52 nodes was used. \textsc{Monch} is  slated to stay
   in  service  without  hardware  upgrade  for  the  duration  of  the
   Exa2Green  project,  allowing   an  identical  configuration  to  be
   recreated for future assessments of the baseline.\\
 
 \item \textsc{Pilatus} is a dual-socket eight-core Intel Sandy
-  Bridge EP based cluster composed of 42 compute nodes and used as Piz
-  Daint pre-post  processing cluster at  CSCS.  The 2 login  nodes and
+  Bridge EP based cluster composed of 42 compute nodes %and used as Piz Daint pre-post  processing cluster 
+  at  CSCS.  The 2 login  nodes and
   the 42 computes nodes consists in 11 twin-pair Intel E5-Series DALCO
   r2264i4t 2U scalable compute modules. Each module contains 4 compute
-  nodes based  on two Intel Xeon E5-2670 processors operating  at 2.6\,GHz 
-  connected  via InfiniBand Mellanox SX6036 and FDR  switches (56
-  Gb/s speed), and is equipped with 64GB of DDR3 1600\,MHz RAM. For our
-  experiments, a  full rack constituted  of 42 standard  compute nodes
+  nodes based  on two Intel Xeon E5-2670 processors operating  at 2.6\,GHz equipped with 64GB of DDR3 1600\,MHz RAM and connected  via InfiniBand Mellanox SX6036 and FDR switches. 
+  For our  experiments, a  full rack constituted  of 42 standard  compute nodes
   was  used. \textsc{Pilatus}  is based  on  Intel's second-generation
   processors, conventional in  HPC systems and known to  be more power
   consuming than Ivy Bridge successor.\\
 
 \item \textsc{Tintorrum} is  a heterogeneous cluster composed of
-  28 compute nodes at UJI. For our  experiments only a subset of 16 nodes was considered,  
-  Each of nodes of this subset includes a dual-socket hexa-core Intel Xeon E5645 processors 
+  28 compute nodes at UJI. For our  experiments only a subset of 16 homogeneous nodes was considered. Each of nodes of this subset includes a dual-socket hexa-core Intel Xeon E5645 processors 
   running at 2.40\,GHz, equipped with 288\,GB  of DDR3 1333\,MHz and connected via Infiniband QDR with a Mellanox MTS3600 switch. A  full tracing  experiment is  conducted on
   \textsc{Tintorrum} in order to  capture an overall  power profile at a much
   finer resolution. Also we analize the contribution of the MPI library
