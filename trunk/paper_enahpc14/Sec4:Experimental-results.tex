@@ -72,14 +72,21 @@ In  Figure~\ref{fig:3}, we  compare both  TTS (right  Y-axis)  and ETS
 (left  Y-axis)  metrics  on  both  platforms.  As  expected,  Xeon  E5
 outperforms Ivy Bridge EP, being  roughly 1.3x faster.  The reason for
 that is  two-fold: \emph{i}) it has  higher clock frequency  than Ivy Bridge
-(2.6  GHz  against  2.2 GHz),  and  \emph{ii})  it  aims at  computing  speed
+(2.6\,GHz  against  2.2\,GHz),  and  \emph{ii})  it  aims at  computing  speed
 regardless to  energy consumption.  In our experiments,  Ivy Bridge EP
 showed the best energy-to-solution, reducing the energy consumption of
 Xeon E5 by approximately 7\,\%.
 
-The TTS and ETS results for a full-day simulation on \tinto are shown in Figure~\ref{fig:4}.  As expected, the mean energy consumed by COSMO-ART when using the blocking MPI policy is about 2\,W less than that consumed by the polling mode. This is due to the blocking-waits performed by the CPU cores while using the blocking mode, in contrast of the polling-waits that take place when polling mode is used. From the point of view of the execution time, there is a slight reduction when the blocking MPI policy is leveraged. One can expect that the costs of the interruptions used in the blocking MPI policy can lead to an increase of the total execution time, however, applications with extensive computing may show better perforamnce with the blocking modes. This plays in favour for our results since the energy consumed is also less by just changing the behavior of the OpenMPI library from the polling to the blocking policy.
-
-
+The TTS and ETS results for a full-day simulation on \tinto are shown in Figure~\ref{fig:4}.  
+As expected, the mean energy consumed by COSMO-ART when using the blocking MPI policy is about 
+2\,W less than that consumed by the polling mode. This is due to the blocking-waits performed 
+by the CPU cores while using the blocking mode, in contrast of the polling-waits that take 
+place when polling mode is used. From the point of view of the execution time, there is a 
+slight reduction when the blocking MPI policy is leveraged. One can expect that the costs of 
+the interruptions used in the blocking MPI policy can lead to an increase of the total 
+execution time, however, applications with extensive computing may show better perforamnce with 
+the blocking modes. This plays in favour for our results since the energy consumed is also less 
+by just changing the behavior of the OpenMPI library from the polling to the blocking policy.
 
 \begin{figure}[htbf]
   \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART-0.eps}
@@ -99,25 +106,25 @@ The TTS and ETS results for a full-day simulation on \tinto are shown in Figure~
 \label{subsec:4.3}
 
 A full tracing experiment is conducted on \tinto in order to capture an overall power
-profile at a much finer resolution. First we run \cosmoart for a full-day simulation
-and analyze the power consumption. Second we correlate performance with
-power traces of two 1-hor time frames during the day: mid-day (from 11h-12h) and
+profile at a much finer resolution using the attached PDUs in each node. First we run \cosmoart 
+for a full-day simulation and analyze the power consumption. Second we correlate performance 
+with power traces of two 1-hor time frames during the day: mid-day (from 11h-12h) and
 midnight (23h-24h). All the experiments were performed using 192 \cosmoart processes
 mapping 12 processes in each of node.
 
-For all the experiments we also analyze the contribution of the MPI library to the energy 
-consumption and how the use of the blocking versus polling message-passing policies can 
-potentially render energy savings. Specifically, the OpenMPI 1.6.5 library installed in \tinto, 
-features two operation modes, blocking and modes, which can be selected before \cosmoart is 
-launched. In the polling configuration (the detault mode) ``MPI'' continually polls
-the netwrok interface to check for the completion of an event (e.g. send or receive).
-This usually yields low latency but high CPU utilization. Thus, can one expcet that this mode attanins the best performance, possibley at the cost a higher energy usage. In the blocking
-mode, the CPU is yield to other processes/threads if there are no incoming messages.
+% For all the experiments we also analyze the contribution of the MPI library to the energy 
+% consumption and how the use of the blocking versus polling message-passing policies can 
+% potentially render energy savings. Specifically, the OpenMPI 1.6.5 library installed in \tinto, 
+% features two operation modes, blocking and modes, which can be selected before \cosmoart is 
+% launched. In the polling configuration (the detault mode) ``MPI'' continually polls
+% the netwrok interface to check for the completion of an event (e.g. send or receive).
+% This usually yields low latency but high CPU utilization. Thus, can one expcet that this mode attanins the best performance, possibley at the cost a higher energy usage. In the blocking
+% mode, the CPU is yield to other processes/threads if there are no incoming messages.
 
 In order to obtain an initial overview of the power dissipation of the system model, we have 
 obtained the power profiles using our \pmlib framework of a full-day simulation of \cosmoart 
 leveraging the polling and blocking MPI policies, these results are depicted in the top/bottom 
-plots of Figure~\ref{fig:9}, respectvely. o, captured with our PDUs. The first observation for 
+plots of Figure~\ref{fig:9}, respectvely. The first observation for 
 the polling MPI policy is the quite plain power profile it generates. However, the first and 
 last hours of the full-day simulation dissipate slightly less power than the mid-day hours. We 
 relate these variations due to the chemical reactions and aerosols, computed by ART, that are 
@@ -144,33 +151,34 @@ shrink the simulations to 1 hour during mid-day (11h-12h) and midnight (23h-24h)
 \cosmoart perform different internal computations, as shown in Figure~\ref{fig:9}. At the same
 time we also leverage the two stated MPI policies: polling and waiting modes.
 
-
+% \begin{figure*}[htbf]
+%   \centering
+%   Simulation of 1 hour during midnight (from 23h to 24h) leveraging the polling MPI policy\\
+%   \includegraphics[width=0.78\textwidth]{Figs/23_24_blq0_stat.eps}\\
+%   Percentage of time for the 1 hour during midnight (from 23h to 24h) leveraging the polling MPI policy\\
+%   \includegraphics[width=0.78\textwidth]{Figs/23_24_blq1_stat.eps}\\
+%   \caption{blabla}
+%   \label{fig:8}
+% \end{figure*}
 
 \begin{figure*}[htbf]
   \centering
-  \includegraphics[width=0.78\textwidth]{Figs/23_24_blq1_stat1.eps}
-  \caption{blabla}
-  \label{fig:8}
-\end{figure*}
-
-\begin{figure*}[htbf]
-  \centering
+  \hspace{0.8cm}
   \scalebox{0.5}{\input{Figs/24hour.pstex_t}}
-  \caption{24 hours simulation trace using the MPI blocking mode on
-    \textsc{Tintorrum}.}
+  \caption{24 hours simulation trace using the MPI blocking mode on \tinto.}
   \label{fig:9}
 \end{figure*}
 
 \begin{figure*}[htbf]
   \centering
   \scriptsize
-  % Simulation of 1 hour during midday (from 11h to 12h) leveraging the polling MPI policy\\
-  % \scalebox{0.5}{\input{Figs/11_12_blq0_figure.pstex_t}}\\
-  % Simulation of 1 hour during midday (from 11h to 12h) leveraging the blocking MPI policy\\
-  % \scalebox{0.5}{\input{Figs/11_12_blq1_figure.pstex_t}}\\
-  Simulation of 1 hour during midnight (from 23h to 24h) leveraging the polling MPI policy\\
+  Simulation of 1 hour during midday (from 11h to 12h) leveraging the polling MPI policy\\
+  \scalebox{0.5}{\input{Figs/11_12_blq0_figure.pstex_t}}\\
+  Simulation of 1 hour during midday (from 11h to 12h) leveraging the blocking MPI policy\\
+  \scalebox{0.5}{\input{Figs/11_12_blq1_figure.pstex_t}}\\
+  1 hour simulation during midnight (from 23h to 24h) leveraging the polling MPI policy\\
   \scalebox{0.5}{\input{Figs/23_24_blq0_figure.pstex_t}}\\
-  Simulation of 1 hour during midnight (from 23h to 24h) leveraging the blocking MPI policy\\
+  1 hour simulation during midnight (from 23h to 24h) leveraging the blocking MPI policy\\
   \scalebox{0.5}{\input{Figs/23_24_blq1_figure.pstex_t}}\\
   \begin{tabular}{rlp{-0.2cm}rlp{-0.2cm}rlp{-0.2cm}rlp{-0.2cm}rlp{-0.2cm}rl}
 & &  & &  & &  & &  \\[-0.15cm]
