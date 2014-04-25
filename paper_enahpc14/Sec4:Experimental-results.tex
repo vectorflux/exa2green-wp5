@@ -125,7 +125,20 @@ mode, the CPU is yield to other processes/threads if there are no incoming messa
   \scalebox{0.5}{\input{Figs/23_24_blq0_figure.pstex_t}}\\
   Simulation of 1 hour during midnight (from 23h to 24h) leveraging the blocking MPI policy\\
   \scalebox{0.5}{\input{Figs/23_24_blq1_figure.pstex_t}}\\
-  \caption{1 hour simulation (23h-24h) trace using the MPI blocking
-    mode on \textsc{Tintorrum}.}
+  \begin{tabular}{rlp{-0.2cm}rlp{-0.2cm}rlp{-0.2cm}rlp{-0.2cm}rlp{-0.2cm}rl}
+& &  & &  & &  & &  \\[-0.15cm]
+Computation     & \multicolumn{1}{>{\columncolor[RGB]{  0,  , 255}}p{0.4cm}}{}  & & 
+Waiting a msg.  & \multicolumn{1}{>{\columncolor[RGB]{255,  0  ,0}}p{0.4cm}}{}  & & 
+Block. send     & \multicolumn{1}{>{\columncolor[RGB]{255,  0,174}}p{0.4cm}}{}  & & 
+Synchronization & \multicolumn{1}{>{\columncolor[RGB]{179,  0,  0}}p{0.4cm}}{}  & & 
+Wait/Wait all   & \multicolumn{1}{>{\columncolor[RGB]{235,  0,  0}}p{0.4cm}}{}  \\
+& &  & &  & &  & &  \\[-0.15cm]
+Immediate recv. & \multicolumn{1}{>{\columncolor[RGB]{100,100,177}}p{0.4cm}}{}  & &
+I/O             & \multicolumn{1}{>{\columncolor[RGB]{172,174, 41}}p{0.4cm}}{}  & &
+Group comm.     & \multicolumn{1}{>{\columncolor[RGB]{255,144, 26}}p{0.4cm}}{}  & &
+Others          & \multicolumn{1}{>{\columncolor[RGB]{192,224,  0}}p{0.4cm}}{}  & &
+Idle            & \multicolumn{1}{>{\columncolor[RGB]{117,195,255}}p{0.4cm}}{}  \\
+\end{tabular}
+  \caption{Power-perfomance traces during midday and midnight leveraging the polling and blocking MPI policies on \tinto.}
   \label{fig:11}
 \end{figure*}
