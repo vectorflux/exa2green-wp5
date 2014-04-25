@@ -1,5 +1,5 @@
 \begin{picture}(0,0)%
-\includegraphics{Figs/23_24_blq1_figure.eps}%
+\includegraphics{Figs/23_24_blq1_figure.pstex}%
 \end{picture}%
 \setlength{\unitlength}{4144sp}%
 %
@@ -16,7 +16,7 @@
 }}}}
 \put(1126,-5191){\makebox(0,0)[rb]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}3748\,W}%
 }}}}
-\put(1126,-5866){\makebox(0,0)[rb]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}1900\,W}%
+\put(1126,-5866){\makebox(0,0)[rb]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}2900\,W}%
 }}}}
 \put(1126,-2761){\makebox(0,0)[rb]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Proc. 1}%
 }}}}
@@ -26,6 +26,6 @@
 }}}}
 \put(1261,-6001){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}0\,s}%
 }}}}
-\put(12691,-6001){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}679.75\,s}%
+\put(12691,-6001){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}444.63\,s}%
 }}}}
 \end{picture}%
