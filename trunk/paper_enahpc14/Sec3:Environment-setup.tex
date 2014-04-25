@@ -7,10 +7,10 @@ allowing a  fair comparison between the baseline  and future milestone
 versions of \cosmoart.
 
 \begin{itemize}
-\item \monch is a 10 rack NEC-provided cluste rat CSCS composed
-  of 312 compute  nodes. %and utilized by members  of the Swiss Platform
+\item \monch is a 10-rack NEC-provided clus\-ter at CSCS composed
+  of 312 compute  nodes. %and utilised by members  of the Swiss Platform
   %for Advanced Scientific  Computing (PASC) project~\citep{PASC}
-  Each node comprises two Intel Ivy Bridge EP  E5-2660 ten-core processors
+  Each node is comprised of two Intel Ivy Bridge EP  E5-2660 ten-core processors
   operating at  2.2 GHz, equipped with 32\,GB of DDR3 1600\,MHz  RAM and connected  via InfiniBand Mellanox  SX6036 and FDR switches. For our  experiments, 
   a full rack constituted of 52 nodes was used. \monch is  slated to stay
   in  service  without  hardware  upgrade  for  the  duration  of  the
@@ -20,8 +20,8 @@ versions of \cosmoart.
 \item \pilat is a dual-socket eight-core Intel Sandy
   Bridge EP based cluster at  CSCS composed of 42 compute nodes. %and used as Piz Daint pre-post  processing cluster 
   The 2 login  nodes and
-  the 42 computes nodes consists in 11 twin-pair Intel E5-Series DALCO
-  r2264i4t 2U scalable compute modules. Each module contains 4 compute
+  the 42 computes nodes are consolidated into 11 twin-pair Intel E5-Series DALCO
+  r2264i4t 2U scalable compute modules, each containing 4 compute
   nodes based  on two Intel Xeon E5-2670 processors operating  at 2.6\,GHz equipped with 64GB of DDR3 1600\,MHz RAM and connected  via InfiniBand Mellanox SX6036 and FDR switches. 
   For our  experiments, a  full rack constituted  of 42 standard  compute nodes
   was used. \pilat  is based  on  Intel's second-generation
@@ -51,7 +51,7 @@ Supercomputer  clusters considered  for our  experiments at CSCS of ETH Zurich a
 E3METER Intelligent  Power Strips (IPS)  and Monitors (IPM)  which are
 high   quality   electricity  meters   released   by  Riedo   Networks
 \citep{Riedonetworks},   that  enable   to  monitor   and   log  power
-consumption  of the IT  infrastructure as  well as  constantly analyze
+consumption  of the IT  infrastructure as  well as  constantly analyse
 line  voltage,  current, power-factor,  frequency  with 1\,\%  accuracy.
 Using  reliable narrowband  powerline communication  (PLC) technology,
 all  metering and  power  quality  data from  each  IPS are  centrally
@@ -69,10 +69,10 @@ minutes interval periods.
 For our experiments at Jaume I University (UJI), we employed a version
 of the integrated framework presented in~\cite{energy13} that employs the \pmlib library in
 combination with Extrae and Paraver, which  are profiling/tracing and
-visualization tools, respectively.
+visualisation tools, respectively.
 
 \cosmoart  is compiled and linked with the Extrae instrumentation library,
-which automatically  instrument the Fortran~90 code of the model, e.g., to record MPI calls.  Next, \cosmoart  is  run on  the  nodes,  thus dissipating  certain
+which automatically  instruments the Fortran~90 code of the model, e.g., to record MPI calls.  Next, \cosmoart  is  run on  the  nodes,  thus dissipating  certain
 amount  of power.   These  nodes are connected to power distribution units (PDUs)
 APC 8653 that account for the dissipated power with a sampling frequency of 1\,Hz. The power data captured by these PDUs is collected into the tracing server. The client,  meanwhile, sends a start/stop  primitive  in  order  to  gather  captured  data  by  the PDUs.
 
@@ -90,13 +90,13 @@ framework which gives an easy  and flexible mechanism to access to all
 of the  provided compilers, tools  and applications.  For  our initial
 benchmarking,   we  opted   for   the  GNU   compiler  GCC 4.8.1   on
 \monch and GCC 4.8.2 on  \pilat and \tinto) using the -O3 compiler
-flag  in favor  of the  Intel compilers 14.0.1,  delivering inferior
+flag  in favor  of the  Intel compilers 14.0.1,  which delivered inferior
 performance.  In  addition, we installed the following implementations of MPI: MVAPICH2 1.9 on \monch and \pilat and  OpenMPI 1.6.5 on \tinto. On the other hand, we  used HDF5 1.8.12 and NetCDF  (4.3.1) libraries for  the management  of extremely  large and
 complex data collections.  All computes nodes have an operating system
 based on GNU/Linux featuring ``2.6.32-358.11.1.el6'' kernel in
 \monch, ``3.0.101-0.15-default'' in \pilat and ``2.6.18-238.19.1.el5'' in \tinto.
 
-A snapshot of the code,  which includes at least conceptually, all the
+A snapshot of the code,  which includes, at least conceptually, all the
 information needed  to reproduce the  energy-to-solution benchmarks of
 \cosmoart, was produced and run  on a 1040 cores using 20~MPI
 tasks  per node on  \monch and  on a  1344 cores  using 16~MPI
