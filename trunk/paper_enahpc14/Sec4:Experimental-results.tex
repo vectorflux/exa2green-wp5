@@ -86,9 +86,7 @@ by the CPU cores while using the blocking mode, in contrast of the polling-waits
 place when polling mode is used. From the point of view of the execution time, there is a 
 slight reduction when the blocking MPI policy is leveraged. One can expect that the costs of 
 the interruptions used in the blocking MPI policy can lead to an increase of the total 
-execution time, however, applications with extensive computing may show better perforamnce with 
-the blocking modes. This plays in favour for our results since the energy consumed is also less 
-by just changing the behavior of the OpenMPI library from the polling to the blocking policy.
+execution time, however, applications with extensive computing, e.g. \cosmoart, may show better perforamnce with the blocking modes This plays in favour for our results since the energy consumed is also less by just changing the behavior of the OpenMPI library from the polling to the blocking policy.
 
 \begin{figure}[htbf]
   \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART-0.eps}
@@ -112,8 +110,8 @@ by just changing the behavior of the OpenMPI library from the polling to the blo
 A full tracing experiment is conducted on \tinto in order to capture an overall power
 profile at a much finer resolution using the attached PDUs in each node. First we run \cosmoart 
 for a full-day simulation and analyse the power consumption. Second we correlate performance 
-with power traces of two 1-hor time frames during the day: mid-day (from 11h-12h) and
-midnight (23h-24h). All the experiments were performed using 192 \cosmoart processes
+with power traces of two 1-hor time frames during the day: mid-day (from 11h--12h) and
+midnight (23h--24h). All the experiments were performed using 192 \cosmoart processes
 mapping 12 processes in each of node.
 
 % For all the experiments we also analyse the contribution of the MPI library to the energy 
@@ -140,20 +138,16 @@ which means a reduction of 50\,W in total or, in other words, 1\,\% of reductuon
 power. Also, we observe power  drops in each hour simulated, basically related to periods in 
 which the processes were performing blocking-waits instead of polling-waits, thus yielding the 
 CPU to a low usage during this phases. Our final observation is the reduction in execution time 
-when the blocking MPI policy is leveraged in contrast with the polling MPI. One can expect that 
-the costs of the interruptions used in the blocking can lead to an increase of the total 
-execution time, however, applications with extensive computing may show better perforamnce with 
-the blocking mode. This plays in favour for our results since the energy consumed is also less 
-by just changing the behavior of the OpenMPI library from the polling to the blocking policy.
+when the blocking MPI policy is leveraged in contrast with the polling MPI.
 
 To gain more insights about the power-performance behavior of \cosmoart, we also have conducted 
 experiments that show power-performance traces of 1 hour simulation. We limited the simulation 
 time to this bound since the pattern of the computation performed by \cosmoart is repeated each 
 hour, also because the weight of a full-day simulation trace can not be easily handled using 
 our machines and memory available (about 45\,GB per trace file). To soften the problem we 
-shrink the simulations to 1 hour during mid-day (11h-12h) and midnight (23h-24h), in which 
-\cosmoart perform different internal computations, as shown in Figure~\ref{fig:9}. At the same
-time we also leverage the two stated MPI policies: polling and waiting modes.
+shrink the simulations to 1 hour during mid-day (11h--12h) and midnight (23h--24h), in which 
+\cosmoart perform different internal computations due to the different chemical reactions that happen during the different time frames of the day. At the same time we also leverage the two stated MPI policies: polling and blocking modes. The traces are shown in Figure~\ref{fig:9}.
+As can be observed, the repetition
 
 % \begin{figure*}[htbf]
 %   \centering
