@@ -50,31 +50,31 @@ gathered in Table~\ref{tab:1}.
 \begin{figure}[htbf]
   \centering
   \includegraphics[width=0.48\textwidth]{Figs/NRJ_benchmark_Monch.eps}
-    \caption{Isola E1 Rack 2 total power of \monch.}
-    \label{fig:1}
+  \caption{Isola E1 Rack 2 total power of \monch.}
+  \label{fig:1}
 \end{figure}
 
 \begin{figure}[htbf]
   \centering
   \includegraphics[width=0.48\textwidth]{Figs/NRJ_benchmark_Pilatus.eps}
-    \caption{Isola HD total power dissipation of \pilat.}
-    \label{fig:2}
+  \caption{Isola HD total power dissipation of \pilat.}
+  \label{fig:2}
 \end{figure}
 
 \begin{table}[htbf]
   \centering
-    \caption{Averaged power dissipation (W) of the platforms.}
-    \label{tab:1}
-    \begin{tabular}{cccc}
-      \hline\noalign{\smallskip}
-      \textbf{\scriptsize{Xeon E5}} & \textbf{\scriptsize{Ivy Bridge}} & 
-      \textbf{\scriptsize{Xeon  E5645}} & \textbf{\scriptsize{Xeon  E5645}} \\
-      & & \textbf{\scriptsize{(Polling)}} & \textbf{\scriptsize{(Blocking)}} \\
-      \noalign{\smallskip}\hline\noalign{\smallskip}
-      18035.0 & 12622.5 & 3713.6 & 3651.8 \\ 
-      \noalign{\smallskip}\hline
-    \end{tabular}
-  \end{table}
+  \caption{Averaged power dissipation (W) of the platforms.}
+  \label{tab:1}
+  \begin{tabular}{cccc}
+    \hline\noalign{\smallskip}   \textbf{\scriptsize{Xeon   E5}}   &
+    \textbf{\scriptsize{Ivy   Bridge}}   &  \textbf{\scriptsize{Xeon
+        E5645}}   &   \textbf{\scriptsize{Xeon   E5645}}  \\   &   &
+    \textbf{\scriptsize{(Polling)}}                                 &
+    \textbf{\scriptsize{(Blocking)}}
+    \\   \noalign{\smallskip}\hline\noalign{\smallskip}   18035.0  &
+    12622.5 & 3713.6 & 3651.8 \\ \noalign{\smallskip}\hline
+  \end{tabular}
+\end{table}
 
 In  Figure~\ref{fig:3}, we  compare both  TTS (right  Y-axis)  and ETS
 (left  Y-axis)  metrics  on  both  platforms.  As  expected,  Xeon  E5
@@ -144,20 +144,20 @@ behavior of the OpenMPI library  to the blocking policy, i.e, with the
   1 hour simulation during midnight (23h--24h) leveraging the blocking MPI policy \\
   \scalebox{0.5}{\input{Figs/23_24_blq1_figure.pstex_t}} \\
   \begin{tabular}{rlp{-0.2cm}rlp{-0.2cm}rlp{-0.2cm}rlp{-0.2cm}rl}
-& &  & &  & &  \\[-0.15cm]
-Computation     & \multicolumn{1}{>{\columncolor[RGB]{  0,  , 255}}p{0.4cm}}{} & & 
-Block. send     & \multicolumn{1}{>{\columncolor[RGB]{255,  0,174}}p{0.4cm}}{} & & 
-Synchronization & \multicolumn{1}{>{\columncolor[RGB]{179,  0,  0}}p{0.4cm}}{} & & 
-Wait/Wait all   & \multicolumn{1}{>{\columncolor[RGB]{235,255,  0}}p{0.4cm}}{} \\
-& &  & &  & &  \\[-0.15cm]
-Immediate recv. & \multicolumn{1}{>{\columncolor[RGB]{100,100,177}}p{0.4cm}}{} & &
-Waiting a msg.  & \multicolumn{1}{>{\columncolor[RGB]{255,  0  ,0}}p{0.4cm}}{} & & 
-Group comm.     & \multicolumn{1}{>{\columncolor[RGB]{255,144, 26}}p{0.4cm}}{} & &
-Others          & \multicolumn{1}{>{\columncolor[RGB]{192,224,  0}}p{0.4cm}}{} \\
-%I/O             & \multicolumn{1}{>{\columncolor[RGB]{172,174, 41}}p{0.4cm}}{} & &
-%
-%Idle            & \multicolumn{1}{>{\columncolor[RGB]{117,195,255}}p{0.4cm}}{} \\
-\end{tabular}
+    & &  & &  & &  \\[-0.15cm]
+    Computation     & \multicolumn{1}{>{\columncolor[RGB]{  0,  , 255}}p{0.4cm}}{} & & 
+    Block. send     & \multicolumn{1}{>{\columncolor[RGB]{255,  0,174}}p{0.4cm}}{} & & 
+    Synchronization & \multicolumn{1}{>{\columncolor[RGB]{179,  0,  0}}p{0.4cm}}{} & & 
+    Wait/Wait all   & \multicolumn{1}{>{\columncolor[RGB]{235,255,  0}}p{0.4cm}}{} \\
+    & &  & &  & &  \\[-0.15cm]
+    Immediate recv. & \multicolumn{1}{>{\columncolor[RGB]{100,100,177}}p{0.4cm}}{} & &
+    Waiting a msg.  & \multicolumn{1}{>{\columncolor[RGB]{255,  0  ,0}}p{0.4cm}}{} & & 
+    Group comm.     & \multicolumn{1}{>{\columncolor[RGB]{255,144, 26}}p{0.4cm}}{} & &
+    Others          & \multicolumn{1}{>{\columncolor[RGB]{192,224,  0}}p{0.4cm}}{} \\
+    %I/O             & \multicolumn{1}{>{\columncolor[RGB]{172,174, 41}}p{0.4cm}}{} & &
+    %
+    %Idle            & \multicolumn{1}{>{\columncolor[RGB]{117,195,255}}p{0.4cm}}{} \\
+  \end{tabular}
   \caption{Power-performance   traces  during   midday   and  midnight
     leveraging the polling and blocking MPI policies on \tinto.}
   \label{fig:6}
