@@ -1,18 +1,18 @@
 While anthropogenic greenhouse gas emissions are driving unprecedented
-major  climate  changes  since   the  mid-20$^{th}$  Century,  one  factor
-overwhelmingly  affects  the  uncertainty  in  determining  human-induced
+major  climate changes  since  the mid-20$^{th}$  Century, one  factor
+overwhelmingly  affects the  uncertainty in  determining human-induced
 radiative  forcing:  the  effects   of  aerosols  in  the  atmosphere.
-Although they  are not considered  heat-trapping greenhouse  gases and
-have  shorter  atmospheric lifetimes,  aerosols  significantly modify  the
-global   radiation   budget   \cite{IPCC-2013}.   Enhanced   aerosols
+Although they  are not  considered heat-trapping greenhouse  gases and
+have shorter atmospheric  lifetimes, aerosols significantly modify the
+global   radiation   budget   \cite{IPCC-2013}.    Enhanced   aerosols
 concentrations impact the climate  system by scattering and absorption
 of solar radiation, thereby exerting a direct radiative forcing; or by
-modifying cloud  properties,  cloud  fraction and  surface
-albedo,  causing  a  negative  indirect  radiative  forcing.   Despite
-considerable  progress in  global aerosol  modelling \cite{Mann-2013}
-and  measurement-based  assessments,  large  uncertainties  remain  in
-current  estimates  of  aerosol radiative  forcing  \cite{Myhre-2013,
-IPCC-2013, Lee-2013,  Sherwood-2013,  Stier-2013}.
+modifying cloud properties, cloud fraction and surface albedo, causing
+a negative indirect  radiative forcing.  Despite considerable progress
+in  global aerosol  modelling  \cite{Mann-2013} and  measurement-based
+assessments,  large  uncertainties  remain  in  current  estimates  of
+aerosol  radiative   forcing  \cite{Myhre-2013,  IPCC-2013,  Lee-2013,
+Sherwood-2013, Stier-2013}.
 
 Hence to  improve our understanding of  aerosol-cloud interactions and
 reduce  these  uncertainties,  the  research  community  is  making  a
@@ -20,40 +20,38 @@ concerted international  effort to represent  the underlying physical,
 chemical  and aerosol dynamical  processes through  numerical chemical
 transport  models (CTMs)  such  as ART  (Aerosols  and Reactive  Trace
 gases),   developed   at  the   Karlsruhe   Institute  of   Technology
-(KIT)  \cite{Vogel-2009,  Bangert-2011,  Knote-2013}.  This  regional
-scale modelling system is coupled  with the operational  weather forecast
-model  \textsc{Cosmo}  \cite{Baldauf-2011},  jointly developed and used by  a
-consortium of European weather centers, as well as utilized in a climate version
-by the wider research community.
+(KIT)  \cite{Vogel-2009,  Bangert-2011,  Knote-2013}.   This  regional
+scale  modelling  system  is  coupled  with  the  operational  weather
+forecast  model \textsc{Cosmo} \cite{Baldauf-2011},  jointly developed
+and  used by  a consortium  of European  weather centers,  as  well as
+utilized in a climate version by the wider research community.
 
-The extended  atmospheric model \cosmoart  is com\-put\-ationally
-much  more  demanding than  \textsc{Cosmo}  since  a  large number  of
-additional  tracers and  processes have  to be  considered.   Thus the
-model  is currently  severely limited  in terms  of applicability  and
-expensive in terms of energy consumption.  Although \textsc{Cosmo} has
-recently been ported to GPUs \cite{Gysi-2014, Lapillonne-2014} 
-within
-the framework of the  High Performance and High Productivity Computing
-(HP2C) Initiative  \cite{HP2C} to optimize it  for computational and
+The extended  atmospheric model \cosmoart  is com\-put\-ationally much
+more demanding than \textsc{Cosmo}  since a large number of additional
+tracers  and processes  have  to  be considered.   Thus  the model  is
+currently severely limited in  terms of applicability and expensive in
+terms  of energy  consumption.  Although  \textsc{Cosmo}  has recently
+been  ported  to  GPUs  \cite{Gysi-2014, Lapillonne-2014}  within  the
+framework  of the  High  Performance and  High Productivity  Computing
+(HP2C)  Initiative \cite{HP2C}  to optimize  it for  computational and
 energy efficiency,  significant investments in ART  are still required
-to take it  to a similar level.  The  efficiency of \cosmoart
-is being  addressed in the  EU Exa2Green project  \cite{EXA2GREEN} to
-deliver a  prototype code, which  provides an energy efficiency  of at
-least five times the  baseline value.  Such an implementation would
-allow  the  community  to  investigate critical  questions  at  higher
-resolution  and   over  longer  periods,   at  reduced  cost   to  the
-environment.
+to take it  to a similar level.  The efficiency  of \cosmoart is being
+addressed in  the EU Exa2Green  project \cite{EXA2GREEN} to  deliver a
+prototype code, which  provides an energy efficiency of  at least five
+times  the baseline  value.  Such  an implementation  would  allow the
+community to  investigate critical questions at  higher resolution and
+over longer periods, at reduced cost to the environment.
 
-This  work is  organized as  follows: in  Section~\ref{sec:1} we  give an
-overview  of  related  work,   then  in  Section~\ref{sec:2}  we  briefly
-introduce \cosmoart  and specify its  technical setup related
-to  the investigated  performance and  energy evaluation  methods.  In
-Section~\ref{sec:3}   we  describe   HPC  platforms,   power  measurement
+This work is  organized as follows: in Section~\ref{sec:1}  we give an
+overview  of  related work,  then  in  Section~\ref{sec:2} we  briefly
+introduce  \cosmoart and specify  its technical  setup related  to the
+investigated   performance   and   energy  evaluation   methods.    In
+Section~\ref{sec:3}  we  describe  HPC  platforms,  power  measurement
 equipments   and  software  environment   employed  to   conduct  this
-benchmarking study.  Section~\ref{sec:4}  presents performance and energy
-requirements  of the  baseline on  these architectures  and highlights
-areas where improvements will be necessary for the subsequent baseline
-refactoring.   Finally,  we  conclude in Section~\ref{concl} with some 
-implications for the Exa2Green project and give an outlook for future
-research.
+benchmarking  study.   Section~\ref{sec:4}  presents  performance  and
+energy  requirements  of  the  baseline  on  these  architectures  and
+highlights  areas  where  improvements   will  be  necessary  for  the
+subsequent   baseline   refactoring.     Finally,   we   conclude   in
+Section~\ref{concl} with  some implications for  the Exa2Green project
+and give an outlook for future research.
 
