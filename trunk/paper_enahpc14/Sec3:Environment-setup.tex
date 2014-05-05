@@ -7,104 +7,121 @@ allowing a  fair comparison between the baseline  and future milestone
 versions of \cosmoart.
 
 \begin{itemize}
-\item \monch is a 10-rack NEC-provided clus\-ter at CSCS composed
-  of 312 compute  nodes. %and utilized by members  of the Swiss Platform
-  %for Advanced Scientific  Computing (PASC) project~\cite{PASC}
-  Each node is comprised of two Intel Ivy Bridge EP  E5-2660 ten-core processors
-  operating at  2.2\,GHz, equipped with 32\,GB of DDR3 1600\,MHz  RAM and connected  via InfiniBand Mellanox  SX6036 and FDR switches. For our  experiments, 
-  a full rack constituted of 52 nodes was used. % \monch is  slated to stay
-  %in  service  without  hardware  upgrade  for  the  duration  of  the
-  %Exa2Green  project,  allowing   an  identical  configuration  to  be
-  %recreated for future assessments of the baseline.\\
+\item \monch is  a 10-rack NEC-provided clus\-ter at  CSCS composed of
+  312 compute nodes. 
+  % and  utilized  by  members  of  the  Swiss  Platform  for  Advanced
+  % Scientific Computing (PASC) project~\cite{PASC}.
+  Each node is  comprised of two Intel Ivy  Bridge EP E5-2660 ten-core
+  processors  operating  at 2.2\,GHz,  equipped  with  32\,GB of  DDR3
+  1600\,MHz RAM  and connected via InfiniBand Mellanox  SX6036 and FDR
+  switches. For our  experiments, a full rack constituted  of 52 nodes
+  was used. 
+  % \monch is  slated to stay  in service without hardware  upgrade for
+  % the  duration  of  the  Exa2Green project,  allowing  an  identical
+  % configuration  to  be  recreated  for  future  assessments  of  the
+  % baseline.
 
-\item \pilat is a dual-socket eight-core Intel Sandy
-  Bridge EP based cluster at  CSCS composed of 42 compute nodes. %and used as Piz Daint pre-post  processing cluster 
-  %The 2 login and 42 compute nodes %are consolidated into 11 twin-pair Intel E5-Series DALCO
-  %r2264i4t 2U scalable compute modules, each containing 4 compute
-  %nodes based 
-  %consisting of 
-  Each node is comprises two Intel Xeon E5-2670 processors operating  at 2.6\,GHz equipped with 64\,GB of DDR3 1600\,MHz RAM and connected  via InfiniBand Mellanox SX6036 and FDR switches. 
-  For our  experiments, a full rack constituted of 42 compute nodes
-  was used. \pilat  is based  on  Intel's second-generation
-  processors, conventional in  HPC systems and known to  be more power
-  consuming than its Ivy Bridge successor.
+\item \pilat is  a dual-socket eight-core Intel Sandy  Bridge EP based
+  cluster at CSCS composed of 42 compute nodes.  
+  % and used as Piz Daint  pre-post processing cluster The 2 login and
+  % 42  compute  nodes  are   consolidated  into  11  twin-pair  Intel
+  % E5-Series  DALCO  r2264i4t   2U  scalable  compute  modules,  each
+  % containing 4 compute nodes
+  Each node  is comprises two Intel Xeon  E5-2670 processors operating
+  at 2.6\,GHz equipped with 64\,GB of DDR3 1600\,MHz RAM and connected
+  via  InfiniBand   Mellanox  SX6036   and  FDR  switches.    For  our
+  experiments, a full  rack constituted of 42 compute  nodes was used.
+  \pilat   is   based   on   Intel's   second-generation   processors,
+  conventional in  HPC systems  and known to  be more  power consuming
+  than its Ivy Bridge successor.
 
-\item \tinto is  a heterogeneous cluster composed of
-  28 compute nodes at UJI. For our  experiments only a subset of 16 homogeneous nodes was considered. Each node is composed of two Intel Xeon E5645 hexa-core processors 
-  running at 2.4\,GHz, equipped with 24\,GB  of DDR3 1333\,MHz and connected via InfiniBand QDR with a Mellanox MTS\-3600 switch. 
-
-  % A  full tracing  experiment is  conducted on
-  % \tinto in order to  capture an overall  power profile at a much
-  % finer resolution. In this sense, we also analyze the contribution of the MPI library
-  % to the energy consumption and how the use of the blocking versus polling
-  % message-passing policies can potentially render energy savings.
+\item \tinto is  a heterogeneous cluster composed of  28 compute nodes
+  at UJI.  For our experiments only  a subset of  16 homogeneous nodes
+  was  considered. Each  node  is  composed of  two  Intel Xeon  E5645
+  hexa-core processors  running at  2.4\,GHz, equipped with  24\,GB of
+  DDR3  1333\,MHz and  connected via  InfiniBand QDR  with  a Mellanox
+  MTS\-3600 switch.
 \end{itemize}
 
 \subsection{Power measurement framework}
 \label{subsec:3.3}
 
-We present here the two different  frameworks deployed on the testbed HPC systems to
-measure  performance, power  dissipation and energy consumption of the baseline execution of \cosmoart.
+We present here  the two different frameworks deployed  on the testbed
+HPC  systems  to measure  performance,  power  dissipation and  energy
+consumption of the baseline execution of \cosmoart.
 
 \subsubsection{E3METER metering framework}
 
-Supercomputer  clusters considered  for our  experiments at CSCS of ETH Zurich are equipped with
-E3METER Intelligent  Power Strips (IPS)  and Monitors (IPM)  which are
-high   quality   electricity  meters   released   by  Riedo   Networks, 
-  that  enable   to  monitor   and   log  power
-dissipation  of the IT  infrastructure as  well as  constantly analyze
-line  voltage,  current, power-factor,  frequency  with 1\,\%  accuracy.
-Using  reliable narrowband  power-line communication  (PLC) technology,
-all  metering and  power  quality  data from  each  IPS are  centrally
-collected  by the E3METER  Data Concentrator,  via the  existing power
-cables thus  avoiding the need for  extra cabling.  This  data is made
-available via  SNMP, HTTP and TELNET  through the built-in  Fast Ethernet
-port.   Time  synchronization  is  guaranteed by  using  NTP  servers.
-Measured  data is  accessed  through the  open  source Cacti  software
-including the E3METER Cacti Plugin  to scan the entire PLC network and
-monitor in real-time the power usage of individual rack, recorded in 5
-minutes interval periods.
+Supercomputer clusters  considered for our experiments at  CSCS of ETH
+Zurich are  equipped with E3METER  Intelligent Power Strips  (IPS) and
+Monitors (IPM)  which are high quality electricity  meters released by
+Riedo Networks,  that enable to  monitor and log power  dissipation of
+the  IT infrastructure  as well  as constantly  analyze  line voltage,
+current, power-factor, frequency  with 1\,\% accuracy.  Using reliable
+narrowband power-line communication (PLC) technology, all metering and
+power  quality data  from  each  IPS are  centrally  collected by  the
+E3METER Data Concentrator, via the existing power cables thus avoiding
+the need  for extra  cabling.  This data  is made available  via SNMP,
+HTTP  and  TELNET  through  the  built-in Fast  Ethernet  port.   Time
+synchronization is guaranteed by  using NTP servers.  Measured data is
+accessed through the open  source Cacti software including the E3METER
+Cacti Plugin to  scan the entire PLC network  and monitor in real-time
+the power  usage of  individual rack, recorded  in 5  minutes interval
+periods.
 
 \subsubsection{Power-performance tracing framework}
 
-For experiments at UJI on \tinto, we employed a version
-of the integrated framework presented in~\cite{energy13} that employs the \pmlib library in
-combination with Extrae and Paraver, which  are profiling/tracing and
-visualization tools, respectively. 
+For  experiments  at UJI  on  \tinto, we  employed  a  version of  the
+integrated  framework presented  in~\cite{energy13}  that employs  the
+\pmlib  library in  combination  with Extrae  and  Paraver, which  are
+profiling/tracing and visualization tools, respectively.
 
-To employ our framework, \cosmoart is first compiled and linked with the Extrae instrumentation library, which automatically  instruments the Fortran~90 code of the model, e.g., to record MPI calls.  Next, \cosmoart  is  run on  the  nodes,  thus dissipating  certain amount  of power. The  nodes are connected to APC 8653 Power Distribution Units (PDUs)
-that account for the dissipated power with a sampling rate of 1\,Hz. The power data captured by these PDUs is collected by a \pmlib tracing server running on a separate machine. The client, running on the target nodes, sends start/stop  primitives in order to collect
-the power data during the \cosmoart run. Once  the run  is finished,  a power-performance trace file containing the power data is received from the tracing server and the instrumentation post-process is generated. A merged trace file is finally loaded in Paraver to visualize and correlate the performance trace and with the power profile generated by \cosmoart. This procedure allows us to easily detect power bottlenecks, basically constituted by inefficient waiting methods.
+To employ our  framework, \cosmoart is first compiled  and linked with
+the  Extrae instrumentation  library, which  automatically instruments
+the Fortran~90  code of the model,  e.g., to record  MPI calls.  Next,
+\cosmoart  is run  on the  nodes, thus  dissipating certain  amount of
+power. The  nodes are connected  to APC 8653 Power  Distribution Units
+(PDUs) that account  for the dissipated power with  a sampling rate of
+1\,Hz. The power data captured by  these PDUs is collected by a \pmlib
+tracing server running  on a separate machine. The  client, running on
+the target nodes, sends start/stop  primitives in order to collect the
+power  data during  the \cosmoart  run. Once  the run  is  finished, a
+power-performance  trace file  containing the  power data  is received
+from  the  tracing  server  and the  instrumentation  post-process  is
+generated.  A  merged trace  file  is  finally  loaded in  Paraver  to
+visualize  and correlate  the  performance trace  and  with the  power
+profile  generated by \cosmoart.  This procedure  allows us  to easily
+detect power bottlenecks, basically constituted by inefficient waiting
+methods.
 
 \subsection{Software environment}
 \label{subsec:3.2}
 
-The \cosmoart  baseline is a  pure MPI-based  Fortran~90 code
-currently  running  on   distributed  multi-core  systems  only.   The
-software stack on the platforms was controlled using the modules
-framework which gives an easy  and flexible mechanism to access to all
-of the  provided compilers, tools  and applications.  For  our initial
-benchmarking,   we  opted   for   the  GNU   compiler  GCC 4.8.1   on
-\monch and GCC 4.8.2 on  \pilat and \tinto) using the -O3 compiler
-flag  in favor  of the  Intel compilers 14.0.1,  which delivered inferior
-performance.  In  addition, we installed the following implementations of MPI: MVAPICH2 1.9 on \monch and \pilat, and  OpenMPI 1.6.5 on \tinto. On the other hand, we  used HDF5 1.8.12 and NetCDF  (4.3.1) libraries for  the management  of extremely  large and
-complex data collections.  All computes nodes have an operating system
-based on GNU/Linux featuring ``2.6.32-358.11.1.el6'' kernel in
-\monch, ``3.0.101-0.15-default'' in \pilat and ``2.6.18-238.19.1.el5'' in \tinto.
+The \cosmoart  baseline is a pure MPI-based  Fortran~90 code currently
+running on distributed multi-core systems only.  The software stack on
+the platforms  was controlled using the modules  framework which gives
+an  easy and  flexible  mechanism to  access  to all  of the  provided
+compilers, tools  and applications.  For our  initial benchmarking, we
+opted for the GNU compiler GCC 4.8.1 on \monch and GCC 4.8.2 on \pilat
+and  \tinto)  using  the -O3  compiler  flag  in  favor of  the  Intel
+compilers 14.0.1, which  delivered inferior performance.  In addition,
+we  installed the following  implementations of  MPI: MVAPICH2  1.9 on
+\monch and \pilat, and OpenMPI 1.6.5  on \tinto. On the other hand, we
+used HDF5  1.8.12 and NetCDF  (4.3.1) libraries for the  management of
+extremely large and complex data collections.  All computes nodes have
+an     operating    system     based     on    GNU/Linux     featuring
+``2.6.32-358.11.1.el6'' kernel  in \monch, ``3.0.101-0.15-default'' in
+\pilat and ``2.6.18-238.19.1.el5'' in \tinto.
 
-A snapshot of the code,  which includes, at least conceptually, all the
+A snapshot of the code, which includes, at least conceptually, all the
 information needed  to reproduce the  energy-to-solution benchmarks of
-\cosmoart, was produced and run on 1040 cores using 20~MPI
-tasks  per node on  \monch, on 1344 cores  using 16~MPI
-tasks per node on  \pilat and on 192 cores  using 12~MPI
-tasks per node on \tinto.  The calculated region was mapped
-to the participating processors using a 2D-partitioning strategy.  The
-distribution along the $x$ and $y$ coordinates was defined accordingly depeding on the selected platform.
-% $by setting:
-%$nprocx=40$  and $nprocy=26$  for \monch  and  $nprocx=28$ and
-%$nprocy=24$  as  
-%to keep $x$  bigger  than  $nprocy$.
-Besides,  as this  version does not  make use  of the  traditional GRIB
-library, we  specified $nprocio=0$  for GRIB I/O.   Hyperthreading was
-not considered in this study  as it previously revealed that it always
-led to higher energy-to-solution.
+\cosmoart, was produced  and run on 1040 cores  using 20~MPI tasks per
+node on  \monch, on 1344 cores  using 16~MPI tasks per  node on \pilat
+and  on  192  cores  using  12~MPI  tasks per  node  on  \tinto.   The
+calculated region  was mapped to the participating  processors using a
+2D-partitioning  strategy.  The  distribution  along the  $x$ and  $y$
+coordinates  was   defined  accordingly  depending   on  the  selected
+platform.  Besides,  as  this  version   does  not  make  use  of  the
+traditional  GRIB  library, we  specified  $nprocio=0$  for GRIB  I/O.
+Hyperthreading  was not  considered  in this  study  as it  previously
+revealed that it always led to higher energy-to-solution.

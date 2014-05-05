@@ -1,10 +1,10 @@
 \subsection{Model Description}
 \label{subsec:1.1}
 
-The model  system \cosmoart described  in \cite{Vogel-2009},
-is  a  regional to  continental  scale  model  coupled online  to  the
+The  model  system  \cosmoart  described in  \cite{Vogel-2009},  is  a
+regional   to  continental   scale   model  coupled   online  to   the
 \textsc{Cosmo}   numerical  weather   prediction  and   climate  model
-\cite{Baldauf-2011}.   It   incorporates  sophisticated  modules  for
+\cite{Baldauf-2011}.    It  incorporates  sophisticated   modules  for
 gaseous  chemistry   and  aerosol  dynamics  and   allows  the  online
 calculation of  reactive trace  substances and their  interaction with
 the  atmosphere.    Detailed  model   description  can  be   found  in
@@ -14,25 +14,27 @@ the  atmosphere.    Detailed  model   description  can  be   found  in
 \label{subsec:1.2}
 
 Establishing effective energy performance benchmarking of a code under
-intense development  such as \cosmoart is  a challenging task
-because of  the absolute necessity  that results must  be reproducible
-within  an  expected  variance  for  the  duration  of  the  Exa2Green
-pro\-je\-ct.  To   define  a  baseline,   it  was  necessary  to   find  a
-run-configuration  capable  of   being  recreated  in  all  subsequent
-versions.  Here  we give a brief  overview of the model  setup for our
-performance and energy efficiency evaluation.
+intense development such as \cosmoart is a challenging task because of
+the  absolute necessity that  results must  be reproducible  within an
+expected variance  for the duration of the  Exa2Green pro\-je\-ct.  To
+define  a  baseline, it  was  necessary  to  find a  run-configuration
+capable of being recreated in all subsequent versions.  Here we give a
+brief  overview of  the model  setup  for our  performance and  energy
+efficiency evaluation.
 
 Three-dimensional simulations are performed over large parts of Europe
-and the Mediterranean~Sea for April 13$^{th}$ 2010, near the equinox, in order to approximately
-have a half  day  of  sun  exposure and  therefore  ensure  a typical
-activation of the chemistry cycle.  The calculation domain corresponds
-to the CORDEX-EU-44 domain and is covered by a grid of $222\times 216$
-points with  a horizontal resolution of  $0.22\,^{\circ}$, i.e., 50~km
-in  both directions  and 40~vertical  layers.  These  24-hour forecast
-simulations  are not  preceded  by  a spin-up  phase  to build up  the
-simulated gaseous and  aerosol concentrations.  This condition means 
-that the model initialization needs a period of adjustment to reach its equilibrium  state and minimize  the effect of
-initial conditions for gases and aerosols on the model predictions.
+and the Mediterranean~Sea for  April 13$^{th}$ 2010, near the equinox,
+in  order  to  approximately have  a  half  day  of sun  exposure  and
+therefore  ensure a typical  activation of  the chemistry  cycle.  The
+calculation  domain  corresponds to  the  CORDEX-EU-44  domain and  is
+covered  by  a  grid  of  $222\times 216$  points  with  a  horizontal
+resolution  of $0.22\,^{\circ}$,  i.e., 50~km  in both  directions and
+40~vertical  layers.   These  24-hour  forecast  simulations  are  not
+preceded  by a spin-up  phase to  build up  the simulated  gaseous and
+aerosol   concentrations.   This  condition   means  that   the  model
+initialization needs  a period of adjustment to  reach its equilibrium
+state  and minimize  the effect  of initial  conditions for  gases and
+aerosols on the model predictions.
 
 The meteorological initial and boundary conditions are obtained by the
 the ECMWF  global spectral model IFS  with an update  frequency of 3h.
@@ -41,13 +43,13 @@ at  6h temporal resolution.   The model  setup incorporates  34~2D and
 45~3D  fields to  be written  out  every hour  and is  devoid of  data
 assimilation methods.
 
-The considered  \cosmoart model  system is configured  with a
-semi-Lagrangian    horizontal   advection    sche\-me    with   tricubic
+The   considered  \cosmoart   model  system   is  configured   with  a
+semi-Lagrangian   horizontal    advection   sche\-me   with   tricubic
 interpolation  and selective filling  diffusion option  in combination
 with   the   dynamical    core   using   Runge-Kutta   time   stepping
-\cite{COSMO-PartI-2011}.    It  also   makes  use   of   the  Kinetic
-PreProcessor solver (KPP) for  the solution of atmospheric chemistry
-ordinary  differential equations \cite{Damian-2002}.   Concerning the
+\cite{COSMO-PartI-2011}.    It   also  makes   use   of  the   Kinetic
+PreProcessor solver  (KPP) for  the solution of  atmospheric chemistry
+ordinary  differential equations  \cite{Damian-2002}.   Concerning the
 modelling  of  wet  deposition  in  aerosols, the  baseline  has  only
 indirect  cloud feedbacks  but  does not  include in-cloud  scavenging
 (rainout) and below-cloud  scavenging (washout) yet.  Amongst physical
