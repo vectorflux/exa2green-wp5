@@ -169,8 +169,8 @@ behavior of the OpenMPI library  to the blocking policy, i.e, with the
 A full tracing  experiment is conducted on \tinto  in order to capture
 an overall power profile at a much finer resolution using the attached
 PDUs in each  node. First we run \cosmoart for  a 1-day simulation and
-analyze the  power consumption.  Second we correlate  performance with
-power  traces  of two  1-hour  time  frames  during the  day:  mid-day
+analyze the  power consumption.  Second we  correlate performance with
+power  traces  of  two  1-hour  time frames  during  the  day:  midday
 (11h--12h) and midnight (23h--24h). All the experiments were performed
 using 192 cores using 12 MPI processes per node on \tinto.
 
@@ -180,7 +180,7 @@ power-measurement    framework   over    a    1-day   simulation    of
 \cosmoart. These profiles, produced with both polling and blocking MPI
 policies,  are depicted in  Figure~\ref{fig:5}. The  first observation
 for the polling MPI policy is that the first and last hours of the day
-dissipate slightly less power than  the mid-day hours. We relate these
+dissipate slightly less  power than the midday hours.  We relate these
 variations  due   to  the  different   chemical  reactions,  aerosols,
 radiations  and clouds  formation processes,  computed by  ART, taking
 place during  daylight hours  but not during  night. In this  case the
@@ -188,10 +188,10 @@ peak power consumption is about  3821\,W. Looking at the power profile
 using the blocking  MPI policy, we observe that  the 1-hour pattern is
 repeated along  the 24-hours, favoring  the reduction of  power during
 night  hours in  a  more noticeable  way  than that  with the  polling
-policy.  The peak  power dissipation  during  day hours  of while  the
+policy.   The peak  power dissipation  during day  hours of  while the
 blocking  MPI policy  is leveraged  is  about 3768\,W,  which means  a
 reduction of around  50\,W with respect to the  polling mode. Also, we
-notice systematic  power drops for  each simulated hour.  We associate
+notice systematic  power drops for each simulated  hour.  We associate
 them  to periods  in  which  the processes  were  blocked waiting  for
 incoming messages  or synchronizations, thus  yielding the CPU  to low
 usage. Our final observation is the reduction of the TTS by 2\,\% with
