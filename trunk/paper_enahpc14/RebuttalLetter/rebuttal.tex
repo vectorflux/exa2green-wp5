@@ -1,0 +1,313 @@
+\documentclass[a4paper,11pt]{article}
+
+\title{Authors' Reply to Reviewers' Comments on\\ \itshape{``Evaluating the Performance and Energy Efficiency of the COSMO-ART Model System''}}
+
+\author{Joseph~Charles, William~Sawyer, Manuel~F.~Dolz, Sandra~Catal\'an}
+
+\usepackage[left=2.5cm,right=2.2cm,top=3cm,bottom=3cm]{geometry}
+\usepackage[latin1]{inputenc}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage[urlcolor=blue,colorlinks=true]{hyperref}
+\usepackage{ifthen}
+
+%\newcommand{\xavi}[1]{\textcolor{blue}{#1}}
+%\newcommand{\xavi}[1]{{#1}}
+%\newcommand{\xaviNote}[1]{\footnote{\textcolor{blue}{#1}}}
+
+\newcounter{question}
+\setcounter{question}{1}
+
+%\newcommand{\reviewerSay}{\vspace{0.2cm} {\bf \noindent \arabic{question}} \fbox{{\sc \textcolor{red}{Reviewer:}}} \medskip \rm}
+\newcommand{\reviewerSay}{\vspace{0.2cm} {\bf \noindent } {\bf Reviewer:} \medskip \par}
+\newcommand{\editorialSay}{\vspace{0.2cm} {\bf \noindent \arabic{question}.} {\bf Editorial:} \medskip \par}
+%\newcommand{\weReply}{\vspace{0.25cm} {\bf \noindent \arabic{question}} \addtocounter{question}{1} \fbox{{\sc \textcolor{blue}{Authors:}}} \medskip \em\par}
+\newcommand{\weReply}{\vspace{0.25cm} {\bf \noindent } \addtocounter{question}{1} \textbf{\emph{Authors:}} \medskip \em\par}
+\newenvironment{weSay}{\bigskip \weReply \begin{it}}{\end{it}\begin{center} \samepage$\star \star \star$ \end{center}}
+\newenvironment{weSayToEditorial}{\bigskip \weReply \begin{it}}{\end{it}\begin{center} \samepage$\star \star \star$ \end{center}}
+
+%\newcommand{\reviewerSay}{\paragraph*{(\arabic{question}) Reviewer: }}
+%\newcommand{\authorsReply}{\paragraph*{\emph{(\arabic{question}) \addtocounter{question}{1} Authors: }}}
+%\newenvironment{weSay}{\vspace{-3ex} \authorsReply \begin{it}}{\end{it}\begin{center} \samepage$\star \star \star$ \end{center}}
+
+\begin{document}
+
+\maketitle
+
+\noindent 
+We would like to thank the Anonymous Reviewers
+for providing us with a prompt and insightful review. 
+We take this as an indication that there was genuine interest in the paper,
+which is always a compliment regardless of the outcome of the review.
+
+We addressed all the suggestions and recommendations from the reviewers to improve
+the quality and flow of the paper. Below, we discuss the comments and suggestions
+from the reviewers in detail.
+
+
+
+\newpage
+% ------------------------------------------------------------------------------------------------------------------------------------------------
+\section*{Reviewer \#1}
+
+\reviewerSay
+The authors perform an energy performance and efficiency analysis of the COSMO-ART model system,
+a complex weather prediction and climate model, focused on the study of aerosol concentrations in the
+atmosphere. They present the model, the software and the hardware setup, including two metering
+frameworks and perform out-of-band (i.e. measurement from external tools) power draw measurement
+for three different setups. They use the experiments to perform two different analyses: energy 
+efficiency for Sandy Bridge versus Ivy Bridge, and a power profile to compare polling and blocking 
+MPI policies that also show the heavy energy consuming phases of the COSMO-ART model system.
+
+The paper is well written and is easy to follow, and, in spite of the idea not being completely new, 
+it offers a good insight about where are the most energy demanding phases and how the different 
+policies on MPI affect them for the second experimentation part. The first experimentation part, 
+besides being a common study, gives an interesting point of view about how energy efficient does 
+not necessarily means time efficient.
+
+%%% *** Manuel/Sandra ***
+\begin{weSay}
+The authors thank the reviewer for his/her general view of the paper.
+\end{weSay}
+
+Some suggestions regarding the paper:
+
+- MONCH and PILATUS are presented as Ivy Bridge and Sandy Bridge clusters respectively in Section 4.1, 
+and afterwards in section 5, they are referred as Ivy Bridge and Xeon E5 respectively. Apart from not 
+being consistent, both processor families are Xeon E5 thus confusing a bit on what cluster is 
+being referred. This also affects Table 1.
+
+%%% *** Joseph ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+- It would be easier to compare values in Figure 4 if both energy ETSs and TTSs where together. 
+Right now you show ETS TTS ETS TTS, and ETS ETS TTS TTS would be easier to understand.
+
+%%% *** Joseph ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+- In multiple places: "power dissipation", "power draw". I assumed it this way, if it is not 
+I suggest to explain it better.
+
+%%% *** Manuel ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+
+\newpage
+\section*{Reviewer \#2}
+
+\reviewerSay
+The paper investigates the energy footprint of a weather forecasting model on various HPC platforms. 
+As such the paper provides the overall energy footprint covering the overall run. In other words the 
+granularity is very coarse and is at the application level. Although this will be interesting to the 
+COSMO-ART community, the results include some good details on traces  on the
+evaluation of polling vs blocking MPI strategies.
+
+It could have been very beneficial to describe the nature of the application in detail instead of 
+citing them. I assume that authors have resorted to that technique for the reasons of brevity  - yet 
+I beleive that such a detailed description is essential to understand the behaviour of the application.
+
+%%% *** Joseph ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+With missing crucial details of the application and in the abseence of any results towards various 
+problem sizes or domains of cases, it is very difficult to do any post-analysis on the overall 
+behaviour of the application - for example its runtime scalability (both weak and strong) vs energy 
+scalability etc.
+
+%%% *** Will ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+In summary, although the paper is very interesting, the lack or depth of information in there severely 
+limits the re-usable knowledge contributed by the paper.
+
+%%% *** Will ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+
+\newpage
+\section*{Reviewer \#2}
+
+The authors describe the extended atmospheric model COSMO-ART. They present
+performance and energy measurements on a selection of HPC systems. There
+is no new methodology presented in this paper.
+
+%%% *** Will ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+Related work is weak. I don't see how [20] and [11] are related to the content
+of this paper (other algorithms, other architectures, no comparison of the
+energy measurement infrastructure). I suggest to focus more on infrastructure
+and tool support for system level power measurement in HPC environments in
+the related work section. This would give you the opportunity to argue that
+the 1 Hz resolution in one of your test systems is actually state-of-the-art.
+
+%%% *** Will/Joseph ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+The hardware description is a bit confusing.
+- why does the NEC system have 10 racks for 312 nodes if one rack houses 52
+     nodes?
+
+%%% *** Joseph ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+- the "v2" is missing from the Ivy Bridge processor's name string
+
+%%% *** Joseph ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+- sentence structure: "Each node is comprises two..."
+
+%%% *** Joseph ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+- what do you mean by "second-generation processor" regarding Sandy Bridge?
+     SB is sometimes referred to as 2nd gen Core-i* processor but this does not
+     apply to the Xeon line
+
+%%% *** Joseph ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+- the claim that SB is known to consume more power is wrong. The TDP classes
+     are the same for IB and SB (e.g. E5-2670 and E5-2670v2 are both 115W parts)
+     It presumably is less efficient, but even such a claim would need a reference
+
+%%% *** Joseph ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+- It should be added if the Turbo Boost feature is enabled or disabled, this
+     seems to be important for the discussion of the TTS results.
+
+%%% *** Manuel/Sandra ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+- It should be added which power saving mechanisms are used (cpufreq
+     governor, available c-states)
+
+%%% *** Manuel/Sandra ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+- the second system is described as 16 cores x 42 nodes = 672 cores total. In
+     4.3 it is stated that 1344 cores were used (Could be HyperThreading, however
+     it is also stated that HT was not considered. Also, 16 MPI ranks per node
+     indicate 84 nodes)
+
+%%% *** Joseph ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+In 4.2.1
+A 5 minute sampling interval seems useless to me. It would be nice to know if
+this is actually an instantaneous value every 5 minutes (as I read it) or the
+correct average of the past 5 minutes. Figure 5 suggests variation of the power
+consumption in the 10\% range. Thus instantaneous values would have a high margin
+for error and the 4,6, or 9 samples you use to calculate the average would be
+too few to estimate a reliable average.
+
+%%% *** Will/Joseph ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+In 4.2.2
+There is no information about the accuracy
+
+%%% *** Manuel/Sandra ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+In 4.3
+Only -O3 is not appropriate for the Sandy bridge and Ivy Bridge system. At
+least -mavx should be added. It looks like some low hanging fruit is reserved
+to reach the targeted 5x improvement
+
+%%% *** Will ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+In 5.1
+The blocking mode does not seem to be blocking. As there are no other
+processes/threads available (as many MPI ranks as cores per node) the waiting
+ranks will repeatedly call sched\_yield() only to be picked again by the OS
+scheduler. This also explains the small benefit as no idle states are used.
+You should check the CPU utilization. I guess it is 100\% on all cores in both
+modes. If it is not, you should check with powertop which idle states are used.
+
+%%% *** Manuel/Sandra ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+In 5.2
+What do you mean by "it aims at computing speed regardless to energy consumption"?
+Does it mean it uses Turbo? Please clarify what exactly is different than on the
+IB system.
+
+%%% *** Joseph ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+It is confusing to compare "Ivy Bridge EP" against "Xeon E5" in the result
+discussion, as the Ivy Bridge processor is also called Xeon E5 (v2) as well.
+
+%%% *** Joseph ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+Since the SB and IB measurements use different amounts of cores it is essential to
+know if the application scales linearly with the core count. If the application
+is scalable 1020 cores at 2.2 GHz should be faster than 672 cores at 2.6 GHz.
+
+%%% *** Will ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+In 5.3
+Only 5\% energy reduction when blocked shows that the processors are not idle.
+As mentioned earlier, you should add information if power management is
+actually used while the processors are waiting.
+
+%%% *** Manuel/Sandra ***
+\begin{weSay}
+blabla
+\end{weSay}
+
+\end{document}
