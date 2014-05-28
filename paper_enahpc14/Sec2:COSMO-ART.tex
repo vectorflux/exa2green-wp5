@@ -1,14 +1,65 @@
 \subsection{Model Description}
 \label{subsec:1.1}
 
-The  model  system  \cosmoart  described in  \cite{Vogel-2009},  is  a
-regional   to  continental   scale   model  coupled   online  to   the
-\textsc{Cosmo}   numerical  weather   prediction  and   climate  model
-\cite{Baldauf-2011}.    It  incorporates  sophisticated   modules  for
-gaseous  chemistry   and  aerosol  dynamics  and   allows  the  online
-calculation of  reactive trace  substances and their  interaction with
-the  atmosphere.    Detailed  model   description  can  be   found  in
-\cite{Bangert-2012, Knote-2011, Knote-2013}.
+The model system \cosmoart (ART stands for Aerosols and Reactive Trace
+gases) developed at KIT  Karlsruhe \cite{Vogel-2009}, is a regional to
+continental scale model coupled online to the \textsc{Cosmo} numerical
+weather  prediction (NWP) and  climate model  \cite{Baldauf-2011}.  It
+allows the  online calculation of reactive trace  substances and their
+interaction with  the atmosphere.  Physical  processes like transport,
+turbulent diffusion,  and dry and wet deposition  are treated together
+with photochemistry and aerosol dynamics using the modal approach.
+
+Aerosols dynamics  are simulated  with the modal  aerosol microphysics
+module  MADE \cite{Ackermann-1998},  expanded in  MADEsoot  to feature
+explicit  treatment of  soot aging  through condensation  of inorganic
+\cite{Riemer-2003} and organic  substances. MADE describes the aerosol
+population  through  five   modes  representing  sub-micron  particles
+consisting of sulphate, ammonium, nitrate, particulate organic matter,
+water and  soot \cite{Riemer-2004} in  a range of mixing  state. These
+modes are coupled  with the gas phase by  condensation and nucleation,
+and are  strongly influenced by  anthropogenic emissions of  gases and
+particles. MADEsoot  describes the sub-micrometer  aerosol population,
+composed  of  sea salt  \cite{Lundgren-2013},  mineral dust  particles
+\cite{Vogel-2006,   Stanelle-2010},  by   means  of   six  interacting
+log-normal modes.  For each  mode, mass contributions and total number
+concentration are prognostic  quantities, while the standard deviation
+is fixed.
+
+Specific  modules are included  to simulate  the dispersion  of pollen
+grains    \cite{Vogel-2008}    and    other   biological    particles.
+Meteorologically-influenced emissions  are also online  coupled within
+the  model  system.  The  biogenic  VOC  (volatile organic  compounds)
+emissions are  calculated as functions of  the land use  type based on
+the Global  Land Cover 2000  dataset and the modeled  temperatures and
+radiative fluxes \cite{Vogel-1995}.
+
+The gaseous chemistry in COSMO-ART  is solved by a modified version of
+the  Regional  Acid  Deposition  Model, Version  2  (RADM2)  mechanism
+\cite{Stockwell-1990}, which is extended to describe secondary organic
+aerosol  formation  based  on  a  volatile basis  set  (VBS)  approach
+\cite{Athanasopoulou-2013}  and  hydroxyl  radical  recycling  due  to
+isoprene chemistry  \cite{Geiger-2003}.  The thermodynamic equilibrium
+between the  gas and particulate  phases of the inorganic  material is
+achieved through the ISORROPIA II module \cite{Fountoukis-2007}.
+
+COSMO-ART  is  fully  online-coupled,  and  allows  for  feedbacks  of
+aerosols  on  temperature,  radiation  and cloud  condensation  nuclei
+(CCN).   Analytical  description  of  modules  incorporated  for  this
+purpose  exists  in  \cite{Vogel-2009, Bangert-2011}.   The  radiation
+scheme used  within the  model to calculate  the vertical  profiles of
+shortwave and longwave  radiative fluxes is GRAALS \cite{Ritter-1992}.
+In order to account for  the interaction of aerosol particles with the
+cloud microphysics and radiation,  COSMO-ART uses the two-moment cloud
+microphysics  scheme  of Seifert  and  Beheng \cite{Seifert-2006}  and
+comprehensive parameterizations for cloud condensation and ice crystal
+nucleation  \cite{Bangert-2011, Bangert-2012}.   The  system of  stiff
+ordinary differential equations described by chemical reactions in the
+aqueous-phase together with the transfer reactions is solved using the
+Kinetic PreProcessor (KPP, \cite{Damian-2002}).
+
+Further model description details  can be found in \cite{Bangert-2012,
+  Knote-2011, Knote-2013}.
 
 \subsection{Model Setup}
 \label{subsec:1.2}

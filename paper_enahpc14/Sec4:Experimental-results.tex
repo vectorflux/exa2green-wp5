@@ -36,16 +36,14 @@ messages~\cite{Castillo-2012}.
 
 Figures~\ref{fig:1} and \ref{fig:2}  account respectively for \monch's
 Isola  E1 Rack 2  and \pilat'  Isola HD  total power  measurements for
-1-day or 2-day  simulations. On the Intel Ivy  Bridge EP based cluster
-(i.e.   \monch), the  1-day simulation  was issued  only twice  due to
-usage restrictions. As  time resolution was set to  one update every 5
-minutes  for  power  sampling,  the  averaged  power  dissipation  was
-computed by  considering 6 values for  each single run.   On the Intel
-Xeon E5 based cluster (i.e.   \pilat), the 1-day simulation was issued
-four times and  a 2-day run only once.   Similarly, the averaged power
-dissipation was computed by considering 4 values for each single 1-day
-run  and  9 values  for  the  2-days  run. Corresponding  results  are
-gathered in Table~\ref{tab:1}.
+1-day or 2-day simulations. On \monch, the 1-day simulation was issued
+only twice due  to usage restrictions.  As time  resolution was set to
+one  update every  5 minutes  for power  sampling, the  averaged power
+dissipation was computed by considering  6 values for each single run.
+On \pilat, the 1-day simulation was  issued four times and a 2-day run
+only once.  Similarly, the  averaged power dissipation was computed by
+considering 4  values for each single  1-day run and 9  values for the
+2-days run. Corresponding results are gathered in Table~\ref{tab:1}.
 
 \begin{figure}[htbf]
   \centering
@@ -66,12 +64,11 @@ gathered in Table~\ref{tab:1}.
   \caption{Averaged power dissipation (W) of the platforms.}
   \label{tab:1}
   \begin{tabular}{cccc}
-    \hline\noalign{\smallskip}   \textbf{\scriptsize{Xeon   E5}}   &
-    \textbf{\scriptsize{Ivy   Bridge}}   &  \textbf{\scriptsize{Xeon
-        E5645}}   &   \textbf{\scriptsize{Xeon   E5645}}  \\   &   &
-    \textbf{\scriptsize{(Polling)}}                                 &
-    \textbf{\scriptsize{(Blocking)}}
-    \\   \noalign{\smallskip}\hline\noalign{\smallskip}   18035.0  &
+    \hline\noalign{\smallskip}     \textbf{\scriptsize{PILATUS}}     &
+    \textbf{\scriptsize{MONCH}}  &  \textbf{\scriptsize{TINTORRUM}}  &
+    \textbf{\scriptsize{TINTORRUM}}           \\          &          &
+    \textbf{\scriptsize{(Polling)}} & \textbf{\scriptsize{(Blocking)}}
+    \\    \noalign{\smallskip}\hline\noalign{\smallskip}   18035.0   &
     12622.5 & 3713.6 & 3651.8 \\ \noalign{\smallskip}\hline
   \end{tabular}
 \end{table}
@@ -81,9 +78,9 @@ In  Figure~\ref{fig:3}, we  compare both  TTS (right  Y-axis)  and ETS
 outperforms Ivy  Bridge EP, being roughly 130\,\%  faster.  The reason
 for that is two-fold: \emph{i}) it has higher clock frequency than Ivy
 Bridge  (2.6\,GHz  against  2.2\,GHz),   and  \emph{ii})  it  aims  at
-computing speed regardless to energy consumption.  In our experiments,
-Ivy Bridge EP showed  the best energy-to-solution, reducing the energy
-consumption of Xeon E5 by approximately 7\,\%.
+computing   speed  regardless   to  be   energy  efficient.    In  our
+experiments,  Ivy  Bridge   EP  showed  the  best  energy-to-solution,
+reducing the energy consumption of Xeon E5 by approximately 7\,\%.
 
 Averaged TTS and ETS results  over 10 repetitions of 24h simulation on
 \tinto are shown in  Figure~\ref{fig:4}. The corresponding results for
@@ -108,7 +105,7 @@ behavior of the OpenMPI library  to the blocking policy, i.e, with the
   \centering
   \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART-0.eps}
   \caption{Time-to-solution and  energy-to-solution comparison between
-    Xeon E5 and Ivy Bridge-EP architectures for a 24h simulation.}
+    \pilat and \monch for a 24h simulation.}
   \label{fig:3}
 \end{figure}
 
