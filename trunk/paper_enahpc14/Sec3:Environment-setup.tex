@@ -7,15 +7,17 @@ allowing a  fair comparison between the baseline  and future milestone
 versions of \cosmoart.
 
 \begin{itemize}
-\item \monch is  a 10-rack NEC-provided clus\-ter at  CSCS composed of
-  312 compute nodes. 
+\item \monch is  a 10-rack NEC-provided clus\-ter at  CSCS composed by
+  376  compute  nodes  grouped  in  312  standard  compute  nodes,  24
+  large-memory compute nodes,  24 huge-memory nodes, 16 administration
+  nodes and 8 servers to provide I/O to Lustre.
   % and  utilised  by  members  of  the  Swiss  Platform  for  Advanced
-  % Scientific Computing (PASC) project~\cite{PASC}.
-  Each node is  comprised of two Intel Ivy  Bridge EP E5-2660 ten-core
-  processors  operating  at 2.2\,GHz,  equipped  with  32\,GB of  DDR3
-  1600\,MHz RAM  and connected via InfiniBand Mellanox  SX6036 and FDR
-  switches. For our  experiments, a full rack constituted  of 52 nodes
-  was used. 
+  % Scientific  Computing (PASC)  project~\cite{PASC}.   Each standard
+  compute  node is  comprised of  two  Intel Ivy  Bridge EP  E5-2660v2
+  ten-core processors  operating at 2.2\,GHz, equipped  with 32\,GB of
+  DDR3 1600\,MHz RAM and  connected via InfiniBand Mellanox SX6036 and
+  FDR  switches.   For  our   experiments,  a  full  rack  constituted
+  exclusively of 52 nodes was used.
   % \monch is  slated to stay  in service without hardware  upgrade for
   % the  duration  of  the  Exa2Green project,  allowing  an  identical
   % configuration  to  be  recreated  for  future  assessments  of  the
@@ -23,11 +25,11 @@ versions of \cosmoart.
 
 \item \pilat is  a dual-socket eight-core Intel Sandy  Bridge EP based
   cluster at CSCS composed of 42 compute nodes.  
-  % and used as Piz Daint  pre-post processing cluster The 2 login and
+  % and used as Piz Daint pre-post processing cluster. The 2 login and
   % 42  compute  nodes  are   consolidated  into  11  twin-pair  Intel
   % E5-Series  DALCO  r2264i4t   2U  scalable  compute  modules,  each
   % containing 4 compute nodes based on two ...
-  Each node  is comprises two Intel Xeon  E5-2670 processors operating
+  Each node  is comprised two Intel Xeon  E5-2670 processors operating
   at 2.6\,GHz equipped with 64\,GB of DDR3 1600\,MHz RAM and connected
   via  InfiniBand   Mellanox  SX6036   and  FDR  switches.    For  our
   experiments, a full  rack constituted of 42 compute  nodes was used.
