@@ -68,7 +68,8 @@ not necessarily means time efficient.
 
 %%% *** Manuel/Sandra ***
 \begin{weSay}
-The authors thank the reviewer for his/her general view of the paper.
+The authors thank the reviewer for his/her general view of the paper. We consider this work as
+a first step towards an energy-efficient version of COSMO-ART inside the Exa2Green project.
 \end{weSay}
 
 Some suggestions regarding the paper:
@@ -80,7 +81,9 @@ being referred. This also affects Table 1.
 
 %%% *** Joseph ***
 \begin{weSay}
-blabla
+We have fixed this issue along the manuscript. To do so we have explained in detail the specifications of the machines
+in the Environment setup section and afterwards we refer to the platforms' name or using the
+full processor's name and its microarchitecture.
 \end{weSay}
 
 - It would be easier to compare values in Figure 4 if both energy ETSs and TTSs where together. 
@@ -88,7 +91,7 @@ Right now you show ETS TTS ETS TTS, and ETS ETS TTS TTS would be easier to under
 
 %%% *** Joseph ***
 \begin{weSay}
-blabla
+We have swapped the corresponding columns in the Figure 4, now ETS and TTS appear grouped.
 \end{weSay}
 
 - In multiple places: "power dissipation", "power draw". I assumed it this way, if it is not 
@@ -96,7 +99,7 @@ I suggest to explain it better.
 
 %%% *** Manuel ***
 \begin{weSay}
-blabla
+We have accordingly replaced ``power dissipation'' by ``power consumption'' along the manuscript.
 \end{weSay}
 
 
@@ -109,6 +112,11 @@ As such the paper provides the overall energy footprint covering the overall run
 granularity is very coarse and is at the application level. Although this will be interesting to the 
 COSMO-ART community, the results include some good details on traces  on the
 evaluation of polling vs blocking MPI strategies.
+
+%%% *** Manuel/Sandra ***
+\begin{weSay}
+The authors thank the reviewer for his/her general view of the paper.
+\end{weSay}
 
 It could have been very beneficial to describe the nature of the application in detail instead of 
 citing them. I assume that authors have resorted to that technique for the reasons of brevity  - yet 
@@ -168,21 +176,22 @@ The hardware description is a bit confusing.
 
 %%% *** Joseph ***
 \begin{weSay}
-blabla
+We have explained in detail the kind of nodes that this platform is comprised of.
+We only used a subset of 52 in our experiments.
 \end{weSay}
 
 - the "v2" is missing from the Ivy Bridge processor's name string
 
 %%% *** Joseph ***
 \begin{weSay}
-blabla
+Fixed.
 \end{weSay}
 
 - sentence structure: "Each node is comprises two..."
 
 %%% *** Joseph ***
 \begin{weSay}
-blabla
+Fixed.
 \end{weSay}
 
 - what do you mean by "second-generation processor" regarding Sandy Bridge?
@@ -191,7 +200,7 @@ blabla
 
 %%% *** Joseph ***
 \begin{weSay}
-blabla
+We recognize the mistake and fix the sentence in the manuscript.
 \end{weSay}
 
 - the claim that SB is known to consume more power is wrong. The TDP classes
@@ -208,7 +217,7 @@ blabla
 
 %%% *** Manuel/Sandra ***
 \begin{weSay}
-blabla
+We added information about the Turbo Boost feature for each platform \textbf{(MISSING FOR MONCH and PILATUS!!)}
 \end{weSay}
 
 - It should be added which power saving mechanisms are used (cpufreq
@@ -216,7 +225,7 @@ blabla
 
 %%% *** Manuel/Sandra ***
 \begin{weSay}
-blabla
+We added information about the power saving mechanisms available on each platform \textbf{(MISSING FOR MONCH and PILATUS!!)}
 \end{weSay}
 
 - the second system is described as 16 cores x 42 nodes = 672 cores total. In
@@ -226,7 +235,7 @@ blabla
 
 %%% *** Joseph ***
 \begin{weSay}
-blabla
+We have fixed this mistake. HyperThreading was not considered in our experiments.
 \end{weSay}
 
 In 4.2.1
@@ -239,7 +248,9 @@ too few to estimate a reliable average.
 
 %%% *** Will/Joseph ***
 \begin{weSay}
-blabla
+\textbf{MISSING ANSWER!!}
+
+Figure 5 represents the power drawn of Tintorrum, for this case the PDU used has a sampling rate of 1 Hz instead of 5 minutes.
 \end{weSay}
 
 In 4.2.2
@@ -247,7 +258,7 @@ There is no information about the accuracy
 
 %%% *** Manuel/Sandra ***
 \begin{weSay}
-blabla
+We have added information about the accuracy of the PDU.
 \end{weSay}
 
 In 4.3
@@ -270,7 +281,10 @@ modes. If it is not, you should check with powertop which idle states are used.
 
 %%% *** Manuel/Sandra ***
 \begin{weSay}
-blabla
+We noticed the problem and fixed accordingly along the manuscript the misused blocking term.
+Now we refer to ``aggressive'' and ``degraded'' OpenMPI policies instead of ``polling''
+and ``blocking''. The reviewer is completely right on this issue, however even when using
+the ``degraded'' policy the CPU utilization is readuced to 50\,\%, thus saving energy.
 \end{weSay}
 
 In 5.2
@@ -280,7 +294,7 @@ IB system.
 
 %%% *** Joseph ***
 \begin{weSay}
-blabla
+We have fixed the sentence accordingly so as not to be confusing.
 \end{weSay}
 
 It is confusing to compare "Ivy Bridge EP" against "Xeon E5" in the result
@@ -288,7 +302,7 @@ discussion, as the Ivy Bridge processor is also called Xeon E5 (v2) as well.
 
 %%% *** Joseph ***
 \begin{weSay}
-blabla
+We have fixed this issue along the manuscript.
 \end{weSay}
 
 Since the SB and IB measurements use different amounts of cores it is essential to
@@ -307,7 +321,7 @@ actually used while the processors are waiting.
 
 %%% *** Manuel/Sandra ***
 \begin{weSay}
-blabla
+The reviewer is right in this sense. The processors are not idle during blocking MPI routines, however a reduction of the CPU utilization is observed (50\,\%).
 \end{weSay}
 
 \end{document}
