@@ -9,7 +9,9 @@
   \fontfamily{#3}\fontseries{#4}\fontshape{#5}%
   \selectfont}%
 \fi\endgroup%
-\begin{picture}(12590,3454)(326,-6470)
+\begin{picture}(12652,3474)(264,-6475)
+\put(12691,-6406){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}489.74\,s}%
+}}}}
 \put(1126,-5596){\makebox(0,0)[rb]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}3740\,W}%
 }}}}
 \put(1126,-5326){\makebox(0,0)[rb]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}Proc. 192}%
@@ -25,7 +27,5 @@
 \put(1126,-6271){\makebox(0,0)[rb]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}2900\,W}%
 }}}}
 \put(1306,-6406){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}0\,s}%
-}}}}
-\put(12691,-6406){\makebox(0,0)[b]{\smash{{\SetFigFont{12}{14.4}{\familydefault}{\mddefault}{\updefault}{\color[rgb]{0,0,0}489.74\,s}%
 }}}}
 \end{picture}%
