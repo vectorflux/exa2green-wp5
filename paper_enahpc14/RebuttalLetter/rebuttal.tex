@@ -134,7 +134,9 @@ scalability etc.
 
 %%% *** Will ***
 \begin{weSay}
-blabla
+Indeed, there is a huge amount which could be said about COSMO, and COSMO-ART in particular, about strong and weak scalability, energy scalability, along with the underlying science.  However, going into this detail would make this an entirely different paper, and one that has, at least for COSMO, already been published in several forums.   Moreover, such a comprehensive analysis would have taken far more than eight pages.
+
+We had a modest goal in this paper of evaluating the COSMO-ART configuration, which is a benchmark for production at MeteoSwiss, in terms of energy-to-solution and time-to-solution.  To this end we have used state-of-the-art profiling and energy measurement equipment.   In subsequent papers, we plan to address a wider spectrum of energy issues.    
 \end{weSay}
 
 In summary, although the paper is very interesting, the lack or depth of information in there severely 
@@ -142,7 +144,7 @@ limits the re-usable knowledge contributed by the paper.
 
 %%% *** Will ***
 \begin{weSay}
-blabla
+We would be happy to add specific technical details as requested by the reviewers, but the page limit constrains the amout of general detail we can add.  Information about COSMO and COSMO-ART, as well as the tools employed, can be found in the appropriate citations in the paper.  We have chosen to concentrate on documenting the aspects which are actually new to this paper, namely the application of the energy profiling tools to this non-trivial application, and the T2S and E2S evaluation of the COSMO-ART benchmark provided for MeteoSwiss.  
 \end{weSay}
 
 
@@ -155,7 +157,7 @@ is no new methodology presented in this paper.
 
 %%% *** Will ***
 \begin{weSay}
-blabla
+We do agree that this paper is not intended to develop a methodology for evaluating applications, but rather to use existing tools and methodology to evaluate a complex, real-world application, which brings with it a new spectrum of issues, like additional measurement complexity, large trace files, and the need for system-integrated power measurement tools.
 \end{weSay}
 
 Related work is weak. I don't see how [20] and [11] are related to the content
@@ -167,7 +169,10 @@ the 1 Hz resolution in one of your test systems is actually state-of-the-art.
 
 %%% *** Will/Joseph ***
 \begin{weSay}
-blabla
+Indeed, there is only a tangential relationship between [11] and [20] and our paper, and we would be happy to remove these.  There is in fact very little related work on energy evaluations of real applications; most work in the field limits itself to artificial toy examples, which is definitely not our topic of interest.  We are trying to find more references on infrastructure and tool support, and hope to add these in the final version
+
+
+ [Jo/Manuel/Sandra: can you find anything appropriate?]
 \end{weSay}
 
 The hardware description is a bit confusing.
@@ -268,7 +273,7 @@ to reach the targeted 5x improvement
 
 %%% *** Will ***
 \begin{weSay}
-blabla
+The configuration was taken from the MeteoSwiss benchmark, and was chosen by the developers. We deliberately chose to use their configuration directly to form the baseline, since this is how it would be run in production if running today.  You are right that there is some low-hanging fruit, but optimizations like -mavx alone will not attain the 5x improvement.  
 \end{weSay}
 
 In 5.1
@@ -311,7 +316,7 @@ is scalable 1020 cores at 2.2 GHz should be faster than 672 cores at 2.6 GHz.
 
 %%% *** Will ***
 \begin{weSay}
-blabla
+[Jo:  you have to try to answer this: there is information on the scalability of COSMO at least. ]
 \end{weSay}
 
 In 5.3
