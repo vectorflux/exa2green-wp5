@@ -83,7 +83,7 @@ being referred. This also affects Table 1.
 \begin{weSay}
 We have fixed this issue along the manuscript. To do so we have explained in detail the specifications of the machines
 in the Environment setup section and afterwards we refer to the platforms' name or using the
-full processor's name and its microarchitecture.
+full processor's name plus its microarchitecture.
 \end{weSay}
 
 - It would be easier to compare values in Figure 4 if both energy ETSs and TTSs where together. 
@@ -99,7 +99,7 @@ I suggest to explain it better.
 
 %%% *** Manuel ***
 \begin{weSay}
-We have accordingly replaced ``power dissipation'' by ``power consumption'' along the manuscript.
+We have accordingly replaced ``power dissipation'' by ``power consumption'' along the manuscript to avoid any confusion.
 \end{weSay}
 
 
@@ -124,7 +124,8 @@ I beleive that such a detailed description is essential to understand the behavi
 
 %%% *** Joseph ***
 \begin{weSay}
-blabla
+We agree with the rewiever. Indeed we tried to shorten the COSMO-ART's explanation due to space restrictions in the last version of the paper. However
+with the page limit extension we added more details about the nature of the application to better understand its behaviour.
 \end{weSay}
 
 With missing crucial details of the application and in the abseence of any results towards various 
@@ -134,9 +135,16 @@ scalability etc.
 
 %%% *** Will ***
 \begin{weSay}
-Indeed, there is a huge amount which could be said about COSMO, and COSMO-ART in particular, about strong and weak scalability, energy scalability, along with the underlying science.  However, going into this detail would make this an entirely different paper, and one that has, at least for COSMO, already been published in several forums.   Moreover, such a comprehensive analysis would have taken far more than eight pages.
+Indeed, there is a huge amount which could be said about COSMO, and COSMO-ART in particular, 
+about strong and weak scalability, energy scalability, along with the underlying science.  
+However, going into this detail would make this an entirely different paper, and one that has, 
+at least for COSMO, already been published in several forums. %   Moreover, such a comprehensive 
+%analysis would have taken far more than eight pages.
 
-We had a modest goal in this paper of evaluating the COSMO-ART configuration, which is a benchmark for production at MeteoSwiss, in terms of energy-to-solution and time-to-solution.  To this end we have used state-of-the-art profiling and energy measurement equipment.   In subsequent papers, we plan to address a wider spectrum of energy issues.    
+We had a modest goal in this paper of evaluating the COSMO-ART configuration, which is a benchmark 
+for production at MeteoSwiss, in terms of energy-to-solution and time-to-solution.  To this end we 
+have used state-of-the-art profiling and energy measurement equipment.   In subsequent papers, we 
+plan to address a wider spectrum of energy issues.    
 \end{weSay}
 
 In summary, although the paper is very interesting, the lack or depth of information in there severely 
@@ -169,10 +177,9 @@ the 1 Hz resolution in one of your test systems is actually state-of-the-art.
 
 %%% *** Will/Joseph ***
 \begin{weSay}
-Indeed, there is only a tangential relationship between [11] and [20] and our paper, and we would be happy to remove these.  There is in fact very little related work on energy evaluations of real applications; most work in the field limits itself to artificial toy examples, which is definitely not our topic of interest.  We are trying to find more references on infrastructure and tool support, and hope to add these in the final version
-
-
- [Jo/Manuel/Sandra: can you find anything appropriate?]
+Indeed, there is only a tangential relationship between [11] and [20] and our paper, and we would be happy to remove these.  There is in fact very little related work on energy evaluations of real applications; most work in the field limits itself to artificial toy examples, which is definitely not our topic of interest.  Actually, we have added one reference that helps us to justify the use of the most appropriate wattmeters for an application like COSMO-ART.
+%We are trying to find more references on infrastructure and tool support, and hope to add these in the final version
+% [Jo/Manuel/Sandra: can you find anything appropriate?]
 \end{weSay}
 
 The hardware description is a bit confusing.
@@ -181,8 +188,8 @@ The hardware description is a bit confusing.
 
 %%% *** Joseph ***
 \begin{weSay}
-We have explained in detail the kind of nodes that this platform is comprised of.
-We only used a subset of 52 in our experiments.
+We have described in detail the nodes' architectures that this platform is comprised of.
+We only used a subset of 52 in our experiments, that is why the reviwer was confused. We now rephrased the explanation in order to be more precise.
 \end{weSay}
 
 - the "v2" is missing from the Ivy Bridge processor's name string
@@ -214,23 +221,17 @@ We recognize the mistake and fix the sentence in the manuscript.
 
 %%% *** Joseph ***
 \begin{weSay}
-blabla
+The reviwer is completely right. Thus, we have accordingly modified the text in order to avoid comparisons between SB and IB processors.
 \end{weSay}
 
 - It should be added if the Turbo Boost feature is enabled or disabled, this
      seems to be important for the discussion of the TTS results.
-
-%%% *** Manuel/Sandra ***
-\begin{weSay}
-We added information about the Turbo Boost feature for each platform \textbf{(MISSING FOR MONCH and PILATUS!!)}
-\end{weSay}
-
 - It should be added which power saving mechanisms are used (cpufreq
      governor, available c-states)
 
 %%% *** Manuel/Sandra ***
 \begin{weSay}
-We added information about the power saving mechanisms available on each platform \textbf{(MISSING FOR MONCH and PILATUS!!)}
+We have added the details about the Turbo Boost feature and power saving mechanisms for the used platforms.
 \end{weSay}
 
 - the second system is described as 16 cores x 42 nodes = 672 cores total. In
@@ -253,9 +254,8 @@ too few to estimate a reliable average.
 
 %%% *** Will/Joseph ***
 \begin{weSay}
-\textbf{MISSING ANSWER!!}
-
-Figure 5 represents the power drawn of Tintorrum, for this case the PDU used has a sampling rate of 1 Hz instead of 5 minutes.
+The E3METER metering framework records averaged power data every 5 minutes, this is as much as we can do in MONCH and PILATUS platforms to collect power consumption data.
+On the other hand, Figure 5 represents the power drawn of TINTORRUM, for this case a PDU with a sampling rate of 1 Hz was used instead.
 \end{weSay}
 
 In 4.2.2
@@ -263,7 +263,7 @@ There is no information about the accuracy
 
 %%% *** Manuel/Sandra ***
 \begin{weSay}
-We have added information about the accuracy of the PDU.
+We have added information about the accuracy of the APC8653 PDU.
 \end{weSay}
 
 In 4.3
@@ -287,9 +287,9 @@ modes. If it is not, you should check with powertop which idle states are used.
 %%% *** Manuel/Sandra ***
 \begin{weSay}
 We noticed the problem and fixed it accordingly along the manuscript. We did a misuse of the blocking/polling terms.
-Now we have replaced them to ``aggressive'' and ``degraded'', since reflects exactly the experiments of our paper. 
-For the second comment, the reviewer is completely right on that issue, however even with  the ``degraded'' policy 
-the CPU utilization is reduced to 50\,\% and thus allows us to save energy.
+We have replaced them to ``aggressive'' and ``degraded'', respectively, since exactly reflect the experiments of our paper. 
+For the second comment, the reviewer is completely right, however even with  the ``degraded'' policy 
+the CPU utilization is still reduced to 50\,\% and thus allows us to save energy.
 \end{weSay}
 
 In 5.2
@@ -299,7 +299,7 @@ IB system.
 
 %%% *** Joseph ***
 \begin{weSay}
-We have fixed the sentence accordingly to avoid any confusion.
+We have rephrased the paragraph accordingly to avoid any confusion.
 \end{weSay}
 
 It is confusing to compare "Ivy Bridge EP" against "Xeon E5" in the result
@@ -316,7 +316,8 @@ is scalable 1020 cores at 2.2 GHz should be faster than 672 cores at 2.6 GHz.
 
 %%% *** Will ***
 \begin{weSay}
-[Jo:  you have to try to answer this: there is information on the scalability of COSMO at least. ]
+We avoided to make comparisons between MONCH and PILATUS platforms - so far we have no more information about the scalability of COSMO-ART. We modified the text accordingly.
+%[Jo:  you have to try to answer this: there is information on the scalability of COSMO at least. ]
 \end{weSay}
 
 In 5.3
@@ -326,7 +327,7 @@ actually used while the processors are waiting.
 
 %%% *** Manuel/Sandra ***
 \begin{weSay}
-The reviewer is right in this sense. The processors are not idle during blocking MPI routines, however a reduction of the CPU utilization is observed (50\,\%).
+The reviewer is right in this sense. The processors are not idle during blocking MPI routines, however a reduction of the CPU utilization is observed (50\,\%) even with the degraded policy that we used.
 \end{weSay}
 
 \end{document}

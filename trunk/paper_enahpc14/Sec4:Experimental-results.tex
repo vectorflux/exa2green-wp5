@@ -69,28 +69,28 @@ Figures~\ref{fig:1} and \ref{fig:2}  account respectively for \monch's
 Isola  E1 Rack 2  and \pilat'  Isola HD  total power  measurements for
 1-day or 2-day simulations. On \monch, the 1-day simulation was issued
 only twice due  to usage restrictions.  As time  resolution was set to
-one  update every  5 minutes  for power  sampling, the  averaged power
+one averaged update every  5 minutes  for power  sampling, the  averaged power
 consumption was computed by considering  6 values for each single run.
 On \pilat, the 1-day simulation was  issued four times and a 2-day run
 only once.  Similarly, the  averaged power consumption was computed by
 considering 4  values for each single  1-day run and 9  values for the
 2-days run. Corresponding results are gathered in Table~\ref{tab:1}.
 
-\begin{figure}[htbf]
+\begin{figure}[ht]
   \centering
-  \includegraphics[width=0.48\textwidth]{Figs/NRJ_benchmark_Monch.eps}
+  \includegraphics[width=1\columnwidth]{Figs/NRJ_benchmark_Monch.eps}
   \caption{Isola E1 Rack 2 total power consumption of \monch.}
   \label{fig:1}
 \end{figure}
 
-\begin{figure}[htbf]
+\begin{figure}[ht]
   \centering
-  \includegraphics[width=0.48\textwidth]{Figs/NRJ_benchmark_Pilatus.eps}
+  \includegraphics[width=1\columnwidth]{Figs/NRJ_benchmark_Pilatus.eps}
   \caption{Isola HD total power consumption of \pilat.}
   \label{fig:2}
 \end{figure}
 
-\begin{table}[htbf]
+\begin{table}[ht]
   \centering
   \caption{Averaged power consumption (W) of the platforms.}
   \label{tab:1}
@@ -105,21 +105,22 @@ considering 4  values for each single  1-day run and 9  values for the
 \end{table}
 
 In  Figure~\ref{fig:3}, we  compare both  TTS (right  Y-axis)  and ETS
-(left  Y-axis)  metrics  on  both  platforms.  As  expected, Intel Sandy Bridge EP processors of \pilat
-outperform the Intel Ivy  Bridge EP processors of \monch, being roughly 130\,\%  faster.  The reason
-for that is two-fold: \emph{i}) they have higher clock frequency than Ivy
-Bridge  (2.6\,GHz  against  2.2\,GHz),   and  \emph{ii})  they  aim  at
-computing   speed  regardless   to  be   energy  efficient.    In  our
-experiments,  \monch  showed  the  best  energy-to-solution,
+(left  Y-axis)  metrics  on  both  platforms.  As can be observed, Intel Sandy Bridge EP processors of \pilat
+outperform the Intel Ivy  Bridge EP processors of \monch, being roughly 130\,\%  faster. 
+% The reason
+%for that is two-fold: \emph{i}) they have higher clock frequency than Ivy
+%Bridge  (2.6\,GHz  against  2.2\,GHz),   and  \emph{ii}) % they  aim  at
+% computing   speed  regardless   to  be   energy  efficient.
+In  our experiments,  \monch  showed  the  best  energy-to-solution,
 reducing the energy consumption of \pilat by approximately 7\,\%.
 
-Averaged TTS and ETS results  over 10 repetitions of 24-hour simulation on
+Averaged TTS and ETS results  over 10 repetitions of a 1-day simulation on
 \tinto are shown in  Figure~\ref{fig:4}. The corresponding results for
 the  averaged total  power are  also shown  in  Table~\ref{tab:1}.  As
 expected, the average total power consumption by \cosmoart while using
 the \emph{degraded} MPI policy is about  2\,\% less than that consumed by the
-\emph{aggressive} one. This is  due to  the reduction of CPU usage (of about 50\,\%) while using  the \emph{degraded} MPI policy, in
-contrast with the \emph{aggressive} policy that always yields to 100\,\% of CPU utilization while waiting for an incoming message. From the point of  view of the execution time, there is a
+\emph{aggressive} one. This is  due to  the reduction of the CPU utilization (of about 50\,\%) while using  the \emph{degraded} MPI policy, in
+contrast with the \emph{aggressive} one, that always yields to 100\,\% of CPU load while waiting for incoming messages. From the point of  view of the execution time there is a
 slight reduction  for the \emph{degraded} MPI  policy. One can  expect that the
 costs of the context switches produced in the \emph{degraded} MPI policy can lead to
 an  increase  of  the   execution  time,  however,  applications  with
@@ -130,20 +131,20 @@ behavior of the OpenMPI library  to the \emph{degraded} policy, i.e, with the
 \texttt{--mca    mpi\_yield\_when\_idle 1}   parameter   set    in   the
 \texttt{mpirun} command.
 
-\begin{figure}[htbf]
+\begin{figure}[ht]
   \centering
-  \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART-0.eps}
+  \includegraphics[width=1\columnwidth]{Figs/Time_E2S_COSMO-ART-0.eps}
   \caption{Time-to-solution and  energy-to-solution comparison between
-    \pilat and \monch for a 24-hour simulation.}
+    \pilat and \monch for a 1-day simulation.}
   \label{fig:3}
 \end{figure}
 
-\begin{figure}[htbf]
+\begin{figure}[ht]
   \centering
-  \includegraphics[width=0.5\textwidth]{Figs/Time_E2S_COSMO-ART-1.eps}
+  \includegraphics[width=1\columnwidth]{Figs/Time_E2S_COSMO-ART-1.eps}
   \vspace{-1cm}
   \caption{Mean time-to-solution and  energy-to-solution on \tinto for
-    a 24-hour simulation using the  \emph{aggressive} and \emph{degraded} MPI policies. The
+    a 1-day simulation using the  \emph{aggressive} and \emph{degraded} MPI policies. The
     95\,\%  confidence  intervals of  Student's  $t$ distribution  (10
     samples) clearly  indicates an improvement for the \emph{degraded} policy in
     both TTS and ETS.}
@@ -153,7 +154,7 @@ behavior of the OpenMPI library  to the \emph{degraded} policy, i.e, with the
 \begin{figure*}[ht]
   \centering
   \hspace{0.8cm} \scalebox{0.62}{\input{Figs/24hour.pstex_t}}
-  \caption{24-hour simulation power  trace  using  the \emph{aggressive}  and
+  \caption{1-day simulation power  trace  using  the \emph{aggressive}  and
     \emph{degraded} MPI policies on \tinto.}
   \label{fig:5}
 \end{figure*}
@@ -245,20 +246,20 @@ combined  in  between   with  group  communications,  blocking  sends,
 immediate  receives and  MPI-wait primitives.  Finally,
 group  communications interlaced  with computation  and  a significant
 synchronization  phase are  performed. From  the performance  point of
-view, one can notice a reduction of 2\,\% in the TTS that \emph{degraded}  MPI
-mode leads over the \emph{aggressive} MPI  policy. On the other hand an averaged
-reduction of power consumption of  2\,\% is attained with the \emph{degraded} 
-MPI policy  only in  routines that actually  perform synchronizations,
-group  communications  and  MPI-receive/-wait primitives.   Thus,  the
+view, one can notice a reduction of 2\,\% in the TTS that the \emph{degraded}  MPI
+policy leads over the \emph{aggressive} one. On the other hand, a
+reduction of power consumption of  2\,\% in average is attained with the \emph{degraded} 
+policy only for routines that actually  perform synchronizations,
+group  communications  and MPI receive and wait primitives.   Thus,  the
 reduction of the power-energy  pair directly depends on the percentage
-of time in which blocking MPI  operations are executed. For the 1 hour
+of time in which blocking MPI  operations are executed. For the 1-hour
 simulation traces, an average of 50\,\% of the time the processes were
 waiting for incoming messages.  Taking  into account that  the total power  reduction during
 blocking phases  is about 5\,\%,  one can compute an  approximation of
 the  power savings,  i.e., $50\,\%  \times  5\,\% =  2.5\%$, which  is
-consistent  power  reduction  obtained  for  the  full-day  simulation
+consistent  power  reduction  obtained  for  the  1-day  simulation
 (around  2\,\%). However,  we  expect higher  power/energy savings  if
-upcoming versions of OpenMPI support full blocking policies as well as if 
+upcoming versions of OpenMPI support full blocking policies, as well as if 
 future architectures tend proportional computing~\citep{Barroso-2007}.
 
 % \begin{figure*}[htbf]
