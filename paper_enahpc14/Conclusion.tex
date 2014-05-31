@@ -2,18 +2,14 @@ We  have   presented  a  methodology  for   comparing  performance  of
 \cosmoart,  a  regional  weather  forecast  model  augmented  for  the
 interactions of  reactive gases and aerosol  particles.  The resulting
 benchmarks illustrate  that the  best time-to-solution does  not imply
-the best energy-to-solution: an Intel Sandy Bridge (2.6 GHz) system has
-lower time-to-solution but higher energy-to-solution than an Intel Ivy
-Bridge (2.2 GHz) system, although  the two metrics are indeed strongly
+the best energy-to-solution: a system based on Intel Xeon Sandy Bridge (2.6 GHz) has
+lower time-to-solution but higher energy-to-solution than on a platform based on Intel Xeon Ivy
+Bridge (2.2 GHz), although  the two metrics are indeed strongly
 correlated.   On the  other  hand, the  usage  of energy-friendly  MPI
-waiting techniques analyzed  with our power-per\-for\-man\-ce framework over
-a series of  runs of \cosmoart on \tinto  and power traces demonstrate
-that   it  is   possible  to   reduce  both   power   dissipation  and
-energy-to-solution   while  maintaining   (or  even   decreasing)  the
-time-to-solution. The resulting profiles indicate that simple changes,
-such as making use of the  \emph{degraded} MPI policy rather than the \emph{aggressive}
-is  possible to  slightly  reduce both  power  dissipation and  energy
-consumption (by 2\,\%).
+waiting techniques analyzed  with our power-per\-for\-man\-ce framework demonstrate
+that   it  is   possible  to   reduce the energy-to-solution   while  maintaining   (or  even   decreasing)  the
+time-to-so\-lu\-tion. The resulting power profiles of \cosmoart indicate that simple changes,
+such as making use of the  \emph{degraded} MPI policy rather than the \emph{aggressive} (by default) is  possible to  slightly  reduce both  power and  energy consumption (by 2\,\%).
 
 This  reproducible  benchmark provides  a  baseline  for ongoing  work
 package within  the EU-funded Exa2Green to  minimize power consumption

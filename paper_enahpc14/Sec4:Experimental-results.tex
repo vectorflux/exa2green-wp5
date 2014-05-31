@@ -19,20 +19,18 @@ technology.
 
 For  the   experiments  on  \tinto  platform,  we   also  analyze  the
 contribution of the MPI library  to the energy consumption and how the
-use  of  the aggressive and degraded message-passing progression engine 
-policies can potentially  render energy  savings.
-
-Specifically,   the  OpenMPI 1.6.5  library,  features  two  operation 
+use  of different message-passing progression engine 
+modes can potentially  render energy  savings. Specifically,   the  OpenMPI 1.6.5  library,  features  two  operation 
 policies, \emph{aggressive} and \emph{degraded}, which can be  selected 
-before \cosmoart is launched. In the \emph{aggressive} (default) policy,  
-normally used in exactly- or under-subscribed mode  (i.e., the  number 
+before \cosmoart is launched. In the \emph{aggressive} (by default) policy,  
+normally used in exactly- and under-subscribed modes  (i.e., the  number 
 of running processes is equal to or less than the number of  available 
 cores), MPI processes will never voluntarily give up the processor  to 
 other processes. With some network transports, OpenMPI processes  will 
 spin  in  tight  loops  attempting  to  make message passing progress, 
 effectively causing other processes to not get  any  CPU  cycles  (and  
 therefore never make any  progress).  This  usually  yields  the  best 
-performance but high CPU utilization, possibly at the cost of a higher 
+performance but a higher CPU utilization, possibly at the cost of a higher 
 energy usage.  On the other hand, the \emph{degraded} policy, suitable 
 for the oversubscribed mode (i.e., more  processes  are  running  than 
 total cores  available),  MPI  processes  will  frequently  yield  the 
@@ -47,8 +45,8 @@ from   using   the  \emph{degraded}   policy   compared   with     the
 \emph{aggressive} one, notable differences can be observed in the CPU utilization. 
 In a separated  test  with  the  \emph{aggressive}  policy 
 enabled, we noticed that a blocked MPI process waiting for an incoming 
-message has CPU utilization of 100\,\%,  however  when  the \emph{degraded} 
-mode  is  set,  the  CPU  utilization is only $50\,\%$, approximately. 
+message utilized 100\,\% of CPU,  however  when  the \emph{degraded} 
+mode  was  set,  the  CPU  utilization was only $50\,\%$, approximately. 
 Although neither of both policies avoid busy-waiting loops in blocking 
 routines, the use of the \emph{degraded} policy is as much as we can 
 do in OpenMPI to reduce the CPU utilization, and thus save energy.
@@ -125,7 +123,7 @@ slight reduction  for the \emph{degraded} MPI  policy. One can  expect that the
 costs of the context switches produced in the \emph{degraded} MPI policy can lead to
 an  increase  of  the   execution  time,  however,  applications  with
 extensive computing,  as e.g.  \cosmoart, may show  better performance
-with the \emph{degraded} policy. This effect works in  favor with our results
+with the \emph{degraded} policy. This effect works in  favor with our results,
 since the energy consumed is also reduced (2\,\%) just by changing the
 behavior of the OpenMPI library  to the \emph{degraded} policy, i.e, with the
 \texttt{--mca    mpi\_yield\_when\_idle 1}   parameter   set    in   the
@@ -221,8 +219,7 @@ reduction of around  50\,W with respect to the  \emph{aggressive} mode. Also, we
 notice systematic  power drops for each simulated  hour.  We associate
 them  to periods  in  which  the processes  were waiting  for
 incoming messages  or synchronizations, thus  yielding the CPU  to a lower
-usage. Our final observation is the reduction of the TTS by 2\,\% with
-respect to the  \emph{degraded} MPI policy.
+usage. Our final observation is the reduction of 2\,\% in the TTS when the \emph{degraded} policy is used.
 
 To  gain  more  insights   about  the  power-performance  behavior  of
 \cosmoart,  we  obtained power-per\-for\-man\-ce  traces  to allow  us
@@ -249,7 +246,7 @@ synchronization  phase are  performed. From  the performance  point of
 view, one can notice a reduction of 2\,\% in the TTS that the \emph{degraded}  MPI
 policy leads over the \emph{aggressive} one. On the other hand, a
 reduction of power consumption of  2\,\% in average is attained with the \emph{degraded} 
-policy only for routines that actually  perform synchronizations,
+policy, only for routines that actually  perform synchronizations,
 group  communications  and MPI receive and wait primitives.   Thus,  the
 reduction of the power-energy  pair directly depends on the percentage
 of time in which blocking MPI  operations are executed. For the 1-hour
