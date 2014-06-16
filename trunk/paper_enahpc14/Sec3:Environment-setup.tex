@@ -16,7 +16,7 @@ versions of \cosmoart:
 Each standard  compute node  is comprised of  two Intel Xeon Ivy Bridge EP
 E5-2660v2  ten-core processors  operating at  2.2\,GHz,  equipped with
 32\,GB  of DDR3 1600\,MHz  RAM and  connected via  InfiniBand Mellanox
-SX6036 and FDR switches.  For our experiments, only a subset of 52 was used. %
+SX6036 and FDR switches.  For our experiments, a full rack  of 52 standard compute nodes was used. %
 % only a full rack constituted exclusively of 52 nodes was used.
   % \monch is  slated to stay  in service without hardware  upgrade for
   % the  duration  of  the  Exa2Green project,  allowing  an  identical
@@ -31,21 +31,23 @@ SX6036 and FDR switches.  For our experiments, only a subset of 52 was used. %
   Each of them is comprised of two Intel Xeon Sandy Bridge EP E5-2670 eight-core processors operating
   at 2.6\,GHz equipped with 64\,GB of DDR3 1600\,MHz RAM and connected
   via  InfiniBand   Mellanox  SX6036   and  FDR  switches.    For  our
-  experiments, a subset constituted of 42 compute  nodes was used.
+  experiments, a full rack constituted of 42 compute  nodes was used.
   % \pilat   is   based   on   Intel's   second-generation   processors,
   % conventional in  HPC systems  and known to  be more  power consuming
   % than its Ivy Bridge successor.
 
 \item \tinto is  a heterogeneous cluster composed of  28 compute nodes
-  at UJI.  For our experiments only  a subset of  16 homogeneous nodes
-  was  considered. Each  node  is  comprised of  two  Intel Xeon Westmere EP E5645
-  hexa-core processors  running at  2.4\,GHz, equipped with  24\,GB of
-  DDR3  1333\,MHz and  connected via  InfiniBand QDR  with  a Mellanox
-  MTS\-3600 switch. 
+  at UJI.  For  our experiments only a subset  of 16 homogeneous nodes
+  was considered. Each node is comprised of two Intel Xeon Westmere EP
+  E5645 hexa-core processors running at 2.4\,GHz, equipped with 24\,GB
+  of DDR3 1333\,MHz  and connected via InfiniBand QDR  with a Mellanox
+  MTS\-3600 switch.
 \end{itemize}
 
-Power saving mechanisms enabled on all the nodes' platforms were the C-states (C1, C3 and C6) 
-and P-states, but only P0 or the maximum frequency was used. TurboBoost feature was also enabled for our experiments.
+Power saving mechanisms  enabled on all the nodes'  platforms were the
+C-states (C1,  C3 and  C6) and  P-states, but only  P0 or  the maximum
+frequency  was  used. TurboBoost  feature  was  also  enabled for  our
+experiments.
 
 \subsection{Power measurement framework}
 \label{subsec:3.3}
@@ -61,17 +63,17 @@ Zurich are  equipped with E3METER  Intelligent Power Strips  (IPS) and
 Monitors (IPM)  which are high quality electricity  meters released by
 Riedo Networks,  that enable to  monitor and log power  consumption of
 the  IT infrastructure  as well  as constantly  analyze  line voltage,
-current, power-factor, frequency  with $\pm1\,\%$ accuracy.  Using reliable
-narrowband power-line communication (PLC) technology, all metering and
-power  quality data  from  each  IPS are  centrally  collected by  the
-E3METER Data Concentrator, via the existing power cables thus avoiding
-the need  for extra  cabling.  This data  is made available  via SNMP,
-HTTP  and  TELNET  through  the  built-in Fast  Ethernet  port.   Time
-synchronization is guaranteed by  using NTP servers. Averaged measured data is
-accessed through the open  source Cacti software including the E3METER
-Cacti Plugin to  scan the entire PLC network  and monitor in real-time
-the power  usage of  individual rack, recorded  in 5  minutes interval
-periods.
+current,  power-factor,  frequency  with $\pm1\,\%$  accuracy.   Using
+reliable  narrowband power-line  communication  (PLC) technology,  all
+metering and power quality data  from each IPS are centrally collected
+by the E3METER  Data Concentrator, via the existing  power cables thus
+avoiding the need for extra  cabling.  This data is made available via
+SNMP, HTTP and  TELNET through the built-in Fast  Ethernet port.  Time
+synchronization is guaranteed by  using NTP servers. Averaged measured
+data is accessed through the  open source Cacti software including the
+E3METER Cacti  Plugin to  scan the entire  PLC network and  monitor in
+real-time the  power usage of  individual rack, recorded in  5 minutes
+interval periods.
 
 \subsubsection{Power-performance tracing framework}
 
@@ -83,20 +85,20 @@ profiling/tracing and visualization tools, respectively.
 To employ our  framework, \cosmoart is first compiled  and linked with
 the  Extrae instrumentation  library, which  automatically instruments
 the Fortran~90  code of the model,  e.g., to record  MPI calls.  Next,
-\cosmoart  is run  on the  nodes, thus  consuming certain  amount of
+\cosmoart  is run  on  the  nodes, thus  consuming  certain amount  of
 power. The  nodes are connected  to APC 8653 Power  Distribution Units
-(PDUs) that account  for the consumed   power with  a sampling rate of
-1\,Hz and $\pm3\,\%$ accuracy. The power data captured by  these PDUs is collected by a \pmlib
-tracing server running  on a separate machine. The  client, running on
-the target nodes, sends start/stop  primitives in order to collect the
-power  data during  the \cosmoart  run. Once  the run  is  finished, a
-power-performance  trace file  containing the  power data  is received
-from  the  tracing  server  and the  instrumentation  post-process  is
-generated.  A  merged trace  file  is  finally  loaded in  Paraver  to
-visualize  and correlate  the  tasks trace with the  power
-profile  produced by \cosmoart.  This procedure  allows us  to easily
-detect power bottlenecks, basically constituted by inefficient waiting
-methods.
+(PDUs) that  account for  the consumed power  with a sampling  rate of
+1\,Hz and $\pm3\,\%$  accuracy. The power data captured  by these PDUs
+is  collected  by  a  \pmlib  tracing server  running  on  a  separate
+machine.  The client, running  on the  target nodes,  sends start/stop
+primitives in  order to  collect the power  data during  the \cosmoart
+run.  Once  the  run  is  finished,  a  power-performance  trace  file
+containing the power data is  received from the tracing server and the
+instrumentation  post-process is  generated.  A  merged trace  file is
+finally loaded in  Paraver to visualize and correlate  the tasks trace
+with the  power profile produced by \cosmoart.   This procedure allows
+us  to  easily  detect  power bottlenecks,  basically  constituted  by
+inefficient waiting methods.
 
 \subsection{Software environment}
 \label{subsec:3.2}
@@ -107,11 +109,11 @@ the platforms  was controlled using the modules  framework which gives
 an  easy and  flexible  mechanism to  access  to all  of the  provided
 compilers, tools  and applications.  For our  initial benchmarking, we
 opted for the GNU compiler GCC 4.8.1 on \monch and GCC 4.8.2 on \pilat
-and  \tinto)  using  the \texttt{-O3}  compiler  flag  in  favor of  the  Intel
+and \tinto) using the \texttt{-O3} compiler flag in favor of the Intel
 compilers 14.0.1, which  delivered inferior performance.  In addition,
 we  installed the following  implementations of  MPI: MVAPICH2  1.9 on
 \monch and \pilat, and OpenMPI 1.6.5  on \tinto. On the other hand, we
-used HDF5  1.8.12 and NetCDF  (4.3.1) libraries for the  management of
+used  HDF5 1.8.12  and NetCDF  4.3.1 libraries  for the  management of
 extremely large and complex data collections.  All computes nodes have
 an     operating    system     based     on    GNU/Linux     featuring
 ``2.6.32-358.11.1.el6'' kernel  in \monch, ``3.0.101-0.15-default'' in
