@@ -1,0 +1,14 @@
+
+To use the ipython scripts, install the following packages:
+	> sudo apt-get install ipython ipython-notebook python-numpy python-scipy python-matplotlib python-pip
+
+Then run:
+	> pip install "ipython[all]"
+
+To run the ipython notebook, execute the following command in the directory where the .ipynb file is located:
+	> ipython notebook --pylab=inline
+ 
+Finally to convert the "kpp_vs_kppa.ipynb" file to a .pdf file, run:
+	> ipython nbconvert --to latex kpp_vs_kppa.ipynb
+	> pdflatex kpp_vs_kppa.tex
+

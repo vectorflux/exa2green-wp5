@@ -1,0 +1,83 @@
+//-----------------------------------------------------------------------------
+// This is the preprocessor file for the 0-dim COSMO-ART box-model
+//-----------------------------------------------------------------------------
+#MODEL   box_model
+
+//-----------------------------------------------------------------------------
+// Use the Rosenbrock time integrator
+//-----------------------------------------------------------------------------
+#INTEGRATOR   rosenbrock
+
+//-----------------------------------------------------------------------------
+// Set the calculation precision
+//-----------------------------------------------------------------------------
+#PRECISION   double
+
+//-----------------------------------------------------------------------------
+// Set the form of the ODE function
+// aggregate : combine production/destruction
+// split     : separate production/destruction
+//-----------------------------------------------------------------------------
+#FUNCTION   aggregate
+
+//-----------------------------------------------------------------------------
+// Set the storage format of the Jacobian
+// sparse_lu_row : row-compressed Jacobian with zero fill
+// sparse_row    : row-compressed Jacobian
+// full          : no compression
+//-----------------------------------------------------------------------------
+#JACOBIAN   sparse_lu_row
+
+//-----------------------------------------------------------------------------
+// Set the target output language
+// One of: Fortran90, C
+//-----------------------------------------------------------------------------
+#LANGUAGE   Fortran90
+
+//-----------------------------------------------------------------------------
+// Set the target accelerator
+// One of: Serial, OpenMP, CUDA_GPU
+//-----------------------------------------------------------------------------
+#ACCEL   Serial
+
+//-----------------------------------------------------------------------------
+// Specify program driver
+// performance  : Only calls GridIntegrate
+// general      : Reports species concentrations to stdout
+// plotting     : Draws plots of species concentrations
+// none         : Makefile only, no driver
+//-----------------------------------------------------------------------------
+#DRIVER   performance 
+
+//-----------------------------------------------------------------------------
+// Specify grid size in program driver
+// Any number of dimensions can be specified.
+// Separate dimensions with semicolons ';'
+//-----------------------------------------------------------------------------
+#GRID 66; 56; 31;
+
+//-----------------------------------------------------------------------------
+// Specify time dimension in program driver
+// TSTART : Time at integration start
+// TEND   : Time at integration end
+// TDEL   : Time between integrator restarts
+//-----------------------------------------------------------------------------
+#TSTART 0 // Seconds
+#TEND 3600 // Seconds
+#TDEL 120 // Seconds
+
+//-----------------------------------------------------------------------------
+// Concentrations of species on the MONITOR list are reported
+// after each call to GridIntegrate.  The selected driver 
+// determines how the reporting is done.
+//-----------------------------------------------------------------------------
+#MONITOR NO; NO2; NO3; HO; H2O2; HCHO; OP1; O3;
+
+//-----------------------------------------------------------------------------
+// Concentrations of species on the LOOKAT list are written
+// to a binary file after each call to GridIntegrate.
+//-----------------------------------------------------------------------------
+#LOOKAT NO; NO2; NO3; HO; H2O2; HCHO; OP1; O3;
+
+#REORDER ON
+ 

@@ -1,0 +1,4 @@
+#!/bin/bash 
+echo "Clean directory"
+rm -vf *.aux *.idx *.log *.out *.tex *.pdf 
+rm -vfr kpp_vs_kppa_files/ 
