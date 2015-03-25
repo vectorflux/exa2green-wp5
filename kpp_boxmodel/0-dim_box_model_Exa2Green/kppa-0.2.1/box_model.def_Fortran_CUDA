@@ -1,0 +1,504 @@
+// Use common atomic species definitions
+#include atoms
+
+//-----------------------------------------------------------------------------
+// Variable species
+//-----------------------------------------------------------------------------
+#DEFVAR
+SO2   =  IGNORE;
+SULF   =  IGNORE;
+NO2 = IGNORE;
+NO   =  IGNORE;
+O3   =  IGNORE;
+HNO3   =  IGNORE;
+H2O2   =  IGNORE;
+ALD   =  IGNORE;
+HCHO   =  IGNORE;
+OP1   =  IGNORE;
+OP2   =  IGNORE;
+PAA   =  IGNORE;
+ORA1   =  IGNORE;
+ORA2   =  IGNORE;
+//nh3 nicht vorhanden
+N2O5   =  IGNORE;
+NO3   =  IGNORE;
+PAN   =  IGNORE;
+HC3  =  IGNORE;
+HC5   =  IGNORE;
+HC8   =  IGNORE;
+ETH   =  IGNORE;
+CO  =  IGNORE;
+OL2   =  IGNORE;
+OLT   =  IGNORE;
+OLI   =  IGNORE;
+TOL   =  IGNORE;
+XYL   =  IGNORE;
+ACO3   =  IGNORE;
+TPAN   =  IGNORE;
+HONO   =  IGNORE;
+HNO4  =  IGNORE;
+KET  =  IGNORE;
+GLY   =  IGNORE;
+MGLY   =  IGNORE;
+DCB   =  IGNORE;
+ONIT  =  IGNORE;
+CSL   =  IGNORE;
+ISO  =  IGNORE;
+API = IGNORE;
+LIM = IGNORE;
+HACE = IGNORE;
+ISHP = IGNORE;
+ISON = IGNORE;
+MACR = IGNORE;
+MAHP = IGNORE;
+MPAN = IGNORE;
+NALD = IGNORE;
+CS1 = IGNORE;
+CS10 = IGNORE;
+CS100 = IGNORE;
+CS1000 = IGNORE;
+DMS = IGNORE;
+DMSO = IGNORE;
+HO   =  IGNORE;
+HO2  =  IGNORE;
+{Radikale}
+MO2  =  IGNORE;
+OLN   =  IGNORE;
+MACP = IGNORE;
+ISOP = IGNORE;
+O1D   =  IGNORE;
+O3P   =  IGNORE;
+TCO3  =  IGNORE;
+HC3P   =  IGNORE;
+HC5P   =  IGNORE;
+HC8P   =  IGNORE;
+OL2P   =  IGNORE;
+OLTP  =  IGNORE;
+OLIP   =  IGNORE;
+TOLP   =  IGNORE;
+XYLP   =  IGNORE;
+ETHP   =  IGNORE;
+KETP   =  IGNORE;
+XO2  =  IGNORE;
+XNO2   =  IGNORE;
+APIP = IGNORE;
+LIMP = IGNORE;
+CO2   =  IGNORE;
+H2   =  IGNORE;
+O2   =  IGNORE;
+N2   =  IGNORE;
+H2O   =  IGNORE;
+
+//-----------------------------------------------------------------------------
+// Fixed species
+//-----------------------------------------------------------------------------
+#DEFFIX
+CH4   =  IGNORE;
+
+//-----------------------------------------------------------------------------
+// Reactions
+//-----------------------------------------------------------------------------
+#EQUATIONS
+NO2     =  O3P + NO                                                :  PHUX(1.07E-02,1.01319E+00,0.83330E+00);
+O3      =  O1D + O2                                                :  PHUX(3.22E-05,4.45037E+00,0.78028E+00);
+O3      =  O3P + O2                                                :  PHUX(5.36E-04,0.34764E+00,0.91030E+00);
+HONO    =  HO + NO                                                 :  PHUX(8.96E-04,0.99438E+00,0.83295E+00);
+HNO3    =  HO + NO2                                                :  PHUX(5.48E-07,2.86922E+00,0.79561E+00);
+HNO4    =  HO2 + NO2                                               :  PHUX(3.90E-06,2.37354E+00,0.79830E+00)+EQT2(TEMP);
+NO3     =  NO + O2                                                 :  PHUX(2.74E-02,0.26226E+00,0.92849E+00);
+NO3     =  NO2 + O3P                                               :  PHUX(2.73E-01,0.29327E+00,0.92401E+00);
+H2O2    =  2 HO                                                    :  PHUX(7.78E-06,1.91463E+00,0.79810E+00);
+HCHO    =  H2 + CO                                                 :  PHUX(4.92E-05,1.60973E+00,0.80184E+00);
+HCHO    =  2 HO2 + CO                                              :  PHUX(4.05E-05,2.06917E+00,0.80267E+00);
+ALD     =  MO2 + HO2 + CO                                          :  PHUX(5.40E-06,2.52915E+00,0.79722E+00);
+OP1     = HCHO + HO2 + HO                                          :  PHUX(6.37E-06,1.76570E+00,0.80004E+00);
+OP2     = ALD + HO2 + HO                                           :  PHUX(6.37E-06,1.76570E+00,0.80004E+00);
+PAA     = MO2 + CO2 + HO                                           :  PHUX(6.10E-09,9.17009E+00,0.72585E+00);
+KET     = ACO3 + ETHP                                              :  PHUX(1.32E-05,2.46350E+00,0.79768E+00);
+GLY     = 0.13 HCHO + 1.87 CO                                      :  PHUX(3.11E-03,0.55016E+00,0.88313E+00);
+GLY     = 0.45 HCHO + 1.55 CO + 0.80 HO2                           :  PHUX(3.11E-03,0.55016E+00,0.88313E+00);
+MGLY    = ACO3 + HO2 + CO                                          :  PHUX(1.85E-03,0.57967E+00,0.87921E+00);
+DCB     = 0.98 HO2 + TCO3 + 0.02 ACO3                              :  PHUX(6.39E-04,1.53712E+00,0.80233E+00);
+ONIT    = 0.20 ALD + 0.80 KET + HO2 + NO2                          :  PHUX(7.20E-08,9.11436E+00,0.72600E+00);
+O3P + O2  =  O3    : 2.55e19 * 6.0E-34 * pow((TEMP/300.),(-2.3));
+O3P + NO2  =  NO + O2   :  6.50E-12 * exp( 120. / TEMP );
+O1D + N2  =  O3P + N2   :   2.00E-11 * exp( 130. / TEMP );
+O1D + O2  =  O3P + O2   :  3.20E-11 * exp( 67. / TEMP );
+O1D + H2O  =  2 HO   :  2.14E-10;
+O3 + NO  =  NO2 + O2   :  1.4E-12 * exp( -1310. / TEMP );
+O3 + HO  =  HO2 + O2   :  1.70E-12 * exp( -940. / TEMP );
+O3 + HO2  =  HO + 2 O2   :  1.10E-14 * exp( -500. / TEMP );
+HO2 + NO  =  NO2 + HO   :  3.45E-12 * exp( 270. / TEMP );
+HO2 + NO2  =  HNO4  : TROE2( 1.8E-31, 3.2e0, 4.7E-12, 1.4e0, TEMP );
+{HNO4  = HO2 + NO2 : EQT(1.8e-31,3.2e0,4.7e-12,1.4e0,TEMP,4.76e+26,10900.e0); siehe Photolysereaktion}
+HO2 + HO2  =  H2O2   :  2.2E-13 * exp(620./TEMP) + 1.9E-33 * 2.55e19 * exp(980./TEMP);
+HO2 + HO2 + H2O  =  H2O2 + H2O   :  3.08e-34*exp(2820./TEMP)+2.66e-54*2.55e19*exp(3180./TEMP);
+H2O2 + HO  =  HO2 + H2O   :  3.30E-12 * exp( -200. / TEMP );
+NO + HO  =  HONO  : TROE2( 7.0e-31, 2.6e0, 1.5e-11, 0.5e0, TEMP );
+NO + NO + O2  =  NO2 + NO2   :  3.30E-39 * exp( 530. / TEMP );
+O3 + NO2  =  NO3   :  1.40E-13 * exp( -2470. / TEMP );
+NO3 + NO  =  NO2 + NO2   :  1.80E-11 * exp( 110. / TEMP );
+NO3 + NO2  =  NO + NO2 + O2   :  2.50E-14 * exp( -1230. / TEMP );
+NO3 + HO2  =  HNO3 + O2   :  2.50E-12;
+NO3 + NO2  =  N2O5  : TROE2( 2.2e-30, 4.3e0, 1.5e-12, 0.5e0, TEMP );
+N2O5  =  NO2 + NO3  : EQT(2.2e-30,4.3e0,1.5e-12,0.5e0,TEMP,9.09e+26,11200.e0);{}
+N2O5 + H2O  =  2 HNO3   :  0.00E-21;
+HO + NO2  =  HNO3  : TROE2( 2.6e-30, 3.2e0, 2.4e-11, 1.3e0, TEMP );
+HO + HNO3  =  NO3 + H2O  : SPEZ(7.2e-15,785.e0,4.1e-16,1440.e0,1.9e-33,725.e0,TEMP);
+HO + HNO4  =  NO2 + H2O + O2   :  1.30E-12 * exp( 380. / TEMP );
+HO + HO2  =  H2O + O2   :  4.80E-11 * exp( 250. / TEMP );
+HO + SO2  =  SULF + HO2  : TROE2( 3.0e-31, 3.3e0, 1.5e-12, 0.0e0, TEMP );
+CO + HO  =  HO2   :  1.5E-13 * ( 1.0 + 2.439E-20 * 2.55e19 );
+CH4 + HO  =  MO2 + H2O   :  TEMP * TEMP * 6.95E-18 * exp( -1280. / TEMP );
+ETH + HO  =  ETHP + H2O  :  TEMP * TEMP * 1.37E-17 * exp( -444. /TEMP );
+HC3 + HO  =  0.83 HC3P + 0.17 HO2 + 0.009 HCHO + 0.075 ALD + 0.025 KET + H2O   :  1.59E-11 * exp( -540. / TEMP );
+HC5 + HO  =  HC5P + 0.25 XO2 + H2O   :  1.73E-11 * exp( -380. / TEMP );
+HC8 + HO  =  HC8P + 0.75 XO2 + H2O + 0.2033 CS10 :  3.64E-11 * exp( -380. / TEMP );{ELENI}
+OL2 + HO  =  OL2P   :  2.15E-12 * exp( 411. / TEMP );
+OLT + HO  =  OLTP +1.05E-3 CS1 + 2.1E-3 CS10 + 0.014 CS100 + 0.0525 CS1000 :  5.32E-12 * exp( 504. / TEMP );{ELENI}
+OLI + HO  =  OLIP + 7.E-3 CS1 + 0.01353 CS10 + 0.04013 CS100 + 0.11667 CS1000 :  1.07E-11 * exp( 549. / TEMP );{ELENI}
+TOL + HO  =  0.75 TOLP + 0.25 CSL + 0.25 HO2 + 5.4433E-3 CS1 + 0.1314 CS10 + 0.3833 CS100 + 0.49289 CS1000 :  2.10E-12 * exp( 322. / TEMP );{ELENI}
+XYL + HO  =  0.83 XYLP + 0.17 CSL + 0.17 HO2 +0.04417 CS1 + 0.17667 CS10 + 0.22083 CS100 + 0.30917 CS1000 :  1.89E-11 * exp( 116. / TEMP );{ELENI}
+CSL + HO  =  0.1 HO2 + 0.9 XO2 + 0.9 TCO3 - 0.9 HO  :  4.00E-11;  {Uli altEMP:+ -0.9 HO}{ELENI}
+HCHO + HO  =  HO2 + CO + H2O   :  9.00E-12;
+ALD + HO  =  ACO3 + H2O   :  6.87E-12 * exp( 256. / TEMP );
+KET + HO  =  KETP + H2O   :  1.20E-11 * exp( -745. / TEMP );
+GLY + HO  =  HO2 + 2 CO + H2O   :  1.15E-11;
+MGLY + HO  =  ACO3 + CO + H2O   :  1.70E-11;
+DCB + HO  =  TCO3 + H2O   :  2.8E-11;
+OP1 + HO  =  0.5 MO2 + 0.5 HCHO + 0.5 HO   :  1.00E-11;
+OP2 + HO  =  0.5 HC3P + 0.5 ALD + 0.5 HO   :  1.00E-11;
+PAA + HO  =  ACO3 + H2O   :  1.00E-11;
+PAN + HO  =  HCHO + NO3 + XO2    :  TEMP * TEMP *6.85E-18 * exp( -444. / TEMP );
+ONIT + HO  =  HC3P + NO2   :  1.55E-11 * exp( -540. / TEMP );
+ISO + HO  =  ISOP + 3.4E-3 CS1 + 0.01133 CS10 + 5.6667E-3 CS100  :  2.55E-11 * exp( 409. / TEMP );{ELENI}
+ACO3 + NO2  =  PAN   :  2.6E-12 * exp ( 380. / TEMP);{ACHTUNG, verändert! früher: 2.80E-12 * exp( 181. / TEMP );}
+PAN  =  ACO3 + NO2   :  2.E16 * exp (-13500. / TEMP);{ACHTUNG, verändert! früher: 1.95E+16 * exp(-13543. / TEMP );}
+TCO3 + NO2  =  TPAN   :  4.7E-12;
+TPAN  =  TCO3 + NO2   :  1.95E16 * exp(-13543. / TEMP );
+MO2 + NO  =  HCHO + HO2 + NO2   :  4.20E-12 * exp( 180. / TEMP );
+HC3P + NO  =  0.75 ALD + 0.25 KET + 0.09 HCHO + 0.036 ONIT + 0.964 NO2 + 0.964 HO2   :  4.20E-12 * exp( 180. / TEMP );
+{?   59}
+HC5P + NO  =  0.38 ALD + 0.69 KET + 0.08 ONIT + 0.92 NO2 + 0.92 HO2   :  4.20E-12 * exp( 180. / TEMP );
+{?   61}
+HC8P + NO  =  0.35 ALD + 1.06 KET + 0.04 HCHO + 0.24 ONIT + 0.76 NO2 + 0.76 HO2   :  4.20E-12 * exp( 180. / TEMP );
+{?   63}
+OL2P + NO  =  1.6 HCHO + HO2 + NO2 + 0.2 ALD   :  4.20E-12 * exp( 180. / TEMP );
+OLTP + NO  =  ALD + HCHO + HO2 + NO2   :  4.20E-12 * exp( 180. / TEMP );
+OLIP + NO  =  HO2 + 1.45 ALD + 0.28 HCHO + 0.10 KET + NO2   :  4.20E-12 * exp( 180. / TEMP );
+ACO3 + NO  =  MO2 + NO2   :  3.50E-11 * exp( -180. / TEMP );{ACHTUNG, veränder! früher: 4.20E-12 * exp( 180. / TEMP );}
+TCO3 + NO  =  NO2 + 0.92 HO2 + 0.89 GLY + 0.11 MGLY + 0.05 ACO3 + 0.95 CO + 2 XO2   :  4.20E-12 * exp( 180. / TEMP );
+TOLP + NO  =  NO2 + HO2 + 0.17 MGLY + 0.16 GLY + 0.70 DCB   :  4.20E-12 * exp( 180. / TEMP );
+XYLP + NO  =  NO2 + HO2 + 0.45 MGLY + 0.806 DCB   :  4.20E-12 * exp( 180. / TEMP );
+ETHP + NO  =  ALD + HO2 + NO2   :  4.20E-12 * exp( 180. / TEMP );
+KETP + NO  =  MGLY + NO2 + HO2   :  4.20E-12 * exp( 180. / TEMP );
+OLN + NO  =  HCHO + ALD + 2 NO2   :  4.20E-12 * exp( 180. / TEMP );
+HCHO + NO3  =  HO2 + HNO3 + CO   :  6.00E-13 * exp( -2058. / TEMP );
+ALD + NO3  =  ACO3 + HNO3   :  1.40E-12 * exp( -1900. / TEMP);
+GLY + NO3  =  HNO3 + HO2 + 2 CO   :  6.00E-13 * exp( -2058. / TEMP );
+MGLY + NO3 = HNO3 + ACO3 + CO   :  1.40E-12 * exp( -1900. / TEMP);
+DCB + NO3  =  HNO3 + TCO3   :  1.40E-12 * exp( -1900. / TEMP);
+CSL + NO3  =  HNO3 + XNO2 + 0.5 CSL :  2.20E-11;{ELENI}
+OL2 + NO3  =  OLN   :  2.00E-12 * exp( -2923. / TEMP );
+OLT + NO3  =  OLN + 1.05E-3 CS1 + 2.1E-3 CS10 + 0.014 CS100 + 0.0525 CS1000 :  1.00E-11 * exp( -1895. / TEMP );{ELENI}
+OLI + NO3  =  OLN + 7.E-3 CS1 + 0.01353 CS10 + 0.04013 CS100 + 0.11667 CS1000 :  3.23E-11 * exp( -975. / TEMP );{ELENI}
+ISO + NO3  =  ISON  :  5.81E-13;
+OL2 + O3  =  HCHO + 0.42 CO + 0.4 ORA1 + 0.12 HO2   :  1.20E-14 * exp( -2633. / TEMP );
+OLT + O3  =  0.53 HCHO + 0.50 ALD + 0.33 CO + 0.20 ORA1 + 0.20 ORA2 + 0.23 HO2 + 0.22 MO2 + 0.10 HO + 0.06 CH4 + 1.05E-3 CS1 + 2.1E-3 CS10 + 0.014 CS100 + 0.0525 CS1000 :  1.32E-14 * exp( -2105. / TEMP );{ELENI}
+OLI + O3  =  0.18 HCHO + 0.72 ALD + 0.10 KET + 0.23 CO + 0.06 ORA1 + 0.29 ORA2 + 0.09 CH4 + 0.26 HO2 + 0.14 HO + 0.31 MO2 + 7.E-3 CS1 + 0.01353 CS10 + 0.04013 CS100 + 0.11667 CS1000 :  7.29E-15 * exp( -1136. / TEMP );{ELENI}
+ISO + O3  =  0.58 HCHO + 0.65 MACR + 0.14 CO + 0.28 ORA1 + 0.1 MACP + 0.1 ACO3 + 0.09 H2O2 + 0.25 HO2 + 0.08 MO2 + 0.25 HO + 3.4E-3 CS1 + 0.01133 CS10 + 5.6667E-3 CS100 :  1.23E-14 * exp( -2013. / TEMP );{ELENI}
+HO2 + MO2  =  OP1   :  7.70E-14 * exp( 1300. / TEMP );
+HO2 + ETHP  =  OP2   :  7.70E-14 * exp( 1300. / TEMP );
+HO2 + HC3P  =  OP2   :  7.70E-14 * exp( 1300. / TEMP );
+HO2 + HC5P  =  OP2   :  7.70E-14 * exp( 1300. / TEMP );
+HO2 + HC8P  =  OP2   :  7.70E-14 * exp( 1300. / TEMP );
+HO2 + OL2P  =  OP2   :  7.70E-14 * exp( 1300. / TEMP );
+HO2 + OLTP  =  OP2   :  7.70E-14 * exp( 1300. / TEMP );
+HO2 + OLIP  =  OP2   :  7.70E-14 * exp( 1300. / TEMP );
+HO2 + KETP  =  OP2   :  7.70E-14 * exp( 1300. / TEMP );
+HO2 + ACO3  =  PAA   :  7.70E-14 * exp( 1300. / TEMP );
+HO2 + TOLP  =  OP2   :  7.70E-14 * exp( 1300. / TEMP );
+HO2 + XYLP  =  OP2   :  7.70E-14 * exp( 1300. / TEMP );
+HO2 + TCO3  =  OP2   :  7.70E-14 * exp( 1300. / TEMP );
+HO2 + OLN  =  ONIT   :  7.70E-14 * exp( 1300. / TEMP );
+MO2 + MO2  =  1.5 HCHO + HO2   :  1.90E-13 * exp( 220. / TEMP );
+MO2 + ETHP  =  0.75 HCHO + HO2 + 0.75 ALD   :  1.40E-13 * exp( 220. / TEMP );
+MO2 + HC3P  =  0.84 HCHO + HO2 + 0.77 ALD + 0.26 KET   :  4.20E-14 * exp( 220. / TEMP );
+MO2 + HC5P  =  0.77 HCHO + HO2 + 0.41 ALD + 0.75 KET   :  3.40E-14 * exp( 220. / TEMP );
+MO2 + HC8P  =  0.80 HCHO + HO2 + 0.46 ALD + 1.39 KET   :  2.90E-14 * exp( 220. / TEMP );
+MO2 + OL2P  =  1.55 HCHO + HO2 + 0.35 ALD   :  1.40E-13 * exp( 220. / TEMP );
+MO2 + OLTP  =  1.25 HCHO + HO2 + 0.75 ALD   :  1.40E-13 * exp( 220. / TEMP );
+MO2 + OLIP  =  0.89 HCHO + HO2 + 0.725 ALD + 0.55 KET   :  1.70E-14 * exp( 220. / TEMP );
+MO2 + KETP  =  0.75 HCHO + HO2 + 0.75 MGLY   :  1.70E-14 * exp( 220. / TEMP );
+MO2 + ACO3  =  HCHO + 0.5 HO2 + 0.5 MO2 + 0.5 ORA2   :  9.60E-13 * exp( 220. / TEMP );
+MO2 + TOLP  =  HCHO + 2 HO2 + 0.17 MGLY + 0.16 GLY + 0.70 DCB   :  1.70E-14 * exp( 220. / TEMP );
+MO2 + XYLP  =  HCHO + 2 HO2 + 0.45 MGLY + 0.806 DCB   :  1.70E-14 * exp( 220. / TEMP );
+MO2 + TCO3  =  0.50 HCHO + 0.50 ORA2 + 0.460 HO2 + 0.445 GLY + 0.055 MGLY + 0.03 ACO3 + 0.475 CO + XO2   :  9.60E-13 * exp( 220. / TEMP );
+ETHP + ACO3  =  ALD + 0.5 HO2 + 0.5 MO2 + 0.5 ORA2   :  3.40E-13 * exp( 220. / TEMP );
+HC3P + ACO3  =  0.77 ALD + 0.26 KET + 0.5 HO2 + 0.5 MO2 + 0.5 ORA2   :  1.00E-13 * exp( 220. / TEMP );
+HC5P + ACO3  =  0.41 ALD + 0.75 KET + 0.5 HO2 + 0.5 MO2 + 0.5 ORA2   :  8.40E-14 * exp( 220. / TEMP );
+HC8P + ACO3  =  0.46 ALD + 1.39 KET + 0.5 HO2 + 0.5 MO2 + 0.5 ORA2   :  7.20E-14 * exp( 220. / TEMP );
+OL2P + ACO3  =  0.8 HCHO + 0.6 ALD + 0.5 HO2 + 0.5 MO2 + 0.5 ORA2   :  3.40E-13 * exp( 220. / TEMP );
+OLTP + ACO3  =  ALD + 0.5 HCHO + 0.5 HO2 + 0.5 MO2 + 0.5 ORA2   :  3.40E-13 * exp( 220. / TEMP );
+OLIP + ACO3  =  0.725 ALD + 0.55 KET + 0.14 HCHO + 0.5 HO2 + 0.50 MO2 + 0.50 ORA2   :  4.20E-14 * exp( 220. / TEMP );
+KETP + ACO3  =  MGLY + 0.5 HO2 + 0.5 MO2 + 0.5 ORA2   :  4.20E-14 * exp( 220. / TEMP );
+ACO3 + ACO3  =  2 MO2   :  1.19E-12 * exp( 220. / TEMP );
+ACO3 + TOLP  =  MO2 + 0.17 MGLY + 0.16 GLY + 0.7 DCB + HO2   :  4.20E-14 * exp( 220. / TEMP );
+ACO3 + XYLP  =  MO2 + 0.45 MGLY + 0.806 DCB + HO2   :  4.20E-14 * exp( 220. / TEMP );
+ACO3 + TCO3  =  MO2 + 0.92 HO2 + 0.89 GLY + 0.11 MGLY + 0.05 ACO3 + 0.95 CO + 2 XO2   :  1.19E-12 * exp( 220. / TEMP );
+XO2 + HO2  =  OP2   :  7.70E-14 * exp( 1300. / TEMP );
+XO2 + MO2  =  HCHO + HO2   :  1.70E-14 * exp( 220. / TEMP );
+XO2 + ACO3 = MO2    :  4.20E-14 * exp( 220. / TEMP );
+{XO2 + XO2  = DUMMY   :  3.60E-16 * exp( 220. / TEMP );raus oder rein? -> raus}
+XO2 + NO  =  NO2   :  4.20E-12 * exp( 180. / TEMP );
+XNO2 + NO2  =  ONIT   :  4.20E-12 * exp( 180. / TEMP );
+XNO2 + HO2  =  OP2   :  7.70E-14 * exp( 1300. / TEMP );
+XNO2 + MO2  =  HCHO + HO2   :  1.70E-14 * exp( 220. / TEMP );
+XNO2 + ACO3  =  MO2   :  4.20E-14 * exp( 220. / TEMP );
+{XNO2 + XNO2  = DUMMY   :  3.60E-16 * exp( 220. / TEMP );raus oder rein? -> raus}
+{?   137 N2O5}
+MO2 + OLN  =  1.75 HCHO + 0.5 HO2 + ALD + NO2   :  1.70E-14 * exp( 220. / TEMP );
+ACO3 + OLN  =  HCHO + ALD + 0.5 ORA2 + NO2 + 0.5 MO2   :  4.20E-14 * exp( 220. / TEMP );
+OLN + OLN  =  2 HCHO + 2 ALD + 2 NO2   :  3.60E-16 * exp( 220. / TEMP );
+API + HO = APIP + 0.08103 CS1 + 0.06936 CS10 + 0.27087 CS100 + 0.459 CS1000: 1.21E-11 * exp( 444. / TEMP );{ELENI}
+API + NO3 = OLN + 0.08103 CS1 + 0.06936 CS10 + 0.27087 CS100 + 0.459 CS1000:  ARR2(1.19E-12,490.,TEMP);{ELENI}
+API + O3 = 0.65 ALD + 0.53 KET + 0.14 CO + 0.20 ETHP + 0.42 KETP + 0.85 HO + 0.10 HO2 + 0.02 H2O2 + 0.7556 CS1 + 0.08103 CS1 + 0.06936 CS10 + 0.27087 CS100 + 0.459 CS1000 :  ARR2(1.01E-15,-736.,TEMP);{ELENI}
+APIP + NO = 0.80 HO2 + 0.80 ALD + 0.80 KET + 0.20 ONIT + 0.80 NO2   :  4.00E-12;
+APIP + HO2 = OP2   :  1.50E-11;
+APIP + MO2 = HCHO + ALD + KET + 2 HO2   :  ARR2(3.56E-14,708.,TEMP);
+APIP + ACO3 = ALD + KET + HO2 + MO2   :  ARR2(7.40E-13,765.,TEMP);
+APIP + NO3 = ALD + KET + HO2 + NO2   :  1.20E-12;
+LIM + HO = LIMP + 0.08103 CS1 + 0.06936 CS10 + 0.27087 CS100 + 0.459 CS1000 :  1.70E-10;{ELENI}
+LIM + NO3 = OLN + 0.08103 CS1 + 0.06936 CS10 + 0.27087 CS100 + 0.459 CS1000 :  1.22E-11;{ELENI}
+LIM + O3 = 0.04 HCHO + 0.46 OLT + 0.14 CO + 0.16 ETHP + 0.42 KETP + 0.85 HO + 0.10 HO2 + 0.02 H2O2 + 0.79 MACR + 0.01 ORA1 + 0.07 ORA2 + 0.08103 CS1 + 0.06936 CS10 + 0.27087 CS100 + 0.459 CS1000 :  2.00E-16;{ELENI}
+LIMP + NO = 0.65 HO2 + 0.40 MACR + 0.25 OLI + 0.25 HCHO + 0.35 ONIT + 0.65 NO2   :  4.00E-12;
+LIMP + HO2 = OP2   :  1.50E-11;
+LIMP + MO2 = 1.40 HCHO + 0.60 MACR + 0.40 OLI + 2.00 HO2   :  ARR2(3.56E-14,708.,TEMP);
+LIMP + ACO3 = 0.60 MACR + 0.40 OLI + 0.40 HCHO + HO2 + MO2   :  ARR2(7.40E-13,765.,TEMP);
+LIMP + NO3 = 0.60 MACR + 0.40 OLI + 0.40 HCHO + HO2 + NO2   :  1.20E-12;
+ISOP + NO = MACR + NO2 + HCHO + HO2 + 0.046 ISON   :  ARR2(2.43E-12,360.,TEMP);
+ISOP + HO2 = ISHP   :  ARR2(2.05E-13,1300.,TEMP);
+ISOP + ISOP = 2 MACR + HCHO + HO2   :  2.00E-12;
+ISHP + HO = MACR + HO   :  1.00E-10;
+ISON + HO = HACE + NALD   :  1.30E-11;
+MACR + HO = MACP   :  0.5*(4.13E-12 * exp( 452. / TEMP ) + 1.86E-11 * exp( 175. / TEMP ));
+MACR + O3 = 0.9 MGLY + 0.45 ORA1 + 0.32 HO2 + 0.22 CO + 0.19 HO + 0.1 ACO3   :  0.5*(1.36E-15 * exp( -2112. / TEMP ) + 7.51E-16 * exp( -1521. / TEMP ));
+MACP + NO = NO2 + 0.25 HACE + 0.25 CO + 0.25 ACO3 + 0.5 MGLY + 0.75 HCHO + 0.75 HO2   :  ARR2(2.54E-12,360.,TEMP);
+MACP + HO2 = MAHP   :  ARR2(1.82E-13,1300.,TEMP);
+MACP + MACP = HACE + MGLY + 0.5 HCHO + 0.5 CO + HO2   :  2.00E-12;
+MACP + NO2 = MPAN    : TROE2( 9.7e-29, -5.6e0, 9.3e-12, -1.5e0, TEMP );{k_3rd(TEMP,2.55e19,9.7E-29,-5.6E0,9.3E-12,-1.5E0,0.6E0);}
+MPAN = MACP + NO2    : TROE2( 9.7e-29, -5.6e0, 9.3e-12, -1.5e0, TEMP )/(ARR2(9.0E-19,14000.,TEMP));{k_3rd(TEMP,2.55e19,9.7E-29,-5.6E0,9.3E-12,-1.5E0,0.6E0)/ARR2(9.0E-19,14000.,TEMP);}
+MPAN + HO = HACE + NO2   :  3.60E-12;
+MAHP + HO = MACP   :  3.00E-11;
+HACE + HO = MGLY + HO2   :  3.00E-12;
+NALD + HO = HCHO + CO + NO2   :  ARR2(5.60E-12,270.,TEMP);
+DMS + NO3 = SO2 : ARR2(1.9E-13,500.,TEMP);
+DMS + HO = SO2 : ARR2(9.6E-12,-234.,TEMP);
+DMS + HO = 0.6 SO2 + 0.4 DMSO : ARR2(3.04E-2,350.,TEMP)*ARR2(1.106E-31,7460.,TEMP)*2.55e19/(1+ARR2(1.106E-31,7460.,TEMP)*2.55e19);
+DMSO + HO = 0.6 SO2 : 5.8E-11;
+CS10 + HO = 1.075 CS1   : 2.50E-12;{ELENI}
+CS100 + HO = 1.075 CS10  : 2.50E-12;{ELENI}
+CS1000 + HO = 1.075 CS100 : 2.50E-12;{ELENI}
+ 
+//-----------------------------------------------------------------------------
+// Initial values for the box model
+//-----------------------------------------------------------------------------
+#INITVALUES
+  CFACTOR = 2.55E10;
+  CO = 0.163440898;
+  NO2 = 7.51327025E-03;
+  O3 = 2.03898735E-02;
+  H2O2 = 3.07893060E-05;
+  HNO3 = 1.96098208E-05;
+  NO = 2.50312616E-04;
+  SO2 = 1.15437398E-03;
+  HCHO = 5.93055040E-04;
+  ETH = 7.94721884E-04;
+  ISO = 5.52763231E-06;
+  HO2 = 1.00000000E-15;
+  HO = 2.07011563E-09;
+  SULF = 9.99999996E-12;
+  ALD = 2.17914028E-04;
+  OP1 = 9.99999996E-12;
+  OP2 = 9.99999996E-12;
+  PAA = 9.99999996E-12;
+  ORA1 = 9.99999996E-12;
+  ORA2 = 1.00104330E-06;
+  N2O5 = 9.99999996E-12;
+  NO3 = 9.99999996E-12;
+  PAN = 3.97454598E-04;
+  HC3 = 4.83044678E-05;
+  HC5 = 1.70846039E-03;
+  HC8 = 1.03174598E-05;
+  OL2 = 1.07888791E-05;
+  OLT = 1.30492233E-04;
+  OLI = 5.56513696E-05;
+  TOL = 9.31939401E-04;
+  XYL = 4.07856578E-06;
+  ACO3 = 9.99999996E-12;
+  TPAN = 9.99999996E-12;
+  HONO = 9.99999996E-12;
+  HNO4 = 1.40819511E-05;
+  KET = 3.17653485E-06;
+  GLY = 9.99999996E-12;
+  MGLY = 9.99999996E-12;
+  DCB = 9.99999996E-12;
+  ONIT = 9.99999996E-12;
+  CSL = 6.62816944E-07;
+  API = 8.74233410E-06;
+  LIM = 1.24890448E-05;
+  HACE = 9.99999996E-12;
+  ISHP = 9.99999996E-12;
+  ISON = 9.99999996E-12;
+  MACR = 9.99999996E-12;
+  MAHP = 9.99999996E-12;
+  MPAN = 9.99999996E-12;
+  NALD = 9.99999996E-12;
+  CS1 = 9.99999996E-12;
+  CS10 = 9.99999996E-12;
+  CS100 = 9.99999996E-12;
+  CS1000 = 9.99999996E-12;
+  DMS = 9.99999996E-12;
+  DMSO = 9.99999996E-12;
+  H2O = 8026.68604;
+  CO2 = 372.9;
+  H2 = 500.0;
+  O2 = 20.9E+4;
+  N2 = 78.1E+4;
+  CH4 = 1.8;
+  MO2 = 1.E-17;
+  OLN = 1.E-17;
+  MACP = 1.E-20;
+  ISOP = 1.E-20;
+  O1D = 1.E-20;
+  O3P = 1.E-20;
+  TCO3 = 0.0;
+  HC3P = 0.0;
+  HC5P = 0.0;
+  HC8P = 0.0;
+  OL2P = 0.0;
+  OLTP = 0.0;
+  OLIP = 0.0;
+  TOLP = 0.0;
+  XYLP = 0.0;
+  ETHP = 0.0;
+  KETP = 0.0;
+  XO2 = 0.0; 
+  XNO2 = 0.0;
+  APIP = 0.0;
+  LIMP = 0.0;
+
+#INLINE C CUDA_GPU Rates
+/*----------------------------------- PHUX ------------------------------------*/
+/* @param[in]     X   None                                                     */
+/* @param[in]     Y   None                                                     */
+/* @param[in]     Z   None                                                     */
+/*-----------------------------------------------------------------------------*/
+__device__
+double PHUX(double const X, double const Y, double const Z, double CHI)
+{
+   double const MINYZ = -30.0; 
+   double const EMINYZ = 9.357623e-14;
+
+   double EYCHIZ, CHIZ, YCHIZ;
+
+   CHIZ = CHI * Z;
+
+   if (CHIZ < 1.57079632679489){
+      YCHIZ = Y * (1.0 - (1.0/ cos(CHIZ)));                            
+      if (YCHIZ > MINYZ){
+      	 EYCHIZ = exp(YCHIZ);                                         
+      }
+      else{
+         EYCHIZ = EMINYZ;                                       
+      }
+   } 
+   else{                                                                 
+      EYCHIZ = EMINYZ;
+   }      	      
+
+   return X * EYCHIZ; 
+}
+
+/*----------------------------------- TROE2 -----------------------------------*/
+/* @param[in]     K0300  None                                                  */
+/* @param[in]     Q      None                                                  */
+/* @param[in]     KU300  None                                                  */
+/* @param[in]     R      None                                                  */
+/* @param[in]     T      None                                                  */
+/*-----------------------------------------------------------------------------*/
+__device__
+double TROE2(double const K0300, double const Q, double const KU300, double const R, double const T)
+{
+   double TT, K0, KU, K0M, KK, LGKK, E, F;
+   double const M = 2.55e19;
+
+   TT = T / 3.e2;
+   K0 = K0300 / pow(TT,Q);
+   KU = KU300 / pow(TT,R);
+   K0M = K0 * M;
+   KK = K0M / KU;
+   LGKK = 0.434294481 * log(KK);
+   E = 1.0 / (1.0 + LGKK*LGKK);
+   F = pow(0.6,E);
+   return F * K0M / (1. + KK);
+}
+
+/*------------------------------------ EQT ------------------------------------*/
+/* @param[in]     K0300  None                                                  */
+/* @param[in]     Q      None                                                  */
+/* @param[in]     KU300  None                                                  */
+/* @param[in]     R      None                                                  */
+/* @param[in]     T      None                                                  */
+/* @param[in]     A      None                                                  */
+/* @param[in]     B      None                                                  */
+/*-----------------------------------------------------------------------------*/
+__device__
+double EQT(double const K0300, double const Q, double const KU300, double const R, double const T, double const A, double const B)
+{
+   double KH;
+
+   KH = TROE2( K0300, Q, KU300, R, T );
+   return (KH * A * exp( -B / T )); 
+}
+
+/*----------------------------------- EQT2 ------------------------------------*/
+/* @param[in]     T      None                                                  */
+/*-----------------------------------------------------------------------------*/
+__device__
+double EQT2(double const T)
+{
+   double K0300, Q, KU300, R, A, B, KH;
+
+   K0300 = 1.8e-31;
+   Q = 3.2;
+   KU300 = 4.7e-12;
+   R = 1.4;
+   A = 4.76e+26;
+   B = 10900;
+   KH = TROE2( K0300, Q, KU300, R, T );
+   return KH * A * exp( -B / T );
+}
+
+/*----------------------------------- SPEZ ------------------------------------*/
+/* @param[in]     A0      None                                                 */
+/* @param[in]     B0      None                                                 */
+/* @param[in]     A2      None                                                 */
+/* @param[in]     B2      None                                                 */
+/* @param[in]     A3      None                                                 */
+/* @param[in]     B3      None                                                 */
+/* @param[in]     M       None                                                 */
+/* @param[in]     T       None                                                 */
+/*-----------------------------------------------------------------------------*/
+__device__
+double SPEZ(double const A0, double const B0, double const A2, double const B2, double const A3, double const B3, double const T)
+{
+   double const M = 2.55e19;
+   double K0, K2, K3;
+
+   K0 = A0*exp(B0/T);
+   K2 = A2*exp(B2/T);
+   K3 = A3*M*exp(B3/T);
+   return K0 + K3 / ( 1 + K3/K2 );
+}
+#ENDINLINE C CUDA_GPU Rates

@@ -1,0 +1,12 @@
+#MODEL radm2_kpp_eleni_0714
+#DRIVER kpp_cosmo_0714
+#INTEGRATOR rosenbrock_posdef_h211b_qssa
+#LANGUAGE fortran90
+#DOUBLE on
+#JACOBIAN sparse_lu_row
+#HESSIAN off
+#MEX off
+#STOCHASTIC off
+#STOICMAT off
+#REORDER on
+#DECLARE value

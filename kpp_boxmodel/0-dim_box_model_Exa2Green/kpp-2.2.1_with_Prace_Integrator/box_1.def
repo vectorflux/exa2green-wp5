@@ -1,0 +1,227 @@
+#include radm2_ch4=const.spc
+#include radm2_for_Exa2Green.eqn
+
+#LOOKAT  NO;NO2;NO3;HO;H2O2;HCHO;OP1;O3;
+#MONITOR NO;NO2;NO3;HO;H2O2;HCHO;OP1;O3;
+
+#INITVALUES
+  CFACTOR = 2.55E10;
+  CO = 0.163440898;
+  NO2 = 7.51327025E-03;
+  O3 = 2.03898735E-02;
+  H2O2 = 3.07893060E-05;
+  HNO3 = 1.96098208E-05;
+  NO = 2.50312616E-04;
+  SO2 = 1.15437398E-03;
+  HCHO = 5.93055040E-04;
+  ETH = 7.94721884E-04;
+  ISO = 5.52763231E-06;
+  HO2 = 1.00000000E-15;
+  HO = 2.07011563E-09;
+  SULF = 9.99999996E-12;
+  ALD = 2.17914028E-04;
+  OP1 = 9.99999996E-12;
+  OP2 = 9.99999996E-12;
+  PAA = 9.99999996E-12;
+  ORA1 = 9.99999996E-12;
+  ORA2 = 1.00104330E-06;
+  N2O5 = 9.99999996E-12;
+  NO3 = 9.99999996E-12;
+  PAN = 3.97454598E-04;
+  HC3 = 4.83044678E-05;
+  HC5 = 1.70846039E-03;
+  HC8 = 1.03174598E-05;
+  OL2 = 1.07888791E-05;
+  OLT = 1.30492233E-04;
+  OLI = 5.56513696E-05;
+  TOL = 9.31939401E-04;
+  XYL = 4.07856578E-06;
+  ACO3 = 9.99999996E-12;
+  TPAN = 9.99999996E-12;
+  HONO = 9.99999996E-12;
+  HNO4 = 1.40819511E-05;
+  KET = 3.17653485E-06;
+  GLY = 9.99999996E-12;
+  MGLY = 9.99999996E-12;
+  DCB = 9.99999996E-12;
+  ONIT = 9.99999996E-12;
+  CSL = 6.62816944E-07;
+  API = 8.74233410E-06;
+  LIM = 1.24890448E-05;
+  HACE = 9.99999996E-12;
+  ISHP = 9.99999996E-12;
+  ISON = 9.99999996E-12;
+  MACR = 9.99999996E-12;
+  MAHP = 9.99999996E-12;
+  MPAN = 9.99999996E-12;
+  NALD = 9.99999996E-12;
+  CS1 = 9.99999996E-12;
+  CS10 = 9.99999996E-12;
+  CS100 = 9.99999996E-12;
+  CS1000 = 9.99999996E-12;
+  DMS = 9.99999996E-12;
+  DMSO = 9.99999996E-12;
+  H2O = 8026.68604;
+  CO2 = 372.9;
+  H2 = 500.0;
+  O2 = 20.9E+4;
+  N2 = 78.1E+4;
+  CH4 = 1.8;
+  MO2 = 1.E-17;
+  OLN = 1.E-17;
+  MACP = 1.E-20;
+  ISOP = 1.E-20;
+  O1D = 1.E-20;
+  O3P = 1.E-20;
+  TCO3 = 0.0;
+  HC3P = 0.0;
+  HC5P = 0.0;
+  HC8P = 0.0;
+  OL2P = 0.0;
+  OLTP = 0.0;
+  OLIP = 0.0;
+  TOLP = 0.0;
+  XYLP = 0.0;
+  ETHP = 0.0;
+  KETP = 0.0;
+  XO2 = 0.0; 
+  XNO2 = 0.0;
+  APIP = 0.0;
+  LIMP = 0.0;
+
+#INLINE F90_INIT
+  TSTART = 0.0D0
+  TEND = TSTART + 3600.0D0
+  DT = 120.0D0
+  TEMP = 279.907043D0
+  M = 2.55D19
+#ENDINLINE   
+
+#INLINE F90_RATES
+
+FUNCTION CHIBE(ZEIT,GB,GL,TAG)
+      REAL(dp) :: CHIBE,ZEIT,GB,GL,TAG,SD,CD,FP,OM,SH,SH1,CHI,DEKL
+!C     BERECHNUNG DES SONNENWINKELS CHI
+!C
+      DEKL = 23.45E0*SIN((280.1E0+0.981E0*TAG)*0.01745329E0)
+      FP = 0.01745329E0
+      SD = SIN(DEKL*FP)
+      CD = COS(DEKL*FP)
+!CU    OM = (12.E0-(ZEIT+GL/15.E0))*0.261799388E0
+!CU **** TEILER /60. EINGEFUEGT DA ZEIT IN MINUTEN UEBERGEBEN WIRD ****
+      OM = (12.E0-(ZEIT/60.+GL/15.E0))*0.261799388E0
+      SH = SIN(GB*FP)*SD+COS(GB*FP)*CD*COS(OM)
+      SH1 = ASIN(SH)*180./3.141592
+!CU    IF(SH1.LT.0.) SH1=0.
+      CHI=90.-SH1
+!cn *** fester sonnenzenitwinkel vorgeben
+!cN      chi=25.
+!cn *** !!!
+      CHI=3.141592/180.*CHI
+      CHIBE=CHI
+END FUNCTION CHIBE
+
+FUNCTION PHUX(X,Y,Z,CHI)                            
+!C                                                                          
+!C     CALCULATION OF PHOTOLYSIS FREQUENCY WITH ALGORITHM FROM              
+!C     ROETHS FLUX-PROGAM                                                  
+!C     CHI IN RADIAN                                                        
+!C     X,Y,Z FROM ROETH                                                     
+!C     X  IS PHOTOLYSIS FREQUENCY IN 1/S FOR SOLAR ZENITH ANGLE CHI=0 DEG   
+!C                                                                          
+!C     KUHN 07.09.93                                                
+!C                                                                          
+      IMPLICIT NONE                                                        
+      REAL(dp) :: X,Y,Z,CHI,CHIZ,YCHIZ,EYCHIZ, PHUX                
+      REAL(dp), PARAMETER :: MINYZ = -30, &
+                             EMINYZ = 9.357623D-14  !EMINYZ=EXP(MINYZ)   
+      CHIZ   = CHI * Z                                                     
+      IF (CHIZ.LT.1.57079632679489D0) THEN                                 
+         YCHIZ = Y * (1.0 - (1.0/ COS(CHIZ) ) )                            
+         IF (YCHIZ.GT.MINYZ) THEN                                          
+            EYCHIZ =  DEXP (YCHIZ)                                         
+         ELSE                                                              
+            EYCHIZ =  EMINYZ                                               
+         ENDIF                                                             
+      ELSE                                                                 
+         EYCHIZ = EMINYZ                                                   
+      ENDIF                                                                
+      PHUX = X * EYCHIZ                                                    
+!      PHUX =0.			!ik: ohne photolyse
+END FUNCTION PHUX
+
+!C
+!C*********************************************************************
+!C Die Funktion TROE bestimmt die Werte der Troefunktion
+!C nach Stockwell et al. [2],
+!C die die Druckabhaengigkeit von Reaktionskonstanten durch eine
+!C quasi-bimolekulare Reaktionskonstante beschreibt.
+!C*********************************************************************
+!C
+ FUNCTION TROE( K0300, Q, KU300, R, M, T )
+!C CALCULATION OF RATE CONSTANTS FOR TROE REACTIONS
+!      IMPLICIT REAL(dp) (A-Z)
+      REAL(dp) :: K0300, Q, KU300, R, M, T, TROE
+      REAL(dp) :: tt, k0, ku, k0m, kk, lgkk, e, f
+      TT = T / 3.D2
+      K0 = K0300 / TT**Q
+      KU = KU300 / TT**R
+      K0M = K0 * M
+      KK = K0M / KU
+      LGKK = 0.434294481D0 * LOG(KK)
+      E = 1.D0 / ( 1.D0 + LGKK*LGKK )
+      F = 0.6D0 ** E
+      TROE = F * K0M / ( 1.D0 + KK )
+END FUNCTION TROE
+
+!C
+!C**********************************************************************
+!C Die Funktion EQT [2] bestimmt die Reaktionskonstanten fuer
+!C HNO4 --> H2O + NO2 und N2O5 --> NO2 + NO3
+!C**********************************************************************
+!C
+FUNCTION EQT( K0300, Q, KU300, R, M, T, A, B )
+      !IMPLICIT REAL(dp) (A-Z)
+      REAL(dp) :: K0300, Q, KU300, R, M, T, A, B, EQT
+      REAL(dp) :: kh
+      KH = TROE( K0300, Q, KU300, R, M, T )
+      EQT = KH * A *DEXP( -B / T )
+END FUNCTION EQT
+
+FUNCTION EQT2(M, T)
+      !IMPLICIT REAL(dp) (A-Z)
+      REAL(dp) :: K0300, Q, KU300, R, M, T, A, B, EQT2
+      REAL(dp) :: kh
+      K0300 = 1.8d-31
+      Q = 3.2d0
+      KU300 = 4.7d-12
+      R = 1.4d0
+      A = 4.76d+26
+      B = 10900.d0
+      KH = TROE( K0300, Q, KU300, R, M, T )
+      EQT2 = KH * A *DEXP( -B / T )
+END FUNCTION EQT2
+
+!C
+!C**********************************************************************
+!C Die Funktion SPEZ bestimmt die Reaktionskonstante fuer
+!C HNO3 + HO --> H2O + NO3
+!C**********************************************************************
+!C
+FUNCTION SPEZ(A0,B0,A2,B2,A3,B3,M,T)
+!C SPECIAL RATE CONSTANTS
+      !IMPLICIT REAL(dp) (A-Z)
+      REAL(dp) :: A0,B0,A2,B2,A3,B3,M,T, SPEZ
+      REAL(dp) :: k0, k2, k3
+      K0 = A0*DEXP(B0/T)
+      K2 = A2*DEXP(B2/T)
+      K3 = A3*M*DEXP(B3/T)
+      SPEZ = K0 + K3 / ( 1 + K3/K2 )
+END FUNCTION SPEZ
+
+#ENDINLINE      
+
+#INLINE F90_GLOBAL
+	REAL(dp) :: CHI
+        REAL(dp) :: M
+#ENDINLINE   

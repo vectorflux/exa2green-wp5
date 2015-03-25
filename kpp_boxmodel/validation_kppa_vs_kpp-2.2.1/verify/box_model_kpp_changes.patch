@@ -1,0 +1,59 @@
+diff -Naur box_model/box_model_main.f90 box_model_kppa_defaults/box_model_main.f90
+--- box_model/box_model_main.f90	2014-06-03 15:14:50.000000000 -0400
++++ box_model_kppa_defaults/box_model_main.f90	2014-06-03 14:55:36.000000000 -0400
+@@ -99,17 +99,17 @@
+     ! Rosenbrock default parameters
+     idata(1) = 0       ! System is non-autonomous: F = F(t,y)
+     idata(2) = 0       ! Use vector tolerances
+-    idata(3) = 200000  ! Maximum number of integration steps
+-    idata(4) = 4       ! Rodas4 Rosenbrock method
++    idata(3) = 100000  ! Maximum number of integration steps
++    idata(4) = 5       ! Rodas4 Rosenbrock method
+     idata(5) = 0       ! Tolerance vectors will not be checked
+ 
+-    !rdata(1) = 0       ! Integration step size lower bound: 0 recommended
+-    !rdata(2) = 0       ! Integration step size upper bound: 0 recommended
+-    !rdata(3) = TDEL    ! Starting integration step size
+-    !rdata(4) = 0.2     ! Lower bound on step decrease factor
+-    !rdata(5) = 6       ! Upper bound on step increase factor
+-    !rdata(6) = 0.1     ! Step decrease factor after step rejection
+-    !rdata(7) = 0.9     ! Safety factor in the computation of new step size
++    rdata(1) = 0       ! Integration step size lower bound: 0 recommended
++    rdata(2) = 0       ! Integration step size upper bound: 0 recommended
++    rdata(3) = TDEL    ! Starting integration step size
++    rdata(4) = 0.2     ! Lower bound on step decrease factor
++    rdata(5) = 6       ! Upper bound on step increase factor
++    rdata(6) = 0.1     ! Step decrease factor after step rejection
++    rdata(7) = 0.9     ! Safety factor in the computation of new step size
+ 
+     ! Initialize LookAt file
+     OPEN(unit=lookatFile,file=fname)
+diff -Naur box_model/box_model_parameters.f90 box_model_kppa_defaults/box_model_parameters.f90
+--- box_model/box_model_parameters.f90	2014-06-03 15:13:49.000000000 -0400
++++ box_model_kppa_defaults/box_model_parameters.f90	2014-06-03 14:55:30.000000000 -0400
+@@ -22,9 +22,9 @@
+ !-----------------------------------------------------------------------------
+ 
+   ! Absolute tolerance 
+-  REAL(8), PARAMETER :: ATOLS = 1.0d-3
++  REAL(8), PARAMETER :: ATOLS = 1.0
+   ! Relative tolerance 
+-  REAL(8), PARAMETER :: RTOLS = 1.0d-4
++  REAL(8), PARAMETER :: RTOLS = 0.001
+ 
+ 
+ !-----------------------------------------------------------------------------
+diff -Naur box_model/box_model_rates.f90 box_model_kppa_defaults/box_model_rates.f90
+--- box_model/box_model_rates.f90	2014-06-03 15:16:13.000000000 -0400
++++ box_model_kppa_defaults/box_model_rates.f90	2014-06-03 14:55:30.000000000 -0400
+@@ -404,8 +404,8 @@
+     ! Temperature in kelvin  (uppercase for KPP compatibility) 
+     REAL(8) :: TEMP
+ 
+-    !SUN = Sunlight(time, idx)
+-    TEMP = 270 !Temperature(time, idx)
++    SUN = Sunlight(time, idx)
++    TEMP = Temperature(time, idx)
+ 
+     rct(1) = PHUX(1.07E-02,1.01319E+00,0.83330E+00)
+     rct(2) = PHUX(3.22E-05,4.45037E+00,0.78028E+00)

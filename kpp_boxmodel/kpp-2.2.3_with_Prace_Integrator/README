@@ -1,0 +1,16 @@
+This is KPP version 2.2.1 with an additional Rosenbrock integrator, rosenbrock_posdef_h211b_qssa 
+as proposed and implemented by D. Taraborrelli & G. Fanourgakis within PRACE WP8.
+
+
+The only differences to 2.2.1 are:
+
+* gen.c: Added Fun_Split function
+* int:   Added rosenbrock_posdef_h211b_qssa.f90 and *.def
+
+To make use of the new integrator, 
+* export KPP_HOME=/your/path/to/this/folder/
+* type make 
+* go to your application and set your INTEGRATOR 
+  #INTEGRATOR rosenbrock_posdef_h211b_qssa
+  in your *.kpp File.
+* and generate kpp code with your new kpp command in bin.

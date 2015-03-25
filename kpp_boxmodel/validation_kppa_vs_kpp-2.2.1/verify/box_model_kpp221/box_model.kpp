@@ -1,0 +1,11 @@
+#MODEL   box_model
+#INTEGRATOR   rosenbrock
+#DOUBLE   on
+#FUNCTION   aggregate
+#JACOBIAN   sparse_lu_row
+#LANGUAGE   Fortran90
+#DRIVER   general 
+#MONITOR NO; NO2; NO3; HO; H2O2;    
+//#LOOKATALL
+#LOOKAT  NO; NO2; NO3; HO; H2O2;
+

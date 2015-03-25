@@ -1,0 +1,27 @@
+#!/bin/bash
+#SBATCH --job-name="KPP-2.2.1_PI" 
+#SBATCH -t 00:05:00
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=8
+#SBATCH -o "boxmodel.log"
+#SBATCH -e "boxmodel.err"
+
+# Initialization
+set verbose
+set echo
+
+cd /users/charlesj/KPP_BOXMODEL/0-dim_box_model_Exa2Green/kpp-2.2.1_with_Prace_Integrator
+
+# Export some environment variables
+export OMP_NUM_THREADS=8
+
+# echo date
+date
+
+# Run KPP-2.2.1 in working directory
+/usr/bin/time -p aprun -N 1 -n 1 -d 8 ./kpp.exe
+
+# echo date
+date

@@ -1,0 +1,67 @@
+//-----------------------------------------------------------------------------
+// This is the preprocessor file for the COSMO5-ART baseline
+//-----------------------------------------------------------------------------
+#MODEL   radm2_kpp_eleni_0714_kppa
+
+//-----------------------------------------------------------------------------
+// Use the Rosenbrock time integrator
+//-----------------------------------------------------------------------------
+#INTEGRATOR   rosenbrock
+
+//-----------------------------------------------------------------------------
+// Set the calculation precision
+//-----------------------------------------------------------------------------
+#PRECISION   double
+
+//-----------------------------------------------------------------------------
+// Set the form of the ODE function
+// aggregate : combine production/destruction
+// split     : separate production/destruction
+//-----------------------------------------------------------------------------
+#FUNCTION   aggregate
+
+//-----------------------------------------------------------------------------
+// Set the storage format of the Jacobian
+// sparse_lu_row : row-compressed Jacobian with zero fill
+// sparse_row    : row-compressed Jacobian
+// full          : no compression
+//-----------------------------------------------------------------------------
+#JACOBIAN   sparse_lu_row
+
+//-----------------------------------------------------------------------------
+// Set the target output language
+// One of: Fortran90, C
+//-----------------------------------------------------------------------------
+#LANGUAGE   Fortran90
+
+//-----------------------------------------------------------------------------
+// Set the target accelerator
+// One of: Serial, OpenMP, CUDA_GPU
+//-----------------------------------------------------------------------------
+#ACCEL  CUDA_GPU
+
+//-----------------------------------------------------------------------------
+// Specify program driver
+// performance  : Only calls GridIntegrate
+// general      : Reports species concentrations to stdout
+// plotting     : Draws plots of species concentrations
+// none         : Makefile only, no driver
+//-----------------------------------------------------------------------------
+#DRIVER   performance 
+
+//-----------------------------------------------------------------------------
+// Specify grid size in program driver
+// Any number of dimensions can be specified.
+// Separate dimensions with semicolons ';'
+//-----------------------------------------------------------------------------
+#GRID 222; 216; 40;
+
+//-----------------------------------------------------------------------------
+// Specify time dimension in program driver
+// TSTART : Time at integration start
+// TEND   : Time at integration end
+// TDEL   : Time between integrator restarts
+//-----------------------------------------------------------------------------
+#TDEL 120 // Seconds
+
+#REORDER ON
