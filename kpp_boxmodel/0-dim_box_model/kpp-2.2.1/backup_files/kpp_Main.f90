@@ -52,8 +52,8 @@ PROGRAM kpp_Driver
 !~~~> Initialization 
 
       ! get energy counter at startup
-      call energy(energy_init)
-      call device_energy(device_energy_init)
+      CALL energy(energy_init)
+      CALL device_energy(device_energy_init)
 
       STEPMIN = 0.0d0
       STEPMAX = 0.0d0
@@ -92,8 +92,8 @@ PROGRAM kpp_Driver
 kron: DO WHILE (T < TEND)
 
         ! get energy counter at startup
-        call energy(energy_ts_init)
-        call device_energy(device_energy_ts_init)
+        CALL energy(energy_ts_init)
+        CALL device_energy(device_energy_ts_init)
 
         starttime = MPI_WTIME()
 
@@ -118,8 +118,8 @@ kron: DO WHILE (T < TEND)
         nbit = nbit + 1
 
         ! get energy counter at end
-        call energy(energy_ts_final)
-        call device_energy(device_energy_ts_final)
+        CALL energy(energy_ts_final)
+        CALL device_energy(device_energy_ts_final)
 
         mean_energy_ts = mean_energy_ts + energy_ts_final - energy_ts_init
         mean_device_energy_ts = mean_device_energy_ts + &
@@ -135,44 +135,44 @@ kron: DO WHILE (T < TEND)
       CALL CloseSaveData()
 
       ! get energy counter at end
-      call energy(energy_final)
-      call device_energy(device_energy_final)
+      CALL energy(energy_final)
+      CALL device_energy(device_energy_final)
 
       WRITE(6,*) 'Total elapsed time (timestep) = ', meantime / nbit
-      write(6,*) 'Energy (timestep) = ', mean_energy_ts / nbit, ' Joules'
-      write(6,*) 'Device energy (timestep) = ', &
+      WRITE(6,*) 'Energy (timestep) = ', mean_energy_ts / nbit, ' Joules'
+      WRITE(6,*) 'Device energy (timestep) = ', &
            mean_device_energy_ts / nbit, ' Joules'
-      write(6,*) 'at rate: ', &
+      WRITE(6,*) 'at rate: ', &
            (mean_energy_ts)/(meantime), ' Watts'
-      write(6,*) 
-      write(6,*) 'Nb iterations = ', nbit 
-      write(6,*) 
-      write(6,*) 'Energy = ', energy_final-energy_init, ' Joules'
-      write(6,*) 'Device energy = ', device_energy_final - device_energy_init, ' Joules'
+      WRITE(6,*) 
+      WRITE(6,*) 'Nb iterations = ', nbit 
+      WRITE(6,*) 
+      WRITE(6,*) 'Energy = ', energy_final-energy_init, ' Joules'
+      WRITE(6,*) 'Device energy = ', device_energy_final - device_energy_init, ' Joules'
 
 991   FORMAT(F6.1,'%. T=',E9.3,2X,200(A,'=',E11.4,'; '))
 
 !==============================================================================
-contains
+CONTAINS
 !==============================================================================
 
-  subroutine device_energy(e)
-    implicit none
-    real (kind=8), intent(out) :: e
+  SUBROUTINE device_energy(e)
+    IMPLICIT NONE
+    REAL (kind=8), INTENT(out) :: e
     
-    open(unit=50, file='/sys/cray/pm_counters/accel_energy' ,action='READ')
-    read(50,*) e
-    close(50)
-  end subroutine device_energy
+    OPEN(unit=50, file='/sys/cray/pm_counters/accel_energy' ,action='READ')
+    READ(50,*) e
+    CLOSE(50)
+  END SUBROUTINE device_energy
 
-  subroutine energy(e)
-    implicit none
-    real (kind=8), intent(out) :: e
+  SUBROUTINE energy(e)
+    IMPLICIT NONE
+    REAL (kind=8), INTENT(out) :: e
     
-    open(unit=50, file='/sys/cray/pm_counters/energy' ,action='READ')
-    read(50,*) e
-    close(50)
-  end subroutine energy
+    OPEN(unit=50, file='/sys/cray/pm_counters/energy' ,action='READ')
+    READ(50,*) e
+    CLOSE(50)
+  END SUBROUTINE energy
 
 END PROGRAM kpp_Driver
 
