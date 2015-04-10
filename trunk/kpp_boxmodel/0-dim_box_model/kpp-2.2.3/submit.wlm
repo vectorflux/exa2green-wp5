@@ -13,7 +13,7 @@
 set verbose
 set echo
 
-cd /users/charlesj/KPP_BOXMODEL/0-dim_box_model_Exa2Green/kpp-2.2.3
+cd /users/charlesj/KPP_BOXMODEL/0-dim_box_model/kpp-2.2.3
 
 # Export some environment variables
 export OMP_NUM_THREADS=8

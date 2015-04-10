@@ -13,7 +13,7 @@
 set verbose
 set echo
 
-cd /scratch/daint/charlesj/extended_box_model_Exa2Green/kpp-2.2.3
+cd /scratch/daint/charlesj/extended_box_model/kpp-2.2.3
 
 # Load appropriate programming environment
 module load cray-netcdf

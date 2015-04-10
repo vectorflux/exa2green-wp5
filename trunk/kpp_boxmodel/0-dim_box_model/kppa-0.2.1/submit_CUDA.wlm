@@ -12,7 +12,7 @@
 set verbose
 set echo
 
-cd /users/charlesj/KPP_BOXMODEL/0-dim_box_model_Exa2Green/kppa-0.2.1
+cd /users/charlesj/KPP_BOXMODEL/0-dim_box_model/kppa-0.2.1
 
 # Load appropriate programming environment
 module load craype-accel-nvidia35

@@ -14,7 +14,7 @@
 ! 
 ! File                 : kpp_Util.f90
 ! Time                 : Thu Oct  2 12:24:06 2014
-! Working directory    : /scratch/daint/charlesj/extended_box_model_Exa2Green
+! Working directory    : /scratch/daint/charlesj/extended_box_model/kpp-2.2.1
 ! Equation file        : kpp.kpp
 ! Output root filename : kpp
 ! 

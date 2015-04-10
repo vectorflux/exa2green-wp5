@@ -14,7 +14,7 @@
 ! 
 ! File                 : kpp_Integrator.f90
 ! Time                 : Mon Oct 13 15:31:12 2014
-! Working directory    : /users/charlesj/KPP_BOXMODEL/extended_box_model_Exa2Green/kpp-2.2.3
+! Working directory    : /scratch/daint/charlesj/extended_box_model/kpp-2.2.3
 ! Equation file        : kpp.kpp
 ! Output root filename : kpp
 ! 
@@ -137,7 +137,8 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
    !$OMP& COPYIN(TIME,STEPMIN) &
    !$OMP& DEFAULT(SHARED) &
    !$OMP& PRIVATE(kk,jj,ii,ICNTRL,RCNTRL,ISTATUS,RSTATUS) &
-   !$OMP& LASTPRIVATE(RSTATUS_U)
+   !$OMP& LASTPRIVATE(RSTATUS_U) &
+   !$OMP& REDUCTION(+:ISTATS)
    DO kk=kdim_loc_s,kdim_loc_e
       DO jj=jdim_loc_s,jdim_loc_e
          DO ii=idim_loc_s,idim_loc_e
@@ -170,9 +171,23 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
                  ATOL,RTOL,                &
                  RCNTRL,ICNTRL,RSTATUS,ISTATUS,IERR)
 
-            !~~~> Debug option: show no of steps
-            ! Ntotal = Ntotal + ISTATUS(Nstp)
-            ! PRINT*,'NSTEPS=',ISTATUS(Nstp),' (',Ntotal,')','  O3=', VAR(ind_O3)
+            !~~~> Integrator statistics
+            ! No. of function calls
+            ISTATS(Nfun) = ISTATS(Nfun) + ISTATUS(Nfun)
+            ! No. of jacobian calls
+            ISTATS(Njac) = ISTATS(Njac) + ISTATUS(Njac)
+            ! No. of steps
+            ISTATS(Nstp) = ISTATS(Nstp) + ISTATUS(Nstp)
+            ! No. of accepted steps
+            ISTATS(Nacc) = ISTATS(Nacc) + ISTATUS(Nacc)
+            ! No. of rejected steps (except at very beginning)
+            ISTATS(Nrej) = ISTATS(Nrej) + ISTATUS(Nrej)
+            ! No. of LU decompositions
+            ISTATS(Ndec) = ISTATS(Ndec) + ISTATUS(Ndec)
+            ! No. of forward/backward substitutions
+            ISTATS(Nsol) = ISTATS(Nsol) + ISTATUS(Nsol)
+            ! No. of singular matrix decompositions
+            ISTATS(Nsng) = ISTATS(Nsng) + ISTATUS(Nsng)
 
             STEPMIN = RSTATUS(Nhexit)
             ! if optional parameters are given for output they 

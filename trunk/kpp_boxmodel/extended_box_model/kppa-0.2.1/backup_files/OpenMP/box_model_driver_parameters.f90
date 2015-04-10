@@ -50,7 +50,6 @@ MODULE box_model_driver_parameters
   INTEGER, PARAMETER :: KDIM_SPOT = 40
 
   ! Number of grid cells to integrate 
-  !INTEGER, PARAMETER :: NCELLS = GRID0*GRID1*GRID2
   INTEGER, PARAMETER :: NCELLS = (GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)*(GRID2_LOC_E-GRID2_LOC_S+1)
 
 

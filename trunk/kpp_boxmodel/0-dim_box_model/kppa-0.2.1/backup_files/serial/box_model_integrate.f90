@@ -1,7 +1,7 @@
-!-------------------- BEGIN box_model_integrate.f90 BEGIN --------------------
-! @file box_model_integrate.f90                                               
+!------------------- BEGIN box_model_integrate.f90 BEGIN -------------------
+! @file box_model_integrate.f90                                             
 ! @author charlesj                                                            
-! @date 2014-10-16 14:47:29.900429                                            
+! @date 2015-02-10 15:56:50.885595                                            
 ! @brief Interface to time stepping integrator                                
 !                                                                             
 ! Definitions of interface functions for the Kppa-generated                   
@@ -31,10 +31,9 @@ CONTAINS
   ! @param[in]     reltol Relative integration tolerances for variable species  
   ! @param[in,out] idata  Integer integration in/out parameters                 
   ! @param[in,out] rdata  Real value integration in/out parameters              
-  ! @param[out]    lastH  Last timestep in each grid cell                       
   !-----------------------------------------------------------------------------
   INTEGER FUNCTION GridIntegrate(ncells, conc, tstart, tend, abstol, reltol, &
-       idata, rdata, ISTATS, TEMP)
+       idata, rdata, ISTATS)
     IMPLICIT NONE
 
     INTEGER, INTENT(IN) :: ncells
@@ -46,7 +45,6 @@ CONTAINS
     INTEGER, INTENT(INOUT) :: idata(20)
     REAL(8), INTENT(INOUT) :: rdata(20)
     INTEGER*8, INTENT(OUT) :: ISTATS(8)
-    REAL(8), INTENT(IN) :: TEMP(ncells)
 
     ! Return value 
     INTEGER :: retval
@@ -58,21 +56,13 @@ CONTAINS
     INTEGER :: i
 
     retval = 0
-
-    !$OMP  PARALLEL DO & 
-    !$OMP& DEFAULT(SHARED) &
-    !$OMP& PRIVATE(i,var,fix) & 
-    !$OMP& FIRSTPRIVATE(idata, rdata) &
-    !$OMP& LASTPRIVATE(idata, rdata) &
-    !$OMP& REDUCTION(IOR:retval) &
-    !$OMP& REDUCTION(+:ISTATS)
     DO i = 1, ncells
        var = (i-1)*NSPEC + 1
        fix = var + NVAR
 
        ! Invoke the integrator
        CALL Integrate(conc(var), conc(fix), i, tstart, tend, &
-            abstol, reltol, idata, rdata, TEMP(i))
+            abstol, reltol, idata, rdata)
 
        !~~~> Integrator statistics
        ! No. of function calls
@@ -84,7 +74,7 @@ CONTAINS
        ! No. of accepted steps
        ISTATS(4) = ISTATS(4) + idata(14) 
        ! No. of rejected steps (except at very beginning)
-       ISTATS(5) = ISTATS(5) + idata(15)
+       ISTATS(5) = ISTATS(5) + idata(15) 
        ! No. of LU decompositions
        ISTATS(6) = ISTATS(6) + idata(16) 
        ! No. of forward/backward substitutions
@@ -105,7 +95,6 @@ CONTAINS
           END IF
        END IF
     END DO
-    !$OMP END PARALLEL DO
 
     GridIntegrate = retval
     RETURN
@@ -113,4 +102,4 @@ CONTAINS
 
 
 END MODULE box_model_integrate
-!---------------------- END box_model_integrate.f90 END ----------------------
+!--------------------- END box_model_integrate.f90 END ---------------------

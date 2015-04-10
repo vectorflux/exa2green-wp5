@@ -158,6 +158,20 @@ MODULE box_model_parameters
 
   INTEGER, PARAMETER :: IND_CH4 = 81
 
+!-----------------------------------------------------------------------------
+! Reference solution obtained from a previous reference run with 
+! KPP-2.2.3, Ros4, rtol = atol = 0.01                                 
+!-----------------------------------------------------------------------------
+
+  REAL(8), PARAMETER :: ref_sol(8) = &
+       (/0.8377200824568911E-02, & ! NO
+       0.9265801456215200E-01, &   ! NO2
+       0.1150499062926614E+01, &   ! NO3
+       0.1395368409026804E-06, &   ! HO
+       0.2337237989428882E+02, &   ! H2O2
+       0.2281406708507176E-04, &   ! HCHO
+       0.3735037608923360E+01, &   ! OP1
+       0.6725877108406759E-03/)    ! O3 
 
 END MODULE box_model_parameters
 !---------------------- END box_model_parameters.f90 END ---------------------

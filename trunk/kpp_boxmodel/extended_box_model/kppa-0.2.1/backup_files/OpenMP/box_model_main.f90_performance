@@ -55,8 +55,13 @@ PROGRAM main
   ! Real value integration in/out parameters 
   REAL(8) :: rdata(20)
 
-  REAL(8) :: energy_init, energy_final
-  REAL(8) :: device_energy_init, device_energy_final
+  REAL(8) :: TTS, TTS_init, TTS_final
+  REAL(8) :: ETS, ETS_init, ETS_final
+  REAL(8) :: device_ETS, device_ETS_init, device_ETS_final
+  REAL(8) :: ETS_init_total, ETS_final_total
+  REAL(8) :: device_ETS_init_total, device_ETS_final_total
+
+  REAL(8) :: rel_acc, weight
 
   ! Arrays for NetCDF input files                                                       
   REAL(8), ALLOCATABLE :: initial_conc_from_file(:,:,:,:)
@@ -68,8 +73,8 @@ PROGRAM main
   ! Species concentrations for all grid cells
   REAL(8), ALLOCATABLE :: conc(:,:)
 
-  ! Last stepsize in each grid cell
-  REAL(8), ALLOCATABLE :: lastH(:)
+  ! Integrator statistics
+  INTEGER*8 :: ISTATS(8)
 
   ! Iterator
   INTEGER :: i,ii,jj,kk,act_hour,var_cnt
@@ -78,20 +83,17 @@ PROGRAM main
   ! Program text                                                               
   !---------------------------------------------------------------------------
 
-  call MPI_Init()
+  CALL MPI_Init()
 
   ! get energy counter at startup
-  call energy(energy_init)
-  call device_energy(device_energy_init)
+  CALL energy(ETS_init_total)
+  CALL device_energy(device_ETS_init_total)
 
   ! Initialize example grid data
   ALLOCATE(conc(NSPEC,NCELLS))
   DO i=1,NCELLS
      CALL Initialize(conc(1:NVAR,i), conc(NVAR+1:NSPEC,i))
   END DO
-
-  ! Allocate storage for last step size (useful in reentrant solvers)
-  ALLOCATE(lastH(ncells))
 
   ! Allocate arrays for NetCDF input files 
   ALLOCATE(initial_conc_from_file(idim,jdim,kdim,NSPEC))
@@ -107,6 +109,18 @@ PROGRAM main
   ! Initialize integration parameters to 0 = use defaults
   idata = 0
   rdata = 0
+
+  ! Initialize ETS, TTS
+  TTS = 0.0d0
+  ETS = 0.0d0
+  device_ETS = 0.0d0
+
+  ! Initialize integrator statistics
+  ISTATS(:) = 0
+
+  ! Initialize variables for relative accuracy to ref. sol.
+  rel_acc = 0.0D0
+  weight = 0.0D0
 
   ! Rosenbrock default parameters
   idata(1) = 0       ! System is non-autonomous: F = F(t,y)
@@ -155,7 +169,6 @@ PROGRAM main
      !$OMP END DO 
      !$OMP END PARALLEL
 
-
      IF (act_hour == 0) THEN
         !$OMP PARALLEL DEFAULT(SHARED) &
         !$OMP PRIVATE(kk,jj,ii,var_cnt)
@@ -202,8 +215,24 @@ PROGRAM main
         CALL LookAt(TSTART, rdata(12), rdata(13))
      END IF
 
+     ! get energy counter at startup
+     CALL energy(ETS_init)
+     CALL device_energy(device_ETS_init)
+
+     TTS_init = MPI_WTIME()
+
      retval = GridIntegrate(NCELLS, conc, TSTART, TEND, &
-          abstol, reltol, idata, rdata, lastH, TEMP) 
+          abstol, reltol, idata, rdata, ISTATS, TEMP) 
+
+     TTS_final = MPI_WTIME()
+
+     ! get energy counter at end
+     CALL energy(ETS_final)
+     CALL device_energy(device_ETS_final)
+
+     ETS = ETS + (ETS_final - ETS_init)
+     TTS = TTS + (TTS_final - TTS_init)
+     device_ETS = device_ETS + (device_ETS_final - device_ETS_init)
 
      ! Report species concentrations to stdout
      CALL Monitor(TEND, rdata(12), rdata(13))
@@ -221,54 +250,100 @@ PROGRAM main
      END IF
 102  FORMAT("Kppa: GRID INTEGRATION ",A)
 
-!!$     ! Report statistics
-!!$     WRITE(*,103) idata(13),idata(14),idata(15),idata(18), &
-!!$          idata(11),idata(12),idata(16),idata(17)
-!!$103  FORMAT("Kppa: Stp=",I12,", Acc=",I12,", Rej=",I12,", Sng=",I12, &
-!!$          ", Fun=",I12,", Jac=",I12,", Dec=",I12,", Sol=",I12)
-
   END DO ! end act_hour loop
+
+  ! get energy counter at end
+  CALL energy(ETS_final_total)
+  CALL device_energy(device_ETS_final_total)
+
+  i = 1
+  DO WHILE (i < NMONITOR + 1)
+     rel_acc = rel_acc + (ref_sol(i) - conc(IMONITOR(i),GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1))/CFACTOR)**2
+     weight = weight + ref_sol(i)**2
+     i = i + 1
+  END DO
+  rel_acc = SQRT(rel_acc/weight)
+
+  WRITE(6,*)
+  WRITE(6,992) 'Total Rosenbrock function calls                 = ', ISTATS(1)
+  WRITE(6,992) 'Total Rosenbrock jacobian calls                 = ', ISTATS(2)
+  WRITE(6,992) 'Total Rosenbrock steps                          = ', ISTATS(3)
+  WRITE(6,992) 'Total Rosenbrock accepted steps                 = ', ISTATS(4)
+  WRITE(6,992) 'Total Rosenbrock rejected steps                 = ', ISTATS(5)
+  WRITE(6,992) 'Total Rosenbrock LU decompositions              = ', ISTATS(6)
+  WRITE(6,992) 'Total Rosenbrock forward/backward substitutions = ', ISTATS(7)
+  WRITE(6,992) 'Total Rosenbrock singular matrix decompositions = ', ISTATS(8)
+  WRITE(6,*)
+  WRITE(6,999) 'Absolute Tolerance = ', ATOLS
+  WRITE(6,999) 'Relative Tolerance = ', RTOLS
+  WRITE(6,*)
+  WRITE(6,995) 'IDATA = ', IDATA
+  WRITE(6,996) 'RDATA = ', RDATA
+  WRITE(6,*)
+  WRITE(6,991) 'Total number of timesteps = ', INT(TEND/TDEL) 
+  WRITE(6,*)
+  WRITE(6,998) 'Subgrid coordinates (lon.)  = ', GRID0_LOC_S, GRID0_LOC_E
+  WRITE(6,998) 'Subgrid coordinates (lat.)  = ', GRID1_LOC_S, GRID1_LOC_E
+  WRITE(6,998) 'Subgrid coordinates (vert.) = ', GRID2_LOC_S, GRID2_LOC_E
+  WRITE(6,*)
+  WRITE(6,992) 'Total number of grid points = ', ncells
+  WRITE(6,*)
+  WRITE(6,*)   '******** Total Timesteps ********'
+  WRITE(6,992) 'Rosenbrock steps = ', INT(ISTATS(3)/ncells)
+  WRITE(6,993) 'TTS              = ', TTS, ' s'
+  WRITE(6,994) 'ETS              = ', ETS, ' J'
+  WRITE(6,994) 'Device ETS       = ', device_ETS, ' J'
+  WRITE(6,*)
+  WRITE(6,*)   '******** Entire application ********'
+  WRITE(6,994) 'ETS              = ', ETS_final_total-ETS_init_total, ' J'
+  WRITE(6,994) 'Device ETS       = ', device_ETS_final_total-device_ETS_init_total, ' J'
+  WRITE(6,*)
+  WRITE(6,997) 'Relative accuracy to ref. sol. = ', rel_acc 
+  WRITE(6,*)
+
+991 FORMAT(A,I4)
+992 FORMAT(A,I11)
+993 FORMAT(A,F11.3,A)
+994 FORMAT(A,F11.1,A)
+995 FORMAT(A,20(I7,","))
+996 FORMAT(A,20(F7.2,","))
+997 FORMAT(A,E11.4)
+998 FORMAT(A,I5,I5)
+999 FORMAT(A,F6.2)
+
+  CALL MPI_Finalize()
 
   ! Clean up and exit
   CLOSE(lookatFile)
+
   DEALLOCATE(conc)
-  DEALLOCATE(lastH)
   DEALLOCATE(initial_conc_from_file)
   DEALLOCATE(temperature_from_file)
   DEALLOCATE(TEMP)
-
-  ! get energy counter at end
-  call energy(energy_final)
-  call device_energy(device_energy_final)
-
-  write(6,*) 
-  write(6,*) 'Energy = ', energy_final-energy_init, ' Joules'
-  write(6,*) 'Device energy = ', device_energy_final - device_energy_init, ' Joules'
-
-  CALL MPI_Finalize()
 
   CALL EXIT(retval)
   STOP
 
 CONTAINS
 
-  subroutine device_energy(e)
-    implicit none
-    real (kind=8), intent(out) :: e
+  SUBROUTINE device_energy(e)
+    IMPLICIT NONE
+    REAL (kind=8), INTENT(out) :: e
 
-    open(unit=50, file='/sys/cray/pm_counters/accel_energy' ,action='READ')
-    read(50,*) e
-    close(50)
-  end subroutine device_energy
+    OPEN(unit=50, file='/sys/cray/pm_counters/accel_energy' ,action='READ')
+    READ(50,*) e
+    CLOSE(50)
+  END SUBROUTINE device_energy
 
-  subroutine energy(e)
-    implicit none
-    real (kind=8), intent(out) :: e
+  SUBROUTINE energy(e)
+    IMPLICIT NONE
+    REAL (kind=8), INTENT(out) :: e
 
-    open(unit=50, file='/sys/cray/pm_counters/energy' ,action='READ')
-    read(50,*) e
-    close(50)
-  end subroutine energy
+    OPEN(unit=50, file='/sys/cray/pm_counters/energy' ,action='READ')
+    READ(50,*) e
+    CLOSE(50)
+  END SUBROUTINE energy
 
   !---------------------------------- Monitor ----------------------------------
   ! Reports on species concentrations as they are calculated                    
@@ -344,27 +419,27 @@ CONTAINS
     REAL(8), INTENT(IN) :: step
     REAL(8), INTENT(IN) :: err
 
-    REAL(8) :: data(1 + NLOOKAT)
+    REAL(8) :: DATA(1 + NLOOKAT)
 
-    data(1) = time / 3600.D0
-    data(2) = conc(28,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    DATA(1) = time / 3600.D0
+    DATA(2) = conc(28,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    data(3) = conc(35,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    DATA(3) = conc(35,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    data(4) = conc(63,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    DATA(4) = conc(63,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    data(5) = conc(73,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    DATA(5) = conc(73,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    data(6) = conc(76,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    DATA(6) = conc(76,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    data(7) = conc(77,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    DATA(7) = conc(77,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    data(8) = conc(78,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    DATA(8) = conc(78,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    data(9) = conc(81,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    DATA(9) = conc(81,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
 
-    WRITE(lookatFile,999) data
+    WRITE(lookatFile,999) DATA
 999 FORMAT(F4.1,100(1X,E24.16))
 
   END SUBROUTINE LookAt
