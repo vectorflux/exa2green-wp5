@@ -1,7 +1,7 @@
 /*-------------------- BEGIN box_model_cu_integrate.h BEGIN -------------------*/
 /* @file box_model_cu_integrate.h                                              */
 /* @author charlesj                                                            */
-/* @date 2014-10-09 09:42:21.050207                                            */
+/* @date 2015-01-22 16:21:35.851685                                            */
 /* @brief Interface to time stepping integrator                                */
 /*                                                                             */
 /* Definitions of interface functions for the Kppa-generated                   */
@@ -31,12 +31,12 @@ extern "C" {
 /* @param[in]     reltol Relative integration tolerances for variable species  */
 /* @param[in,out] idata  Integer integration in/out parameters                 */
 /* @param[in,out] rdata  Real value integration in/out parameters              */
-/* @param[in]     TEMP   Temperatures in kelvin                                 */
 /*-----------------------------------------------------------------------------*/
 int GridIntegrate(size_t const ncells, double conc[], double const tstart,
     double const tend, double const  abstol[NVAR], double const
-    reltol[NVAR], int idata[20], double rdata[20], long long int ISTATS[8], 
-    double TEMP[]);
+    reltol[NVAR], int idata[20], double rdata[20], long long int ISTATS[8]);
+
+
 
 #ifdef __cplusplus
 } /* extern "C" */

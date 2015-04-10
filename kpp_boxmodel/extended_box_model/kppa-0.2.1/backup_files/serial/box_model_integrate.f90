@@ -18,9 +18,6 @@ MODULE box_model_integrate
 
   IMPLICIT NONE
 
-
-
-
   CONTAINS
 
 !------------------------------- GridIntegrate -------------------------------
@@ -34,10 +31,9 @@ MODULE box_model_integrate
 ! @param[in]     reltol Relative integration tolerances for variable species  
 ! @param[in,out] idata  Integer integration in/out parameters                 
 ! @param[in,out] rdata  Real value integration in/out parameters              
-! @param[out]    lastH  Last timestep in each grid cell                       
 !-----------------------------------------------------------------------------
   INTEGER FUNCTION GridIntegrate(ncells, conc, tstart, tend, abstol, reltol, &
-      idata, rdata, lastH, TEMP)
+      idata, rdata, ISTATS, TEMP)
     IMPLICIT NONE
 
     INTEGER, INTENT(IN) :: ncells
@@ -48,7 +44,7 @@ MODULE box_model_integrate
     REAL(8), INTENT(IN) :: reltol(NVAR)
     INTEGER, INTENT(INOUT) :: idata(20)
     REAL(8), INTENT(INOUT) :: rdata(20)
-    REAL(8), INTENT(OUT) :: lastH(ncells)
+    INTEGER*8, INTENT(OUT) :: ISTATS(8)
     REAL(8), INTENT(IN) :: TEMP(ncells)
 
     ! Return value 
@@ -61,17 +57,33 @@ MODULE box_model_integrate
     INTEGER :: i
 
     retval = 0
+
     DO i = 1, ncells
         var = (i-1)*NSPEC + 1
         fix = var + NVAR
 
         ! Invoke the integrator
         CALL Integrate(conc(var), conc(fix), i, tstart, tend, &
-                       abstol, reltol, idata, rdata, TEMP(i))
+             abstol, reltol, idata, rdata, TEMP(i))
 
-        ! Save the last timestep for future use
-        lastH(i) = rdata(12)
-        
+        !~~~> Integrator statistics
+        ! No. of function calls
+        ISTATS(1) = ISTATS(1) + idata(11)
+        ! No. of jacobian calls
+        ISTATS(2) = ISTATS(2) + idata(12)
+        ! No. of steps
+        ISTATS(3) = ISTATS(3) + idata(13) 
+        ! No. of accepted steps
+        ISTATS(4) = ISTATS(4) + idata(14) 
+        ! No. of rejected steps (except at very beginning)
+        ISTATS(5) = ISTATS(5) + idata(15) 
+        ! No. of LU decompositions
+        ISTATS(6) = ISTATS(6) + idata(16) 
+        ! No. of forward/backward substitutions
+        ISTATS(7) = ISTATS(7) + idata(17) 
+        ! No. of singular matrix decompositions
+        ISTATS(8) = ISTATS(8) + idata(18)
+
         ! Process integrator return code
         IF (idata(20) < 0) THEN
             WRITE(*,*) "Kppa: CELL",i,"-- INTEGRATION FAILED"

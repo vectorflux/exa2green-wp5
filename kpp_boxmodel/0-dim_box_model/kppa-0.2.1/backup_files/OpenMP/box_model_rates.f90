@@ -17,7 +17,7 @@ MODULE box_model_rates
   IMPLICIT NONE
 
 
-! BEGIN INLINE declared at /users/charlesj/KPP_BOXMODEL/0-dim_box_model_Exa2Green/kppa-0.2.1_SERIAL_TEMP/box_model.def:323,1 
+! BEGIN INLINE declared at /users/charlesj/KPP_BOXMODEL/0-dim_box_model/kppa-0.2.1/box_model.def:323,1 
 
 
 
@@ -151,7 +151,7 @@ FUNCTION SPEZ(A0,B0,A2,B2,A3,B3,T)
 END FUNCTION SPEZ
 
 
-! END INLINE declared at /users/charlesj/KPP_BOXMODEL/0-dim_box_model_Exa2Green/kppa-0.2.1_SERIAL_TEMP/box_model.def:323,1 
+! END INLINE declared at /users/charlesj/KPP_BOXMODEL/0-dim_box_model/kppa-0.2.1/box_model.def:323,1 
 
 
 !------------------------------------ ARR ------------------------------------

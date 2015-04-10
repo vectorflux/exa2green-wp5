@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH --account=csstaff
 #SBATCH --job-name="KPPA-0.2.1" 
-#SBATCH -t 00:30:00
+#SBATCH -t 00:05:00
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH --ntasks-per-node=1
@@ -12,7 +12,7 @@
 set verbose
 set echo
 
-cd /users/charlesj/KPP_BOXMODEL/0-dim_box_model_Exa2Green/kppa-0.2.1
+cd /users/charlesj/KPP_BOXMODEL/0-dim_box_model/kppa-0.2.1
 
 # echo date
 date

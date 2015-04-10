@@ -1,7 +1,7 @@
 !-------------------- BEGIN box_model_integrate.f90 BEGIN --------------------
 ! @file box_model_integrate.f90                                               
 ! @author charlesj                                                            
-! @date 2014-10-09 10:42:21.347175                                            
+! @date 2015-01-22 16:21:36.377184                                            
 ! @brief Interface to time stepping integrator                                
 !                                                                             
 ! Definitions of interface functions for the Kppa-generated                   
@@ -21,7 +21,7 @@ MODULE box_model_integrate
     INTERFACE
     
     INTEGER(C_INT) FUNCTION GridIntegrate(ncells, conc, tstart, tend, abstol, reltol, &
-            idata, rdata, ISTATS, TEMP) BIND(C, name="GridIntegrate")
+            idata, rdata, ISTATS) BIND(C, name="GridIntegrate")
 
         USE ISO_C_BINDING, ONLY: C_DOUBLE, C_INT, C_LONG_LONG
         USE box_model_parameters, ONLY: NVAR
@@ -35,7 +35,6 @@ MODULE box_model_integrate
         INTEGER(C_INT), INTENT(INOUT) :: idata(20)
         REAL(C_DOUBLE), INTENT(INOUT) :: rdata(20)
         INTEGER(C_LONG_LONG), INTENT(OUT) :: ISTATS(8)
-        REAL(C_DOUBLE), INTENT(IN) :: TEMP(ncells)
 
     END FUNCTION GridIntegrate
     END INTERFACE

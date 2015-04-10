@@ -1,7 +1,7 @@
 /*------------------- BEGIN box_model_cu_integrate.cu BEGIN -------------------*/
 /* @file box_model_cu_integrate.cu                                             */
 /* @author charlesj                                                            */
-/* @date 2014-05-23 15:17:05.134548                                            */
+/* @date 2015-01-22 16:21:35.760333                                            */
 /* @brief Interface to time stepping integrator                                */
 /*                                                                             */
 /* Definitions of interface functions for the Kppa-generated                   */
@@ -18,7 +18,6 @@
 #include "box_model_sparse.h"
 #include "box_model_cu_integrate.h"
 #include "box_model_rosenbrock.h"
-
 
 /*-------------------------------- StageToHost --------------------------------*/
 /* Stages concentration data into host-side memory in preparation              */
@@ -40,21 +39,6 @@ void StageToHost(size_t const ncells, double* h_conc, size_t const pitch,
     }
 }/* END StageToHost */
 
-/*----------------------------- TempStageToHost -------------------------------*/
-/* Stages temperatures data into host-side memory in preparation               */
-/* for transfer to device memory.  Data is reorganized to promote              */
-/* data access coalescing.                                                     */
-/*                                                                             */
-/* @param[in]     ncells Number of grid cells                                  */
-/* @param[out]    h_temp Temperatures in page-locked host memory               */
-/* @param[in]     TEMP   Temperatures                                          */
-/*-----------------------------------------------------------------------------*/
-void TempStageToHost(size_t const ncells, double* h_temp, double const TEMP[])
-{
-    for(int i=0; i<ncells; ++i) {
-      h_temp[i] = *(TEMP++);
-    }
-}/* END TempStageToHost */
 
 /*------------------------------- StageFromHost -------------------------------*/
 /* Stages concentration data out of host-side memory after it is               */
@@ -185,12 +169,10 @@ int GetBestDevice(int * devNumberOut, cudaDeviceProp * propsOut)
 /* @param[in]     reltol Relative integration tolerances for variable species  */
 /* @param[in,out] idata  Integer integration in/out parameters                 */
 /* @param[in,out] rdata  Real value integration in/out parameters              */
-/* @param[in]     TEMP   Temperatures in kelvin                                 */
 /*-----------------------------------------------------------------------------*/
 int GridIntegrate(size_t const ncells, double conc[], double const tstart,
     double const tend, double const  abstol[NVAR], double const
-    reltol[NVAR], int idata[20], double rdata[20], long long int ISTATS[8], 
-    double TEMP[])
+    reltol[NVAR], int idata[20], double rdata[20], long long int ISTATS[8])
 {
 
     #define ABORT(code, fmt, ...) { \
@@ -204,7 +186,6 @@ int GridIntegrate(size_t const ncells, double conc[], double const tstart,
     static size_t chunk = 0;
     static size_t chunk32 = 0;
     static size_t stagesize = 0;
-    static size_t tempstagesize = 0;
     
     /* Return value */
     int retval = 0;
@@ -241,14 +222,11 @@ int GridIntegrate(size_t const ncells, double conc[], double const tstart,
         /* Round up to next multiple of 32 */
         chunk32 = (chunk + 31) & ~31;
         stagesize = NSPEC*chunk32*sizeof(double);
-	tempstagesize = chunk32*sizeof(double);
     }
     
     /* Allocate write combined, page-locked host memory */
       /* Species concentrations in page-locked host memory */
-    double* h_conc;
-      /* Temperatures in page-locked host memory */
-    double* h_temp;
+  double* h_conc;
 
     if(cudaHostAlloc(&h_conc, stagesize, cudaHostAllocWriteCombined) != cudaSuccess) {
         /* Fall back to page-locked only */
@@ -262,28 +240,11 @@ int GridIntegrate(size_t const ncells, double conc[], double const tstart,
         }
     }
     
-    if(cudaHostAlloc(&h_temp, tempstagesize, cudaHostAllocWriteCombined) != cudaSuccess) {
-        /* Fall back to page-locked only */
-        printf("Kppa: Warning: Can't allocate write combined page-locked host memory.\n");
-        retval = 1;
-        if(cudaMallocHost(&h_temp, tempstagesize) != cudaSuccess) {
-            /* Fall back to regular malloc */
-            printf("Kppa: Warning: Can't allocate page-locked host memory.\n");
-            if(!(h_temp = (double*)malloc(tempstagesize)))
-                ABORT(-20, "Failed to allocate host memory.\n");
-        }
-    }
-    
-    /* Allocate device memory */
+    /* Allocate device memory for species concentrations */
       /* Species concentrations in device memory */
-    double* d_conc;
-      /* Temperatures in device memory */
-    double* d_temp;
+  double* d_conc;
 
     if(cudaMalloc(&d_conc, stagesize) != cudaSuccess)
-        ABORT(-20, "Can't allocate device memory.\n");
-
-    if(cudaMalloc(&d_temp, tempstagesize) != cudaSuccess)
         ABORT(-20, "Can't allocate device memory.\n");
 
     for(size_t i=0; i<ncells; i+=chunk) {
@@ -299,17 +260,12 @@ int GridIntegrate(size_t const ncells, double conc[], double const tstart,
         if(cudaMemcpy(d_conc, h_conc, stagesize, cudaMemcpyHostToDevice) != cudaSuccess)
             ABORT(-20, "Can't copy concentration data to device\n");
 
-	/* Stage temperature data onto device */
-	TempStageToHost(chunk, h_temp, TEMP + i);
-	if(cudaMemcpy(d_temp, h_temp, tempstagesize, cudaMemcpyHostToDevice) != cudaSuccess)
-	  ABORT(-20, "Can't copy temperature data to device\n");
-    
         /* Point to variable and fixed concentrations */
         double * d_var = d_conc;
         double * d_fix = d_conc + NVAR*chunk32;
 
         /* Invoke the integrator on this block of grid cells */
-        Integrate(chunk, d_var, d_fix, i, tstart, tend, abstol, reltol, idata, rdata, d_temp);
+        Integrate(chunk, d_var, d_fix, i, tstart, tend, abstol, reltol, idata, rdata);
 
         /* Retrieve concentration data from device */
         if(cudaMemcpy(h_conc, d_conc, stagesize, cudaMemcpyDeviceToHost) != cudaSuccess)
@@ -353,10 +309,10 @@ int GridIntegrate(size_t const ncells, double conc[], double const tstart,
     /* Deallocate memory and return*/
     cudaFree(d_conc);
     cudaFreeHost(h_conc);
-    cudaFree(d_temp);
-    cudaFreeHost(h_temp);
     return retval;
 
 }/* END GridIntegrate */
+
+
 
 /*---------------------- END box_model_cu_integrate.h END ---------------------*/

@@ -14,7 +14,7 @@
 ! 
 ! File                 : kpp_Parameters.f90
 ! Time                 : Thu Oct  9 13:01:06 2014
-! Working directory    : /users/charlesj/KPP_BOXMODEL/0-dim_box_model_Exa2Green/kpp-2.2.1
+! Working directory    : /scratch/daint/charlesj/extended_box_model/kpp-2.2.1
 ! Equation file        : kpp.kpp
 ! Output root filename : kpp
 ! 
@@ -34,6 +34,9 @@ MODULE kpp_Parameters
 ! Start/end indexes of the subgrid in the global grid
   INTEGER, PARAMETER :: idim_loc_s = 65,  jdim_loc_s = 75,  kdim_loc_s = 10
   INTEGER, PARAMETER :: idim_loc_e = 130, jdim_loc_e = 130, kdim_loc_e = 40
+
+! Total number of grid cells
+  INTEGER, PARAMETER :: ncells = (kdim_loc_e - kdim_loc_s + 1) * (jdim_loc_e - jdim_loc_s + 1) * (idim_loc_e - idim_loc_s + 1)
 
 ! Coordinates of Paris in the global grid
   INTEGER, PARAMETER :: idim_spot = 86, jdim_spot = 108, kdim_spot = 40 
@@ -162,6 +165,18 @@ MODULE kpp_Parameters
 !    FIX(indf_spc) = C(ind_spc) = C(NVAR+indf_spc)
 
   INTEGER, PARAMETER :: indf_CH4 = 1 
+
+! reference solution obtained from a previous reference run with
+! KPP-2.2.3, Ros4, rtol = atol = 0.01
+  REAL(kind=dp), PARAMETER :: ref_sol(NMONITOR) = &
+       (/0.8377200824568911E-02, & ! NO
+       0.9265801456215200E-01, &   ! NO2
+       0.1150499062926614E+01, &   ! NO3
+       0.1395368409026804E-06, &   ! HO
+       0.2337237989428882E+02, &   ! H2O2
+       0.2281406708507176E-04, &   ! HCHO
+       0.3735037608923360E+01, &   ! OP1
+       0.6725877108406759E-03/)    ! O3 
 
 END MODULE kpp_Parameters
 

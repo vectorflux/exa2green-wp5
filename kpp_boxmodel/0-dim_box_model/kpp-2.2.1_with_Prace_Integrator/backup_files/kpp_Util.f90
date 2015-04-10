@@ -14,7 +14,7 @@
 ! 
 ! File                 : kpp_Util.f90
 ! Time                 : Wed Oct 15 11:57:05 2014
-! Working directory    : /users/charlesj/KPP_BOXMODEL/0-dim_box_model_Exa2Green/kpp-2.2.1_with_Prace_Integrator
+! Working directory    : /users/charlesj/KPP_BOXMODEL/0-dim_box_model/kpp-2.2.1_with_Prace_Integrator
 ! Equation file        : kpp.kpp
 ! Output root filename : kpp
 ! 

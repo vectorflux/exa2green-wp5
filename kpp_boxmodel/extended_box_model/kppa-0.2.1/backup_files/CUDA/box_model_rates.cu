@@ -16,7 +16,7 @@
 #include "box_model_cu_parameters.h"
 #include "box_model_rates.h"
 
-/* BEGIN INLINE declared at /users/charlesj/KPP_BOXMODEL/extended_box_model_Exa2Green/kppa-0.2.1/box_model.def:309,1 */
+/* BEGIN INLINE declared at /users/charlesj/KPP_BOXMODEL/extended_box_model/kppa-0.2.1/box_model.def:309,1 */
 
 __device__
 double PHUX(double const X, double const Y, double const Z, double CHI)
@@ -126,7 +126,7 @@ double SPEZ(double const A0, double const B0, double const A2, double const B2, 
    return K0 + K3 / ( 1 + K3/K2 );
 }
 
-/* END INLINE declared at /users/charlesj/KPP_BOXMODEL/extended_box_model_Exa2Green/kppa-0.2.1/box_model.def:309,1 */
+/* END INLINE declared at /users/charlesj/KPP_BOXMODEL/extended_box_model/kppa-0.2.1/box_model.def:309,1 */
 
 
 /* Be friendly to Fortran mathmatical intrinsics */

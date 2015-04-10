@@ -14,7 +14,7 @@
 ! 
 ! File                 : kpp_Global.f90
 ! Time                 : Mon Oct 13 15:31:12 2014
-! Working directory    : /users/charlesj/KPP_BOXMODEL/extended_box_model_Exa2Green/kpp-2.2.3
+! Working directory    : /scratch/daint/charlesj/extended_box_model/kpp-2.2.3
 ! Equation file        : kpp.kpp
 ! Output root filename : kpp
 ! 
@@ -75,6 +75,8 @@ MODULE kpp_Global
   REAL(kind=dp) :: STEPMAX
 ! CFACTOR - Conversion factor for concentration units
   REAL(kind=dp) :: CFACTOR
+! Integrator statistics
+  INTEGER*8 :: ISTATS(8), global_ISTATS(8)
 
 ! INLINED global variable declarations
 
