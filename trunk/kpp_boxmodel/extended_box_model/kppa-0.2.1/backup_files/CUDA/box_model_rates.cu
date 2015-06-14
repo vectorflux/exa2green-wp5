@@ -561,11 +561,12 @@ void d_Rates(size_t const ncells32, double const time, size_t const idx,
     rct[186*ncells32] = ARR2(1.9E-13,500.,TEMP);
     rct[187*ncells32] = ARR2(9.6E-12,-234.,TEMP);
     rct[188*ncells32] =
-        ARR2(3.04E-2,350.,TEMP)*ARR2(1.106E-31,7460.,TEMP)*2.55e19/(1+ARR2(1.106E-31,7460.,TEMP)*2.55e19);
+        ARR2(3.04E-12,350.,TEMP)*ARR2(1.106E-31,7460.,TEMP)*2.55e19/(1+ARR2(1.106E-31,7460.,TEMP)*2.55e19);
     rct[189*ncells32] = 5.8e-11;
     rct[190*ncells32] = 2.5e-12;
     rct[191*ncells32] = 2.5e-12;
     rct[192*ncells32] = 2.5e-12;
+    rct[193*ncells32] = 0.0;
     }
 }/* END d_Rates */
 

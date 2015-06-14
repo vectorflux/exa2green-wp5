@@ -108,7 +108,8 @@ CONTAINS
     INTEGER,       INTENT(OUT), OPTIONAL :: IERR_U
 
     REAL(kind=dp) :: RCNTRL(20), RSTATUS(20) 
-    INTEGER       :: ICNTRL(20), ISTATUS(20), IERR, ii, jj, kk, i, var_cnt
+    INTEGER       :: ICNTRL(20), ISTATUS(20)
+    INTEGER       :: IERR, ii, jj, kk, i, var_cnt
 
     INTEGER, SAVE :: Ntotal = 0
 
@@ -134,7 +135,7 @@ CONTAINS
           DO kk=1,kdim
              DO jj=1,jdim
                 DO ii=1,idim
-                   DO var_cnt=1,n_from_file-1
+                   DO var_cnt=1,n_from_file
                       ! set initial values with those of box(ii,jj,kk)
                       VARTOT(lookup(var_cnt),ii,jj,kk) = initial_conc_from_file(ii,jj,kk,lookup(var_cnt)) * CFACTOR * 1000
                    ENDDO
@@ -154,7 +155,7 @@ CONTAINS
        CALL SaveData()
     END IF
 
-    !$OMP PARALLEL DO &
+    !$OMP PARALLEL DO SCHEDULE(static) &
     !$OMP& COPYIN(TIME,STEPMIN) &
     !$OMP& DEFAULT(SHARED) &
     !$OMP& PRIVATE(kk,jj,ii,ICNTRL,RCNTRL,ISTATUS,RSTATUS) &

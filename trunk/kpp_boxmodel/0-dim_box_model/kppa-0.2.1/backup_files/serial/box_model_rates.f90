@@ -420,17 +420,14 @@ END FUNCTION SPEZ
     REAL(8), INTENT(IN) :: time
     INTEGER, INTENT(IN) :: idx
     REAL(8), INTENT(IN) :: CHI
-    REAL(8), INTENT(OUT) :: rct(193)
+    REAL(8), INTENT(OUT) :: rct(194)
 
     ! Sunlight intensity: 0 to 1 inclusive (uppercase for KPP compatibility) 
     REAL(8) :: SUN
-    ! Temperature in kelvin  (uppercase for KPP compatibility) 
-    REAL(8) :: TEMP
 
 !!$    SUN = Sunlight(time, idx)
 !!$    TEMP = Temperature(time, idx)
-    TEMP = 279.907043E+00;
-
+    
     rct(1) = PHUX(1.07E-02,1.01319E+00,0.83330E+00,CHI)
     rct(2) = PHUX(3.22E-05,4.45037E+00,0.78028E+00,CHI)
     rct(3) = PHUX(5.36E-04,0.34764E+00,0.91030E+00,CHI)
@@ -623,11 +620,12 @@ END FUNCTION SPEZ
     rct(187) = ARR2(1.9E-13,500.,TEMP)
     rct(188) = ARR2(9.6E-12,-234.,TEMP)
     rct(189) = &
-        ARR2(3.04E-2,350.,TEMP)*ARR2(1.106E-31,7460.,TEMP)*2.55e19/(1+ARR2(1.106E-31,7460.,TEMP)*2.55e19)
+        ARR2(3.04E-12,350.,TEMP)*ARR2(1.106E-31,7460.,TEMP)*2.55e19/(1+ARR2(1.106E-31,7460.,TEMP)*2.55e19)
     rct(190) = 5.8e-11
     rct(191) = 2.5e-12
     rct(192) = 2.5e-12
     rct(193) = 2.5e-12
+    rct(194) = 0.0
   END SUBROUTINE Rates
 
 

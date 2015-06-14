@@ -15,7 +15,7 @@ OP2   =  ignore;
 PAA   =  ignore;
 ORA1   =  ignore;
 ORA2   =  ignore;
-//nh3 nicht vorhanden
+NH3    = ignore;
 N2O5   =  ignore;
 NO3   =  ignore;
 PAN   =  ignore;

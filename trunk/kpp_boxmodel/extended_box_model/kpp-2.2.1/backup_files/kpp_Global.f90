@@ -44,7 +44,7 @@ MODULE kpp_Global
   REAL(kind=dp) :: FIX(NFIX)
 ! VAR, FIX are chunks of array C
   EQUIVALENCE( C(1),VAR(1) )
-  EQUIVALENCE( C(82),FIX(1) )
+  EQUIVALENCE( C(83),FIX(1) )
 ! RCONST - Rate constants (global)
   REAL(kind=dp) :: RCONST(NREACT)
   !$OMP THREADPRIVATE(RCONST)

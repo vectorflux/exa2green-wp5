@@ -19,7 +19,7 @@ OP2   =  IGNORE;
 PAA   =  IGNORE;
 ORA1   =  IGNORE;
 ORA2   =  IGNORE;
-//nh3 nicht vorhanden
+NH3    = IGNORE;
 N2O5   =  IGNORE;
 NO3   =  IGNORE;
 PAN   =  IGNORE;
@@ -142,7 +142,7 @@ NO3 + NO2  =  NO + NO2 + O2   :  2.50E-14 * exp( -1230. / TEMP );
 NO3 + HO2  =  HNO3 + O2   :  2.50E-12;
 NO3 + NO2  =  N2O5  : TROE2( 2.2e-30, 4.3e0, 1.5e-12, 0.5e0, TEMP );
 N2O5  =  NO2 + NO3  : EQT(2.2e-30,4.3e0,1.5e-12,0.5e0,TEMP,9.09e+26,11200.e0);{}
-N2O5 + H2O  =  2 HNO3   :  0.00E-21;
+N2O5 =  2 HNO3   :  0.00E-21;
 HO + NO2  =  HNO3  : TROE2( 2.6e-30, 3.2e0, 2.4e-11, 1.3e0, TEMP );
 HO + HNO3  =  NO3 + H2O  : SPEZ(7.2e-15,785.e0,4.1e-16,1440.e0,1.9e-33,725.e0,TEMP);
 HO + HNO4  =  NO2 + H2O + O2   :  1.30E-12 * exp( 380. / TEMP );
@@ -294,12 +294,13 @@ HACE + HO = MGLY + HO2   :  3.00E-12;
 NALD + HO = HCHO + CO + NO2   :  ARR2(5.60E-12,270.,TEMP);
 DMS + NO3 = SO2 : ARR2(1.9E-13,500.,TEMP);
 DMS + HO = SO2 : ARR2(9.6E-12,-234.,TEMP);
-DMS + HO = 0.6 SO2 + 0.4 DMSO : ARR2(3.04E-2,350.,TEMP)*ARR2(1.106E-31,7460.,TEMP)*2.55e19/(1+ARR2(1.106E-31,7460.,TEMP)*2.55e19);
+DMS + HO = 0.6 SO2 + 0.4 DMSO : ARR2(3.04E-12,350.,TEMP)*ARR2(1.106E-31,7460.,TEMP)*2.55e19/(1+ARR2(1.106E-31,7460.,TEMP)*2.55e19);
 DMSO + HO = 0.6 SO2 : 5.8E-11;
 CS10 + HO = 1.075 CS1   : 2.50E-12;{ELENI}
 CS100 + HO = 1.075 CS10  : 2.50E-12;{ELENI}
 CS1000 + HO = 1.075 CS100 : 2.50E-12;{ELENI}
- 
+NH3 = NH3 : 0.E1;
+
 //-----------------------------------------------------------------------------
 // Initial values for the box model
 //-----------------------------------------------------------------------------

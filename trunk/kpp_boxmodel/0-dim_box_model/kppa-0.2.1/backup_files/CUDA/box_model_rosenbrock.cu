@@ -627,9 +627,9 @@ void RosenStageLHS(size_t ncells32, double diag, double * d_jac, double * d_slhs
 /* @param[in,out] idata  Integer integration in/out parameters                 */
 /* @param[in,out] rdata  Real value integration in/out parameters              */
 /*-----------------------------------------------------------------------------*/
-void Integrate(size_t const ncells, double d_var[81], double d_fix[1], size_t
+void Integrate(size_t const ncells, double d_var[82], double d_fix[1], size_t
     const idx, double const tstart, double const tend, double const
-    abstol[81], double const  reltol[81], int idata[20], double rdata[20])
+    abstol[82], double const  reltol[82], int idata[20], double rdata[20])
 {
     /* .................... Rosenbrock method parameters .................... */
 
