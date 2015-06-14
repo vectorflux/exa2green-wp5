@@ -1,7 +1,7 @@
 #!/bin/bash -l
 #SBATCH --account=csstaff
 #SBATCH --job-name="KPPA-0.2.1" 
-#SBATCH -t 01:00:00
+#SBATCH -t 01:15:00
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH --ntasks-per-node=1
@@ -12,8 +12,6 @@
 # Initialization
 set verbose
 set echo
-
-cd /scratch/daint/charlesj/extended_box_model/kppa-0.2.1
 
 # Load appropriate programming environment
 module load cray-netcdf

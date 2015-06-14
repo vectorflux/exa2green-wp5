@@ -22,9 +22,9 @@ MODULE box_model_driver_parameters
 !-----------------------------------------------------------------------------
 
   ! Integration start time 
-  REAL(8), PARAMETER :: TSTART = 0.0
+  REAL(8), PARAMETER :: TSTART = 43200.0
   ! Integration end time 
-  REAL(8), PARAMETER :: TEND = 3600.0
+  REAL(8), PARAMETER :: TEND = 46800.0
   ! Time between integrator restarts 
   REAL(8), PARAMETER :: TDEL = 120.0
 

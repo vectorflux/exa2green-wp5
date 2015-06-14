@@ -137,6 +137,6 @@ clean:
 	rm -f box_model.exe box_model.dat boxmodel.* *.o *.mod
 
 destroy: clean
-	rm -f *.f90 *.cu *.h Makefile
+	rm -f *.f90 *.cu *.h Makefile *general *performance
 
 #----------------------------- END Makefile END -------------------------------

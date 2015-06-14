@@ -57,7 +57,7 @@ CONTAINS
 
     retval = 0
 
-!$OMP  PARALLEL DO & 
+!$OMP  PARALLEL DO SCHEDULE(static) & 
 !$OMP& DEFAULT(SHARED) &
 !$OMP& PRIVATE(i,var,fix) & 
 !$OMP& FIRSTPRIVATE(idata, rdata) &

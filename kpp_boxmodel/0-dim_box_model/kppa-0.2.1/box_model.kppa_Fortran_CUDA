@@ -62,8 +62,8 @@
 // TEND   : Time at integration end
 // TDEL   : Time between integrator restarts
 //-----------------------------------------------------------------------------
-#TSTART 0 // Seconds
-#TEND 3600 // Seconds
+#TSTART 43200 // Seconds
+#TEND 46800 // Seconds
 #TDEL 120 // Seconds
 
 //-----------------------------------------------------------------------------

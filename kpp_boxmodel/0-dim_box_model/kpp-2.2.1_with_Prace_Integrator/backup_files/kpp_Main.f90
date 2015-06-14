@@ -72,7 +72,7 @@ PROGRAM kpp_Driver
 
       STEPMIN = 0.0d0
       STEPMAX = 0.0d0
-
+      
       TTS = 0.0d0
       ETS = 0.0d0
       device_ETS = 0.0d0
@@ -204,25 +204,25 @@ kron: DO WHILE (T < TEND)
       WRITE(6,995) 'ICNTRL = ', ICNTRL
       WRITE(6,996) 'RCNTRL = ', RCNTRL
       WRITE(6,*)
-      WRITE(6,991) 'Total number of timesteps = ', nbit 
-      WRITE(6,*)
       WRITE(6,998) 'Subgrid coordinates (lon.)  = ', idim_loc_s, idim_loc_e
       WRITE(6,998) 'Subgrid coordinates (lat.)  = ', jdim_loc_s, jdim_loc_e
       WRITE(6,998) 'Subgrid coordinates (vert.) = ', kdim_loc_s, kdim_loc_e
       WRITE(6,*)
       WRITE(6,992) 'Total number of grid points = ', ncells
       WRITE(6,*)
-      WRITE(6,*)   '******** First Timestep ********'
+      WRITE(6,*)   '******** First Timestep (average of all cells) ********'
       WRITE(6,992) 'Rosenbrock steps = ', INT(tsteps_first_call/ncells)
       WRITE(6,993) 'TTS              = ', TTS_first_call, ' s'
       WRITE(6,994) 'ETS              = ', ETS_first_call, ' J'
       WRITE(6,994) 'Device ETS       = ', device_ETS_first_call, ' J'
       WRITE(6,*)
-      WRITE(6,*)   '******** In Average ********'
+      WRITE(6,*)   '******** One Timestep (average of all cells) ********'
       WRITE(6,992) 'Rosenbrock steps = ', INT(global_ISTATS(Nstp)/(ncells*nbit))
       WRITE(6,993) 'TTS              = ', TTS/nbit, ' s'
       WRITE(6,994) 'ETS              = ', ETS/nbit, ' J'
       WRITE(6,994) 'Device ETS       = ', device_ETS/nbit, ' J'
+      WRITE(6,*)
+      WRITE(6,991) 'Total number of timesteps = ', nbit 
       WRITE(6,*)
       WRITE(6,*)   '******** Total Timesteps ********'
       WRITE(6,992) 'Rosenbrock steps = ', INT(global_ISTATS(Nstp)/ncells)

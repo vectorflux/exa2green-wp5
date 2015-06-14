@@ -92,6 +92,7 @@ SUBROUTINE Initialize ()
   RCONST(191) = 2.5e-12
   RCONST(192) = 2.5e-12
   RCONST(193) = 2.5e-12
+  RCONST(194) = 0
 ! END constant rate coefficients
 
 ! INLINED initializations

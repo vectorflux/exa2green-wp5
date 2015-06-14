@@ -69,11 +69,11 @@ Testing of Rosenbrock Solvers for EXA2Green
 \end_layout
 
 \begin_layout Author
-Teresa Beck
+Teresa Beck, Joseph Charles
 \end_layout
 
 \begin_layout Standard
-In point 4 of the COSMO-ART roadmap M13-M36, we have promised an 
+In point 4 of the COSMO-ART roadmap M13-M36, we had promised an 
 \shape italic
 
 \begin_inset Quotes eld
@@ -87,7 +87,8 @@ Integration of algorithmic changes, which were demonstrated in the PRACE
 
  
 \shape default
-This document first outlines the fundamentals of the new solver 
+This document first outlines the fundamentals of the new solver, which will
+ be denoted by 
 \begin_inset Quotes eld
 \end_inset
 
@@ -101,7 +102,7 @@ rosenbrock_posdef_h211b_qssa
  The following section presents tests for the new solver.
  Different configurations of the solver are being compared with respect
  to the speedup and the accuracy of the solution.
- All tests are carried out by means of the 0-dim-boxmodel.
+ All tests are carried out by means of a zero-dimensional box-model.
  The document closes with conclusions and an estimation of the new solver's
  potential E2S improvement for the extended testbed.
 \end_layout
@@ -114,8 +115,8 @@ Basics of rosenbrock_posdef_h211b_qssa
 In early 2013, G.
  Fanourgakis, J.
  Lelieveld and D.
- Taraborelli have announced a new integrator, that combines the quasi-steady-sta
-te approach with the Rosenbrock integrator and a new time-stepping algorithm.
+ Taraborelli had announced a new integrator, that combines the quasi-steady-stat
+e approach with the Rosenbrock integrator and a new time-stepping algorithm.
  G.
  Fanourgakis noted that the 
 \begin_inset Quotes eld
@@ -200,10 +201,6 @@ h_{n+1}=h_{n}(\epsilon/r_{n})^{1/k},
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
 with the tolerance parameter 
 \begin_inset Formula $\epsilon,$
 \end_inset
@@ -243,10 +240,6 @@ h_{n+1} & = & h_{n}(\epsilon/r_{n})^{1/(bk)}(\epsilon/r_{n-1})^{1/(bk)}(h_{n}/h_
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
 According to Söderlin 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -288,10 +281,6 @@ P(t,y)-D(t,y)\; y & = & 0\\
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
 i.e.
  for some species, we assume that the amount being destructed 
 \begin_inset Formula $D(t,y)\; y$
@@ -788,62 +777,86 @@ Tests
 \end_layout
 
 \begin_layout Standard
-All tests were carried out by means of the 0-d boxmodel and with the repository
+All tests were carried out by means of the 0-dim box-model using the repository
  revision number 220.
- It deals with a variable CHI function.
- The initial conditions represent a chemical mixture right above Paris as
- it is configured for the very first timestep for the extended box model.
- The time step size, in which the function 
-\begin_inset Quotes eld
-\end_inset
-
-INTEGRATE
-\begin_inset Quotes erd
-\end_inset
-
- is called, is chosen as TSTEP = 120 sec, the total integration time is
- TEND = 3600 sec.
- This leads to a total of 30 calls of the function 
-\begin_inset Quotes eld
-\end_inset
-
-INTEGRATE.
+ The utilized chemical mechanism is RADM-KA (Regional Acid Deposition Model
+ Version Karlsruhe), a slightly amended version of the chemical mechanism
+ RADM2 by Stockwell et al.
  
-\begin_inset Foot
-status open
-
-\begin_layout Plain Layout
-We have been discussing in detail, what this actually means! As it has been
- presented in the first part of this document, the splitting approach is
- an essential source of stiffness and stiffness is the reason, why the chemical
- simulations are so time consuming.
- The more stiffness present, the more time steps will be necessary.
- The way this test was set up means, i.e.
- TSTEP=120 sec and TEND=3600 sec, we only have perturbed initial concentrations
- for the very first of the 30 function calls of the 
-\begin_inset Quotes eld
-\end_inset
-
-INTEGRATE
-\begin_inset Quotes erd
-\end_inset
-
- function.
- Therefore, only the first measurement can give a qualitative estimate for
- performance improvements for future 3d runs with COSMO-ART!
-\end_layout
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Stockwell1990"
 
 \end_inset
 
-
+.
+ RADM-KA comprises 193 reactions and 82 chemical species, whereas one species
+ is held constant.
+ This mechanism was chosen in accordance to the baseline scenario, the collabora
+tors had agreed upon in March 2014.
 \end_layout
 
 \begin_layout Standard
-The code was produced with the respective executables in bin/kpp.
- After the code was produced by KPP, a back-up file for kpp_Main.f90, stored
- in backup_files_serial_integrator_tests/, was copied to the current directory.
- This file includes the tuning of the parameters and the additional writing
- out of the wall clock time and the number of timesteps.
+The tests are set up on a three-dimensional discrete computing domain with
+ 
+\begin_inset Formula $66\times56\times31$
+\end_inset
+
+ grid cells, i.e.
+ a total of 
+\begin_inset Formula $114\;576$
+\end_inset
+
+ independent 0-dim boxes are being solved.
+ The initial conditions for each box were extracted from realistic COSMO-ART
+ model runs from a computing domain of the same dimension, centered above
+ Paris at high noon (12am), April 13th, 2010.
+ Initial conditions for all species therefore vary for each of the 
+\begin_inset Formula $114\;576$
+\end_inset
+
+ 0-dim boxs, but all represent a polluted atmosphere above Paris.
+ The model supports variable photolysis conditions, which allows to locally
+ adapt the rate constants.
+ Temperature is kept constant over all boxes.
+ The total integration time is set to one hour, with integrator restarts
+ at every 120 seconds, again in accordance with the baseline.
+ In total, the function INTEGRATE is therefore called 30 times.
+ 
+\end_layout
+
+\begin_layout Standard
+In the tests presented here, no external disturbances due to advection,
+ diffusion or further effects are taken into account, as it would be the
+ case in a real air quality model.
+ In fact, only the very first initial conditions represent a realistic set-up
+ with perturbed initial conditions, as those initial values were extracted
+ from realistic, three-dimensional air quality model runs.
+ Since in our tests, the chemical species are not exposed to any perturbation
+ throughout the simulation, they equilibrate with elapsing time.
+ Hence, the systems will be less stiff in the following 29 INTEGRATE function
+ calls.
+ However, the number of time-steps necessary for the solution of the chemical
+ kinetics is strongly influenced by the degree of stiffness.
+ Therefore, only the measurements for the very first call of the INTEGRATE
+ function, can give a qualitative estimate for performance improvements
+ for future three-dimensional runs within COSMO-ART.
+\end_layout
+
+\begin_layout Standard
+The simulation is being monitored by means of 8 key chemical species (NO,
+ NO2, NO3, HO, H2O2, HCHO, OP1, O3), and observed at the gridpoint located
+ right above Paris.
+ 
+\end_layout
+
+\begin_layout Standard
+The source code for the simulation of the chemical kinetics was generated
+ by KPP.
+ To this end, first a KPP executable was produced in bin/kpp.
+ After the Fortran code was generated by KPP, backup files containing modificati
+ons needed for the benchmarking (tuning of parameters, statistics output)
+ of the different solvers are copied to the current directory.
  All tests are run with scalar relative and absolute tolerances of 
 \begin_inset Formula $\text{rtol =}10^{-2}$
 \end_inset
@@ -852,17 +865,7 @@ The code was produced with the respective executables in bin/kpp.
 \begin_inset Formula $\text{atol =}10^{-2}$
 \end_inset
 
- and in non-autonomous mode, i.e.
- 
-\begin_inset Formula $f=f(t,y)$
-\end_inset
-
- depends on 
-\begin_inset Formula $t$
-\end_inset
-
-.
- 
+ on one node of Piz Daint at CSCS (Intel 8-core Xeon E5-2670 processor).
 \end_layout
 
 \begin_layout Paragraph
@@ -870,8 +873,9 @@ Reference Solution
 \end_layout
 
 \begin_layout Standard
-As a reference solution we took a run with Ros4 solver using KPP-2.2.1 and
- scalar relative and absolute tolerances of 
+As a reference solution, we took a run with the Rosenbrock4 solver using
+ KPP-2.2.3 (as it corresponds to the solver used in the original COSMO-ART
+ baseline) and scalar and absolute tolerances of 
 \begin_inset Formula $\text{rtol =}10^{-2}$
 \end_inset
 
@@ -926,25 +930,18 @@ error to the reference solution
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout Standard
 with 
 \begin_inset Formula $T=3600\;\text{sec}$
 \end_inset
 
 .
- As a reference solution we take a run with the Rosenbrock4 solver, using
- KPP version 2.2.1, and scalar absolute and relative tolerances of atol=
-\begin_inset Formula $10^{-2}$
-\end_inset
-
- and rtol=
-\begin_inset Formula $10^{-2}$
-\end_inset
-
-.
+ The current way to calculate the relative error is not ideal as we consider
+ only a portion of the full population of chemical species (NO, NO2, NO3,
+ HO, H2O2, HCHO, OP1, O3).
+ However we take into account the most critical chemical species, which
+ are the ones that typically have the biggest error contributions, so the
+ approximation is fine.
+ 
 \end_layout
 
 \begin_layout Paragraph
@@ -958,7 +955,7 @@ number of timesteps
 \series default
  and the 
 \series bold
-wall clock time
+elapsed time
 \series default
  for a) the first function call of the function 
 \begin_inset Quotes eld
@@ -978,13 +975,13 @@ INTEGRATE
 
  and c) in total over all 30 timesteps.
  It has to be emphasized, that measure a) will give a realistic hint on
- the estimated speed-up within a 3dimensional simulation in COSMO-ART.
+ the estimated speed-up within a three dimensional simulation in COSMO-ART.
  
 \end_layout
 
 \begin_layout Standard
 \begin_inset Graphics
-	filename ../../../Dropbox/MyWorkStuff/Exa2Green/IntegratorTests_0-dim_box_model_Exa2Green/snapshot_code.png
+	filename snapshot_code.jpg
 	width 11cm
 
 \end_inset
@@ -1002,7 +999,7 @@ In the first tests, [ref0], [ref1] and [ref2], the KPP-2.2.1, KPP-2.2.3 and
  The parameters for the tests can be seen in table 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "tab:Parameters-for-Test"
+reference "tab:Parameters-for-Test-1-1"
 
 \end_inset
 
@@ -1017,15 +1014,15 @@ reference "tab:Results-for-all"
 \end_layout
 
 \begin_layout Standard
-In case of the *_Prace_* implementation, no additional options such as QSSA,
+In case of the Prace implementation, no additional options such as QSSA,
  posdef and linear interpolation were enabled.
  The results illustrate, that the pure implementation of Ros4 already uses
  a different time step control mechanism.
- So the results differ to those of [ref0] and [ref1], especially in the
- number of timesteps per function call.
+ So the results [ref2] differ to those of [ref0], especially in the number
+ of timesteps per function call.
  At this point, it also gets clear, that the time measurements we take,
- are not linear with the number of time steps, taken: the 158 timesteps
- taken in [ref0] need even more time, than the 313 timesteps token in [ref2].
+ are not linear with the number of time steps, taken: the 176 timesteps
+ taken in [ref0] need even more time, than the 329 timesteps token in [ref2].
  
 \end_layout
 
@@ -1072,7 +1069,22 @@ key "Soderlind2002"
 \begin_inset Formula $k=4$
 \end_inset
 
- are chosen for Ros4.
+ are also chosen for Ros4.
+  Parameters and results can be seen in table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Parameters-for-Test-1-2"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Results-for-all"
+
+\end_inset
+
+.
  
 \end_layout
 
@@ -1086,7 +1098,7 @@ The tests [linint0], [linint1] and [linint2] test all options of using linear
  Parameters and results can be seen in table 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "tab:Parameters-for-Test-1-1"
+reference "tab:Parameters-for-Test-1-3"
 
 \end_inset
 
@@ -1111,7 +1123,7 @@ The tests [posdef1] - [posdef2] test all options of positive definition
  Parameters and results can be seen in table 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "tab:Parameters-for-Test-1"
+reference "tab:Parameters-for-Test-1-4"
 
 \end_inset
 
@@ -1160,7 +1172,7 @@ All options for QSSA using Ros4, no posdef option, and no linear interpolation
  Parameters and results can be seen in table 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "tab:Parameters-for-Test-1-1-1"
+reference "tab:Parameters-for-Test-1-5"
 
 \end_inset
 
@@ -1206,13 +1218,13 @@ the optimum for speedup and accuracy has been found with Rosenbrock-Rodas3
 \end_inset
 
 .
- As it has been seen in the previous QSSA tests, best choices for INCNTRL(6)
+ As it has been seen in the previous QSSA tests, best choices for ICNTRL(6)
  seem to be 2 or 3 - we now choose 2.
  We both tested Ros4 and Rodas3 in combination with above mentioned settings.
  Parameters and results can be seen in table 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "tab:Parameters-for-Test-1-2"
+reference "tab:Parameters-for-Test-1-6"
 
 \end_inset
 
@@ -1230,13 +1242,7 @@ reference "tab:Results-for-all"
 \begin_inset Float table
 wide false
 sideways false
-status collapsed
-
-\begin_layout Plain Layout
-\begin_inset Float table
-wide false
-sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Tabular
@@ -1644,7 +1650,7 @@ RCNTRL(:)
 Parameters for tests [ref0]-[ref2].
 \begin_inset CommandInset label
 LatexCommand label
-name "tab:Parameters-for-Test"
+name "tab:Parameters-for-Test-1-1"
 
 \end_inset
 
@@ -1661,11 +1667,11 @@ name "tab:Parameters-for-Test"
 
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset Float table
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Tabular
@@ -2113,12 +2119,7 @@ RCNTRL(9)
 Parameters for tests [timestep_<b>_<k>].
 \begin_inset CommandInset label
 LatexCommand label
-name "tab:Parameters-for-Test-1-1-2"
-
-\end_inset
-
-
-\end_layout
+name "tab:Parameters-for-Test-1-2"
 
 \end_inset
 
@@ -2140,12 +2141,6 @@ name "tab:Parameters-for-Test-1-1-2"
 wide false
 sideways false
 status open
-
-\begin_layout Plain Layout
-\begin_inset Float table
-wide false
-sideways false
-status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Tabular
@@ -2467,7 +2462,7 @@ I_DO_LIN_INTERP
 Parameters for tests [linint0]-[linint2].
 \begin_inset CommandInset label
 LatexCommand label
-name "tab:Parameters-for-Test-1-1"
+name "tab:Parameters-for-Test-1-3"
 
 \end_inset
 
@@ -2484,11 +2479,11 @@ name "tab:Parameters-for-Test-1-1"
 
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset Float table
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Tabular
@@ -2808,7 +2803,7 @@ RCNTRL(:)
 Parameters for tests [posdef0] and [posdef1] 1.
 \begin_inset CommandInset label
 LatexCommand label
-name "tab:Parameters-for-Test-1"
+name "tab:Parameters-for-Test-1-4"
 
 \end_inset
 
@@ -2825,11 +2820,11 @@ name "tab:Parameters-for-Test-1"
 
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset Float table
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \begin_inset Tabular
@@ -3112,7 +3107,7 @@ Parameters for tests [QSSA<1:6>_<
 >].
 \begin_inset CommandInset label
 LatexCommand label
-name "tab:Parameters-for-Test-1-1-1"
+name "tab:Parameters-for-Test-1-5"
 
 \end_inset
 
@@ -3129,7 +3124,7 @@ name "tab:Parameters-for-Test-1-1-1"
 
 \end_layout
 
-\begin_layout Plain Layout
+\begin_layout Standard
 \begin_inset Float table
 wide false
 sideways false
@@ -3837,12 +3832,7 @@ RCNTRL(10)
 Parameters for tests [opt_<int>_<mode>].
 \begin_inset CommandInset label
 LatexCommand label
-name "tab:Parameters-for-Test-1-2"
-
-\end_inset
-
-
-\end_layout
+name "tab:Parameters-for-Test-1-6"
 
 \end_inset
 
@@ -7689,7 +7679,7 @@ Results for all tests on local Desktop.
  
 \begin_inset CommandInset label
 LatexCommand label
-name "tab:Results-for-all"
+name "tab:Results-for-all-0"
 
 \end_inset
 
@@ -7994,7 +7984,25 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1912E-07
+0.1906E-06
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+59
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+66.554
 \end_layout
 
 \end_inset
@@ -8012,7 +8020,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1654E+02
+11.045
 \end_layout
 
 \end_inset
@@ -8021,7 +8029,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-4
+266
 \end_layout
 
 \end_inset
@@ -8030,25 +8038,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1008E+0
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-142
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-0.3025E+03
+331.341
 \end_layout
 
 \end_inset
@@ -8071,7 +8061,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1912E-07
+0.4712E-07
 \end_layout
 
 \end_inset
@@ -8080,7 +8070,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-13
+21
 \end_layout
 
 \end_inset
@@ -8089,7 +8079,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.2719E+02
+26.440
 \end_layout
 
 \end_inset
@@ -8098,7 +8088,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-10
+11
 \end_layout
 
 \end_inset
@@ -8107,7 +8097,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.2173E+02
+14.510
 \end_layout
 
 \end_inset
@@ -8116,7 +8106,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-304
+346
 \end_layout
 
 \end_inset
@@ -8125,7 +8115,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.6518E+03
+435.300
 \end_layout
 
 \end_inset
@@ -8148,7 +8138,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1912E-07
+0.4712E-07
 \end_layout
 
 \end_inset
@@ -8157,7 +8147,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-13
+21
 \end_layout
 
 \end_inset
@@ -8166,7 +8156,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.3656E+01
+8.376
 \end_layout
 
 \end_inset
@@ -8175,7 +8165,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-10
+11
 \end_layout
 
 \end_inset
@@ -8184,7 +8174,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.2886E+01
+4.603
 \end_layout
 
 \end_inset
@@ -8193,7 +8183,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-304
+346
 \end_layout
 
 \end_inset
@@ -8202,7 +8192,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.8658E+02
+138.098
 \end_layout
 
 \end_inset
@@ -8225,7 +8215,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1911E-07
+0.5346E-06
 \end_layout
 
 \end_inset
@@ -8234,7 +8224,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-7
+47
 \end_layout
 
 \end_inset
@@ -8243,7 +8233,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1938E+01
+17.299
 \end_layout
 
 \end_inset
@@ -8252,7 +8242,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-3
+6
 \end_layout
 
 \end_inset
@@ -8261,7 +8251,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1232E+01
+2.419
 \end_layout
 
 \end_inset
@@ -8270,7 +8260,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-95
+183
 \end_layout
 
 \end_inset
@@ -8279,7 +8269,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.3697E+02
+72.561
 \end_layout
 
 \end_inset
@@ -8302,7 +8292,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1911E-07
+0.8385E-07
 \end_layout
 
 \end_inset
@@ -8311,7 +8301,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-9
+22
 \end_layout
 
 \end_inset
@@ -8320,7 +8310,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.4089E+01
+8.642
 \end_layout
 
 \end_inset
@@ -8329,7 +8319,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-4
+8
 \end_layout
 
 \end_inset
@@ -8338,7 +8328,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1526E+01
+3.454
 \end_layout
 
 \end_inset
@@ -8347,7 +8337,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-127
+258
 \end_layout
 
 \end_inset
@@ -8356,7 +8346,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.4578E+02
+103.635
 \end_layout
 
 \end_inset
@@ -8379,7 +8369,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1912E-07
+0.4712E-07
 \end_layout
 
 \end_inset
@@ -8388,7 +8378,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-13
+21
 \end_layout
 
 \end_inset
@@ -8397,7 +8387,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.2383E+02
+25.059
 \end_layout
 
 \end_inset
@@ -8406,7 +8396,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-10
+11
 \end_layout
 
 \end_inset
@@ -8415,7 +8405,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1867E+02
+13.753
 \end_layout
 
 \end_inset
@@ -8424,7 +8414,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-304
+346
 \end_layout
 
 \end_inset
@@ -8433,7 +8423,7 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.5602E+03
+412.575
 \end_layout
 
 \end_inset
@@ -8533,7 +8523,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1912E-07
+0.4712E-07
 \end_layout
 
 \end_inset
@@ -8542,7 +8532,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-13
+21
 \end_layout
 
 \end_inset
@@ -8551,7 +8541,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.3452E+01
+8.410
 \end_layout
 
 \end_inset
@@ -8560,7 +8550,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-10
+11
 \end_layout
 
 \end_inset
@@ -8569,7 +8559,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.3835E+01
+4.621
 \end_layout
 
 \end_inset
@@ -8578,7 +8568,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-304
+346
 \end_layout
 
 \end_inset
@@ -8587,7 +8577,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1151E+03
+138.618
 \end_layout
 
 \end_inset
@@ -8610,7 +8600,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1912E-07
+0.4712E-07
 \end_layout
 
 \end_inset
@@ -8619,7 +8609,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-13
+21
 \end_layout
 
 \end_inset
@@ -8628,7 +8618,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.5945E+01
+8.453
 \end_layout
 
 \end_inset
@@ -8637,7 +8627,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-10
+11
 \end_layout
 
 \end_inset
@@ -8646,7 +8636,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.3948E+01
+4.638
 \end_layout
 
 \end_inset
@@ -8655,7 +8645,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-304
+346
 \end_layout
 
 \end_inset
@@ -8664,7 +8654,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1184E+03
+139.132
 \end_layout
 
 \end_inset
@@ -8687,7 +8677,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1911E-07
+0.5352E-07
 \end_layout
 
 \end_inset
@@ -8696,7 +8686,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-13
+21
 \end_layout
 
 \end_inset
@@ -8705,7 +8695,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.5109E+01
+8.551
 \end_layout
 
 \end_inset
@@ -8714,7 +8704,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-10
+11
 \end_layout
 
 \end_inset
@@ -8723,7 +8713,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.3340E+01
+4.698
 \end_layout
 
 \end_inset
@@ -8732,7 +8722,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-304
+346
 \end_layout
 
 \end_inset
@@ -8741,7 +8731,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1002E+03
+140.946
 \end_layout
 
 \end_inset
@@ -8764,7 +8754,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1911E-07 
+0.5352E-07
 \end_layout
 
 \end_inset
@@ -8773,7 +8763,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-13
+21
 \end_layout
 
 \end_inset
@@ -8782,7 +8772,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.3645E+01
+8.498
 \end_layout
 
 \end_inset
@@ -8791,7 +8781,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-10
+11
 \end_layout
 
 \end_inset
@@ -8800,7 +8790,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.2919E+01
+4.692
 \end_layout
 
 \end_inset
@@ -8809,7 +8799,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-304
+346
 \end_layout
 
 \end_inset
@@ -8818,7 +8808,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.8758E+02
+140.762
 \end_layout
 
 \end_inset
@@ -8918,7 +8908,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1912E-07
+0.5352E-07
 \end_layout
 
 \end_inset
@@ -8927,7 +8917,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-13
+21
 \end_layout
 
 \end_inset
@@ -8936,7 +8926,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.3713E+01
+8.493
 \end_layout
 
 \end_inset
@@ -8945,7 +8935,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-10
+11
 \end_layout
 
 \end_inset
@@ -8954,7 +8944,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.3404E+01
+4.684
 \end_layout
 
 \end_inset
@@ -8963,7 +8953,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-304
+346
 \end_layout
 
 \end_inset
@@ -8972,7 +8962,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1021E+03
+140.516
 \end_layout
 
 \end_inset
@@ -8995,7 +8985,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1912E-07
+0.5352E-07
 \end_layout
 
 \end_inset
@@ -9004,7 +8994,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-13
+21
 \end_layout
 
 \end_inset
@@ -9013,7 +9003,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.3680E+01
+8.532
 \end_layout
 
 \end_inset
@@ -9022,7 +9012,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-10
+11
 \end_layout
 
 \end_inset
@@ -9031,7 +9021,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.2915E+01
+4.701
 \end_layout
 
 \end_inset
@@ -9040,7 +9030,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-304
+346
 \end_layout
 
 \end_inset
@@ -9049,7 +9039,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.8746E+02
+141.042
 \end_layout
 
 \end_inset
@@ -9149,43 +9139,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1912E-07 
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-13
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-0.6157E+01
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-7
-\end_layout
-
-\end_inset
-</cell>
-<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
-\begin_inset Text
-
-\begin_layout Plain Layout
-0.2896E+01
+0.5352E-07
 \end_layout
 
 \end_inset
@@ -9203,7 +9157,43 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.8689E+02
+8.555
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+11
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+4.705
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+346
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+141.156
 \end_layout
 
 \end_inset
@@ -9226,7 +9216,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1912E-07
+0.5352E-07
 \end_layout
 
 \end_inset
@@ -9235,7 +9225,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-13
+21
 \end_layout
 
 \end_inset
@@ -9244,7 +9234,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.3687E+01
+8.579
 \end_layout
 
 \end_inset
@@ -9253,7 +9243,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-7
+11
 \end_layout
 
 \end_inset
@@ -9262,7 +9252,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.2126E+01
+4.721
 \end_layout
 
 \end_inset
@@ -9271,7 +9261,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-216
+346
 \end_layout
 
 \end_inset
@@ -9280,7 +9270,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.6377E+02
+141.635
 \end_layout
 
 \end_inset
@@ -9380,7 +9370,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1911E-07
+0.2264E-03
 \end_layout
 
 \end_inset
@@ -9389,7 +9379,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-13
+21
 \end_layout
 
 \end_inset
@@ -9398,7 +9388,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.3548E+01
+8.579
 \end_layout
 
 \end_inset
@@ -9407,7 +9397,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-6
+4
 \end_layout
 
 \end_inset
@@ -9416,7 +9406,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.2534E+01
+2.049
 \end_layout
 
 \end_inset
@@ -9425,7 +9415,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-187
+146
 \end_layout
 
 \end_inset
@@ -9434,7 +9424,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.7603E+02
+61.472
 \end_layout
 
 \end_inset
@@ -9457,7 +9447,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1911E-07 
+0.2264E-03
 \end_layout
 
 \end_inset
@@ -9466,7 +9456,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-13
+21
 \end_layout
 
 \end_inset
@@ -9475,7 +9465,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.3811E+01
+8.530
 \end_layout
 
 \end_inset
@@ -9484,7 +9474,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-6
+4
 \end_layout
 
 \end_inset
@@ -9493,7 +9483,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1864E+01
+2.060
 \end_layout
 
 \end_inset
@@ -9502,7 +9492,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-187
+146
 \end_layout
 
 \end_inset
@@ -9511,7 +9501,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.5592E+02
+61.790
 \end_layout
 
 \end_inset
@@ -9611,7 +9601,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1906E-07
+0.2287E-03
 \end_layout
 
 \end_inset
@@ -9620,7 +9610,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-7
+47
 \end_layout
 
 \end_inset
@@ -9629,7 +9619,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1901E+01
+16.959
 \end_layout
 
 \end_inset
@@ -9638,7 +9628,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-2
+4
 \end_layout
 
 \end_inset
@@ -9647,7 +9637,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.6882E+00
+1.820
 \end_layout
 
 \end_inset
@@ -9656,7 +9646,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-66
+138
 \end_layout
 
 \end_inset
@@ -9665,7 +9655,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.2065E+02
+54.595
 \end_layout
 
 \end_inset
@@ -9688,7 +9678,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1902E-07 
+0.2256E-03
 \end_layout
 
 \end_inset
@@ -9697,7 +9687,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-9
+18
 \end_layout
 
 \end_inset
@@ -9706,7 +9696,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.2225E+01
+6.859
 \end_layout
 
 \end_inset
@@ -9715,7 +9705,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-2
+3
 \end_layout
 
 \end_inset
@@ -9724,7 +9714,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.6513E+00
+1.458
 \end_layout
 
 \end_inset
@@ -9733,7 +9723,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-68
+107
 \end_layout
 
 \end_inset
@@ -9742,7 +9732,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1954E+02
+43.735
 \end_layout
 
 \end_inset
@@ -9765,7 +9755,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1906E-07
+0.2287E-03
 \end_layout
 
 \end_inset
@@ -9774,7 +9764,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-7
+47
 \end_layout
 
 \end_inset
@@ -9783,7 +9773,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.2036E+01
+17.446
 \end_layout
 
 \end_inset
@@ -9792,7 +9782,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-2
+4
 \end_layout
 
 \end_inset
@@ -9801,7 +9791,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.7403E+00
+1.892
 \end_layout
 
 \end_inset
@@ -9810,7 +9800,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-66
+138
 \end_layout
 
 \end_inset
@@ -9819,7 +9809,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.2221E+02
+56.749
 \end_layout
 
 \end_inset
@@ -9842,7 +9832,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.1902E-07
+0.2256E-03
 \end_layout
 
 \end_inset
@@ -9851,7 +9841,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-9
+18
 \end_layout
 
 \end_inset
@@ -9860,7 +9850,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.2630E+01
+7.197
 \end_layout
 
 \end_inset
@@ -9869,7 +9859,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-2
+3
 \end_layout
 
 \end_inset
@@ -9878,7 +9868,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.8170E+00,
+1.536
 \end_layout
 
 \end_inset
@@ -9887,7 +9877,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-68
+107
 \end_layout
 
 \end_inset
@@ -9896,7 +9886,7 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.2451E+02
+46.075
 \end_layout
 
 \end_inset
@@ -9916,7 +9906,7 @@ Results for all tests on Piz Daint.
  
 \begin_inset CommandInset label
 LatexCommand label
-name "tab:Results-for-all-1"
+name "tab:Results-for-all"
 
 \end_inset
 
@@ -10323,7 +10313,7 @@ Conclusions
 
 \begin_layout Standard
 All results are only discussed with regard to option a) first call only.
- This decision has been guided by the comment in footnote 4.
+ This decision has been guided by the comment in footnote 1.
  
 \end_layout
 
@@ -10339,7 +10329,7 @@ Discussion measurements on Desktop PC
 Table 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "tab:Results-for-all"
+reference "tab:Results-for-all-0"
 
 \end_inset
 
@@ -10412,27 +10402,28 @@ key "poster_wp9"
 \end_layout
 
 \begin_layout Paragraph
-Discussion measurements on Piz Daint
+Discussion measurements on Piz Daint at CSCS
 \end_layout
 
 \begin_layout Standard
 Table 
 \begin_inset CommandInset ref
 LatexCommand ref
-reference "tab:Results-for-all-1"
+reference "tab:Results-for-all"
 
 \end_inset
 
- shows the results for measurements carried out on PizDaint at CSCS.
- All tests led to very small erors 
-\begin_inset Formula $<10^{-6}$
+ shows the results for measurements carried out on one node of Piz Daint
+ at CSCS.
+ All tests led to very small errors 
+\begin_inset Formula $<10^{-4}$
 \end_inset
 
 .
  The integrator [ref2] led to results, which were approx.
- 3 times faster than [ref0] and more than 7 times [ref1].
+ 3x faster than [ref0] and [ref1].
  Again, both tests of the new time stepping algorithm are significantly
- faster than the reference [ref0], also faster than [ref1] and [ref2].
+ faster than the reference [ref0], also faster than [ref1].
  Best performance was achieved with 
 \begin_inset Formula $b=1$
 \end_inset
@@ -10441,10 +10432,11 @@ reference "tab:Results-for-all-1"
 \begin_inset Formula $k=2$
 \end_inset
 
-, which was approximately 10x faster than the reference [ref0].
- Further, all QSSA tests with ICNTRL(6) = 2 or 3 were faster than the reference.
+, which was approximately 5x faster than the reference [ref0].
+ Further, all QSSA tests with ICNTRL(6) = 2 or 3 were faster than the reference
+ [ref0].
  All other choices for ICNTRL(6) led to very (>> reference*10) long computing
- times.
+ times or errors.
  These tests have therefore only been executed partly.
  The fastest results could be achieved with the parameters chosen in accordance
  to the poster by Taraborelli et al.
@@ -10468,7 +10460,7 @@ key "poster_wp9"
 \end_inset
 
  in autonomous mode.
- Both Rodas3 and Ros4 led to comparable results in terms of performance.
+ Rodas3 shows better results (3.5x faster) than Ros4 in terms of performance.
  
 \end_layout
 

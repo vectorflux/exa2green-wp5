@@ -39,9 +39,9 @@ PROGRAM main
   ! Integration time 
   REAL(8) :: time
   ! Absolute integration tolerances for variable species 
-  REAL(8) :: abstol(81)
+  REAL(8) :: abstol(82)
   ! Relative integration tolerances for variable species 
-  REAL(8) :: reltol(81)
+  REAL(8) :: reltol(82)
 
   ! Integer integration in/out parameters 
   INTEGER :: idata(20)
@@ -76,7 +76,7 @@ PROGRAM main
   CALL device_energy(device_ETS_init_total)
 
   WRITE(*,101) NCELLS,TSTART,TEND
-101 FORMAT("Kppa: Integrating ",I8," grid cells, time interval [",E8.2,",",E8.2,"]")
+101 FORMAT("Kppa: Integrating ",I8," grid cells, time interval [",F8.0,",",F8.0,"]")
 
   ! Initialize example grid data
   ALLOCATE(conc(NSPEC,NCELLS))
@@ -117,7 +117,7 @@ PROGRAM main
 
 !!$    rdata(1) = 0       ! Integration step size lower bound: 0 recommended
 !!$    rdata(2) = 0       ! Integration step size upper bound: 0 recommended
-!!$    rdata(3) = TDEL    ! Starting integration step size
+  rdata(3) = TDEL    ! Starting integration step size
 !!$    rdata(4) = 0.2     ! Lower bound on step decrease factor
 !!$    rdata(5) = 6       ! Upper bound on step increase factor
 !!$    rdata(6) = 0.1     ! Step decrease factor after step rejection
@@ -181,19 +181,33 @@ PROGRAM main
   rel_acc = SQRT(rel_acc/weight)
 
   WRITE(6,*)
+  WRITE(6,992) 'Total Rosenbrock function calls                 = ', ISTATS(1)
+  WRITE(6,992) 'Total Rosenbrock jacobian calls                 = ', ISTATS(2)
+  WRITE(6,992) 'Total Rosenbrock steps                          = ', ISTATS(3)
+  WRITE(6,992) 'Total Rosenbrock accepted steps                 = ', ISTATS(4)
+  WRITE(6,992) 'Total Rosenbrock rejected steps                 = ', ISTATS(5)
+  WRITE(6,992) 'Total Rosenbrock LU decompositions              = ', ISTATS(6)
+  WRITE(6,992) 'Total Rosenbrock forward/backward substitutions = ', ISTATS(7)
+  WRITE(6,992) 'Total Rosenbrock singular matrix decompositions = ', ISTATS(8)
+  WRITE(6,*)
   WRITE(6,999) 'Absolute Tolerance = ', ATOLS
   WRITE(6,999) 'Relative Tolerance = ', RTOLS
   WRITE(6,*)
   WRITE(6,995) 'IDATA = ', IDATA
   WRITE(6,996) 'RDATA = ', RDATA
   WRITE(6,*)
-  WRITE(6,991) 'Total number of timesteps = ', INT(TEND/TDEL) 
-  WRITE(6,*)
   WRITE(6,998) 'Subgrid coordinates (lon.)  = ', GRID0_LOC_S, GRID0_LOC_E
   WRITE(6,998) 'Subgrid coordinates (lat.)  = ', GRID1_LOC_S, GRID1_LOC_E
   WRITE(6,998) 'Subgrid coordinates (vert.) = ', GRID2_LOC_S, GRID2_LOC_E
   WRITE(6,*)
   WRITE(6,992) 'Total number of grid points = ', ncells
+  WRITE(6,*)
+  WRITE(6,*)   '******** One Timestep (average of all cells) ********'
+  WRITE(6,993) 'TTS              = ', TTS/INT((TEND-TSTART)/TDEL), ' s'
+  WRITE(6,994) 'ETS              = ', ETS/INT((TEND-TSTART)/TDEL), ' J'
+  WRITE(6,994) 'Device ETS       = ', device_ETS/INT((TEND-TSTART)/TDEL), ' J'
+  WRITE(6,*)
+  WRITE(6,991) 'Total number of timesteps = ', INT((TEND-TSTART)/TDEL) 
   WRITE(6,*)
   WRITE(6,*)   '******** Total Timesteps ********'
   WRITE(6,993) 'TTS              = ', TTS, ' s'
@@ -263,21 +277,21 @@ CONTAINS
     REAL(8) :: perc
     REAL(8) :: cspc(NMONITOR)
 
-    cspc(1) = conc(28,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    cspc(1) = conc(30,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    cspc(2) = conc(35,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    cspc(2) = conc(36,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    cspc(3) = conc(63,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    cspc(3) = conc(64,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    cspc(4) = conc(73,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    cspc(4) = conc(75,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    cspc(5) = conc(76,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    cspc(5) = conc(77,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    cspc(6) = conc(77,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    cspc(6) = conc(78,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    cspc(7) = conc(78,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    cspc(7) = conc(80,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    cspc(8) = conc(81,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    cspc(8) = conc(82,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
 
     perc = ((time-TSTART)/ABS(TEND-TSTART))*100.0
@@ -298,7 +312,7 @@ CONTAINS
 
 
     WRITE(*,401)
-    WRITE(*,402) "OP1","H2O2","HCHO","HO","NO2","NO","O3","NO3"
+    WRITE(*,402) "OP1","H2O2","HCHO","NO2","NO","O3","NO3","HO"
     WRITE(*,401)
 401 FORMAT(149("-"))
 402 FORMAT("       |     T     |     H     | Err. Norm | ",28(A11," |"))
@@ -324,21 +338,21 @@ CONTAINS
     REAL(8) :: DATA(1 + NLOOKAT)
 
     DATA(1) = ((time-TSTART)/ABS(TEND-TSTART))*100.0
-    DATA(2) = conc(28,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    DATA(2) = conc(30,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    DATA(3) = conc(35,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    DATA(3) = conc(36,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    DATA(4) = conc(63,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    DATA(4) = conc(64,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    DATA(5) = conc(73,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    DATA(5) = conc(75,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    DATA(6) = conc(76,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    DATA(6) = conc(77,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    DATA(7) = conc(77,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    DATA(7) = conc(78,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    DATA(8) = conc(78,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    DATA(8) = conc(80,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
-    DATA(9) = conc(81,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
+    DATA(9) = conc(82,GRID0_SPOT+(GRID1_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1) + &
          (GRID2_SPOT-1)*(GRID0_LOC_E-GRID0_LOC_S+1)*(GRID1_LOC_E-GRID1_LOC_S+1)) / CFACTOR
 
     WRITE(lookatFile,999) DATA

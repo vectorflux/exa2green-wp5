@@ -71,8 +71,8 @@ MODULE kpp_Integrator
 
 CONTAINS
 
-SUBROUTINE INTEGRATE( TIN, TOUT, &
-  ICNTRL_U, RCNTRL_U, ISTATUS_U, RSTATUS_U, NHOUR, IERR_U )
+SUBROUTINE INTEGRATE( TIN, TOUT, & 
+     ICNTRL_U, RCNTRL_U, ISTATUS_U, RSTATUS_U, NHOUR, IERR_U )
 
    IMPLICIT NONE
 
@@ -87,42 +87,43 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
    INTEGER,       INTENT(OUT), OPTIONAL :: IERR_U
 
    REAL(kind=dp) :: RCNTRL(20), RSTATUS(20)
-   INTEGER       :: ICNTRL(20), ISTATUS(20), IERR, ii, jj, kk, i, var_cnt
+   INTEGER       :: ICNTRL(20), ISTATUS(20)
+   INTEGER       :: IERR, ii, jj, kk, i, var_cnt
 
    INTEGER, SAVE :: Ntotal = 0
 
    IF (TIN == TSTART) THEN
-       IF (NHOUR == 0) THEN
-          !$OMP PARALLEL DEFAULT(SHARED) &
-          !$OMP PRIVATE(kk,jj,ii)
-          !$OMP DO COLLAPSE(2)
-          DO kk=1,kdim
-             DO jj=1,jdim
-                DO ii=1,idim
-                   ! set initial values with those of box(ii,jj,kk)
-                   VARTOT(1:NVAR,ii,jj,kk) = initial_conc_from_file(ii,jj,kk,1:NVAR) * CFACTOR * 1000
-                ENDDO
-             ENDDO
-          ENDDO
-          !$OMP END DO 
-          !$OMP END PARALLEL
-       ELSE
-          !$OMP PARALLEL DEFAULT(SHARED) &
-          !$OMP PRIVATE(kk,jj,ii,var_cnt)
-          !$OMP DO COLLAPSE(2)
-          DO kk=1,kdim
-             DO jj=1,jdim
-                DO ii=1,idim
-                   DO var_cnt=1,n_from_file-1
-                      ! set initial values with those of box(ii,jj,kk)
-                      VARTOT(lookup(var_cnt),ii,jj,kk) = initial_conc_from_file(ii,jj,kk,lookup(var_cnt)) * CFACTOR * 1000
-                   ENDDO
-                ENDDO
-             ENDDO
-          ENDDO
-          !$OMP END DO 
-          !$OMP END PARALLEL
-       ENDIF
+      IF (NHOUR == 0) THEN
+         !$OMP PARALLEL DEFAULT(SHARED) &
+         !$OMP PRIVATE(kk,jj,ii)
+         !$OMP DO COLLAPSE(2)
+         DO kk=1,kdim
+            DO jj=1,jdim
+               DO ii=1,idim
+                  ! set initial values with those of box(ii,jj,kk)
+                  VARTOT(1:NVAR,ii,jj,kk) = initial_conc_from_file(ii,jj,kk,1:NVAR) * CFACTOR * 1000
+               ENDDO
+            ENDDO
+         ENDDO
+         !$OMP END DO 
+         !$OMP END PARALLEL
+      ELSE
+         !$OMP PARALLEL DEFAULT(SHARED) &
+         !$OMP PRIVATE(kk,jj,ii,var_cnt)
+         !$OMP DO COLLAPSE(2)
+         DO kk=1,kdim
+            DO jj=1,jdim
+               DO ii=1,idim
+                  DO var_cnt=1,n_from_file
+                     ! set initial values with those of box(ii,jj,kk)
+                     VARTOT(lookup(var_cnt),ii,jj,kk) = initial_conc_from_file(ii,jj,kk,lookup(var_cnt)) * CFACTOR * 1000
+                  ENDDO
+               ENDDO
+            ENDDO
+         ENDDO
+         !$OMP END DO 
+         !$OMP END PARALLEL
+      ENDIF
 
       WRITE(6,991) (TIN-TSTART)/(TEND-TSTART)*100, TIN, &
            ( TRIM(SPC_NAMES(MONITOR(i))), VARTOT(MONITOR(i),idim_spot,jdim_spot,kdim_spot)/CFACTOR, i=1,NMONITOR )
@@ -133,7 +134,18 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
       CALL SaveData()
    END IF
 
-   !$OMP PARALLEL DO &
+!!$   IF (TIN == TSTART) THEN
+!!$      WRITE(6,*)
+!!$      WRITE(6,*) "ACT_HOUR = ",NHOUR
+!!$      DO i=1,82
+!!$         WRITE(6,*) TRIM(SPC_NAMES(i)), VARTOT(i,idim_spot,jdim_spot,kdim_spot)/(CFACTOR*1000)
+!!$      ENDDO
+!!$      WRITE(6,*)
+!!$      WRITE(6,*) "TEMP = ",temperature_from_file(idim_spot,jdim_spot,kdim_spot)
+!!$      WRITE(6,*)
+!!$   ENDIF
+      
+   !$OMP PARALLEL DO SCHEDULE(static) &
    !$OMP& COPYIN(TIME,STEPMIN) &
    !$OMP& DEFAULT(SHARED) &
    !$OMP& PRIVATE(kk,jj,ii,ICNTRL,RCNTRL,ISTATUS,RSTATUS) &
@@ -143,12 +155,12 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
       DO jj=jdim_loc_s,jdim_loc_e
          DO ii=idim_loc_s,idim_loc_e
 
-             ICNTRL(:)  = 0
-             RCNTRL(:)  = 0.0_dp
-             ISTATUS(:) = 0
-             RSTATUS(:) = 0.0_dp
+            ICNTRL(:)  = 0
+            RCNTRL(:)  = 0.0_dp
+            ISTATUS(:) = 0
+            RSTATUS(:) = 0.0_dp
 
-             ! set temperature values for all boxes(ii, jj, kk)
+            ! set temperature values for all boxes(ii, jj, kk)
             TEMP = temperature_from_file(ii,jj,kk)
 
             CALL Update_RCONST()
@@ -165,7 +177,6 @@ SUBROUTINE INTEGRATE( TIN, TOUT, &
             IF (PRESENT(RCNTRL_U)) THEN
                WHERE(RCNTRL_U(:) > 0) RCNTRL(:) = RCNTRL_U(:)
             END IF
-
 
             CALL Rosenbrock(NVAR,VARTOT(:,ii,jj,kk),TIN,TOUT,   &
                  ATOL,RTOL,                &

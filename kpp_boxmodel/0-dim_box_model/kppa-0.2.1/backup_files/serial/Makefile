@@ -118,8 +118,8 @@ box_model_monitor.o: box_model_monitor.f90 \
 
 clean:
 	rm -f box_model.exe box_model.dat boxmodel.* *.o *.mod
-	
+
 destroy: clean
-	rm -f *.f90 Makefile
+	rm -f *.f90 Makefile *general *performance
 
 #----------------------------- END Makefile END -------------------------------
