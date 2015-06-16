@@ -65,7 +65,7 @@
 \begin_body
 
 \begin_layout Title
-Testing of Rosenbrock Solvers for EXA2Green
+Testing of Rosenbrock Solvers for Exa2Green
 \end_layout
 
 \begin_layout Author
@@ -102,9 +102,8 @@ rosenbrock_posdef_h211b_qssa
  The following section presents tests for the new solver.
  Different configurations of the solver are being compared with respect
  to the speedup and the accuracy of the solution.
- All tests are carried out by means of a zero-dimensional box-model.
- The document closes with conclusions and an estimation of the new solver's
- potential E2S improvement for the extended testbed.
+ All tests are carried out by means of a zero-dimensional box model.
+ 
 \end_layout
 
 \begin_layout Section
@@ -560,7 +559,7 @@ Positive definite
 \end_layout
 
 \begin_layout Standard
-Last, an intransparant 
+Last, an 
 \begin_inset Quotes eld
 \end_inset
 
@@ -778,7 +777,7 @@ Tests
 
 \begin_layout Standard
 All tests were carried out by means of the 0-dim box-model using the repository
- revision number 220.
+ revision number 265.
  The utilized chemical mechanism is RADM-KA (Regional Acid Deposition Model
  Version Karlsruhe), a slightly amended version of the chemical mechanism
  RADM2 by Stockwell et al.
@@ -790,10 +789,10 @@ key "Stockwell1990"
 \end_inset
 
 .
- RADM-KA comprises 193 reactions and 82 chemical species, whereas one species
+ RADM-KA comprises 194 reactions and 83 chemical species, whereas one species
  is held constant.
  This mechanism was chosen in accordance to the baseline scenario, the collabora
-tors had agreed upon in March 2014.
+tors had agreed upon in May 2015 (redefinition of the COSMO-ART baseline).
 \end_layout
 
 \begin_layout Standard
@@ -815,7 +814,7 @@ The tests are set up on a three-dimensional discrete computing domain with
 \begin_inset Formula $114\;576$
 \end_inset
 
- 0-dim boxs, but all represent a polluted atmosphere above Paris.
+ 0-dim boxes, but all represent a polluted atmosphere above Paris.
  The model supports variable photolysis conditions, which allows to locally
  adapt the rate constants.
  Temperature is kept constant over all boxes.
@@ -836,11 +835,11 @@ In the tests presented here, no external disturbances due to advection,
  throughout the simulation, they equilibrate with elapsing time.
  Hence, the systems will be less stiff in the following 29 INTEGRATE function
  calls.
- However, the number of time-steps necessary for the solution of the chemical
+ However, the number of timesteps necessary for the solution of the chemical
  kinetics is strongly influenced by the degree of stiffness.
  Therefore, only the measurements for the very first call of the INTEGRATE
- function, can give a qualitative estimate for performance improvements
- for future three-dimensional runs within COSMO-ART.
+ function can give a qualitative estimate for performance improvements for
+ future three-dimensional runs within COSMO-ART.
 \end_layout
 
 \begin_layout Standard
@@ -865,7 +864,8 @@ ons needed for the benchmarking (tuning of parameters, statistics output)
 \begin_inset Formula $\text{atol =}10^{-2}$
 \end_inset
 
- on one node of Piz Daint at CSCS (Intel 8-core Xeon E5-2670 processor).
+ on one node of Piz Dora at CSCS (12-core Intel Haswell CPUs (Intel® Xeon®
+ E5-2690 v3)).
 \end_layout
 
 \begin_layout Paragraph
@@ -906,7 +906,7 @@ error to the reference solution
 \begin_layout Standard
 \begin_inset Formula 
 \[
-\text{err}_{\text{rel}}=\sqrt{\frac{\sum_{i=0}^{N}\left(\tilde{c}_{i}(T)-c_{i}(T)\right)^{2}}{\sum_{i=0}^{N}\tilde{c}_{i}^{2}}},
+\text{err}_{\text{rel}}=\sqrt{\frac{\sum_{i=0}^{N}\left(\tilde{c}_{i}(T)-c_{i}(T)\right)^{2}}{\sum_{i=0}^{N}\tilde{c}_{i}^{2}}}
 \]
 
 \end_inset
@@ -915,21 +915,6 @@ error to the reference solution
 \end_layout
 
 \begin_layout Standard
-\begin_inset Formula 
-\[
-\text{err}_{\text{rel}}=\sqrt{\sum_{i=0}^{N}\left(\frac{\tilde{c}_{i}(T)-c_{i}(T)}{\tilde{c}_{i}}\right)^{2}},
-\]
-
-\end_inset
-
-
-\begin_inset Formula 
-\[
-\text{err}_{\text{rel}}=\max\sum_{i=0}^{N}\left(\frac{\tilde{c}_{i}(T)-c_{i}(T)}{\tilde{c}_{i}}\right)^{2},
-\]
-
-\end_inset
-
 with 
 \begin_inset Formula $T=3600\;\text{sec}$
 \end_inset
@@ -994,8 +979,8 @@ Ros4 implementations for different KPP versions
 \end_layout
 
 \begin_layout Standard
-In the first tests, [ref0], [ref1] and [ref2], the KPP-2.2.1, KPP-2.2.3 and
- KPP-2.2.1_with_Prace_Integrator implementations of Ros4 were checked.
+In the first tests [ref0], [ref1] and [ref2], the KPP-2.2.1, KPP-2.2.3 and KPP-2.2.1_w
+ith_Prace_Integrator implementations of Ros4 were checked.
  The parameters for the tests can be seen in table 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1014,15 +999,17 @@ reference "tab:Results-for-all"
 \end_layout
 
 \begin_layout Standard
-In case of the Prace implementation, no additional options such as QSSA,
+In the case of the Prace implementation, no additional options such as QSSA,
  posdef and linear interpolation were enabled.
  The results illustrate, that the pure implementation of Ros4 already uses
  a different time step control mechanism.
  So the results [ref2] differ to those of [ref0], especially in the number
  of timesteps per function call.
- At this point, it also gets clear, that the time measurements we take,
- are not linear with the number of time steps, taken: the 176 timesteps
- taken in [ref0] need even more time, than the 329 timesteps token in [ref2].
+ However the number of timesteps between [ref2] and [ref1] are exactly the
+ same as well as the numerical accuracy, only the timings are different.
+ At this point it also gets clear, that the time measurements we take, are
+ not linear with the number of timesteps: the 266 timesteps taken in [ref0]
+ need even more time than the 346 timesteps taken in [ref2].
  
 \end_layout
 
@@ -1058,10 +1045,7 @@ key "Soderlind2002"
 \begin_inset Formula $k=2$
 \end_inset
 
-.
- As mentioned before, this new control mechanism is already implemented
- in the baseline in KPP-2.2.1.
- There 
+, but 
 \begin_inset Formula $b=1$
 \end_inset
 
@@ -1069,7 +1053,7 @@ key "Soderlind2002"
 \begin_inset Formula $k=4$
 \end_inset
 
- are also chosen for Ros4.
+ were also tested for Ros4.
   Parameters and results can be seen in table 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1119,7 +1103,6 @@ reference "tab:Results-for-all"
 \begin_layout Standard
 The tests [posdef1] - [posdef2] test all options of positive definition
  using Ros4, no QSSA and no linear interpolation.
- Note, that is absolutely intransparant, what this option actually does!
  Parameters and results can be seen in table 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1152,7 +1135,7 @@ All options for QSSA using Ros4, no posdef option, and no linear interpolation
 \begin_inset Formula $\tau_{QSSA}^{max}$
 \end_inset
 
- is varied from 
+ is tuned with 
 \begin_inset Formula $10^{-9}$
 \end_inset
 
@@ -1164,7 +1147,7 @@ All options for QSSA using Ros4, no posdef option, and no linear interpolation
 \begin_inset Formula $10^{-3}$
 \end_inset
 
- and 
+ or 
 \begin_inset Formula $10^{0}$
 \end_inset
 
@@ -1191,7 +1174,7 @@ reference "tab:Results-for-all"
 \end_layout
 
 \begin_layout Standard
-The parameters for these tests are chosen in accordance to the results,
+The parameters for these tests were chosen in accordance to the results
  presented on a poster by Taraborelli et al.
  
 \begin_inset CommandInset citation
@@ -1204,7 +1187,7 @@ key "poster_wp9"
 \begin_inset Quotes eld
 \end_inset
 
-the optimum for speedup and accuracy has been found with Rosenbrock-Rodas3
+the optimum for speedup and accuracy has been found with Rosenbrock Rodas3
  in the autonomous mode, 
 \begin_inset Formula $\tau_{QSSA}^{max}=1s$
 \end_inset
@@ -1217,10 +1200,56 @@ the optimum for speedup and accuracy has been found with Rosenbrock-Rodas3
 \begin_inset Formula $k=2$
 \end_inset
 
+
+\begin_inset Quotes erd
+\end_inset
+
 .
- As it has been seen in the previous QSSA tests, best choices for ICNTRL(6)
- seem to be 2 or 3 - we now choose 2.
- We both tested Ros4 and Rodas3 in combination with above mentioned settings.
+ As noticed with the previous QSSA tests, best choices for ICNTRL(6) seem
+ to be 2 or 3, which provides equivalent results.
+ For our tests, we considered ICNTRL(6) = 2 as it seems a bit faster.
+ Nevertheless, even if the previous QSSA tests revealed that considering
+ 
+\begin_inset Formula $\tau_{QSSA}^{max}=1s$
+\end_inset
+
+ is indeed the best choice in terms of computational speed, it turns out
+ that it is definitely not concerning numerical accuracy (
+\begin_inset Formula $\sim10^{-3}$
+\end_inset
+
+ for 
+\begin_inset Formula $\tau_{QSSA}^{max}=1s$
+\end_inset
+
+ versus 
+\begin_inset Formula $\sim10^{-7}$
+\end_inset
+
+for 
+\begin_inset Formula $\tau_{QSSA}^{max}\leq10^{-3}$
+\end_inset
+
+).
+ Therefore we conducted our experiments by using 
+\begin_inset Formula $\tau_{QSSA}^{max}=10^{-3}$
+\end_inset
+
+, instead of 
+\begin_inset Formula $\tau_{QSSA}^{max}=1s$
+\end_inset
+
+ considered by Taraborelli et al.
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "poster_wp9"
+
+\end_inset
+
+.
+ We tested both Ros4 and Rodas3 (in autonomous mode or not) in combination
+ with above mentioned settings.
  Parameters and results can be seen in table 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -1245,6 +1274,8 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+
+\size footnotesize
 \begin_inset Tabular
 <lyxtabular version="3" rows="9" columns="4">
 <features tabularvalignment="middle">
@@ -1267,7 +1298,7 @@ status open
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 [ref0]
 \end_layout
 
@@ -1278,7 +1309,7 @@ status open
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 [ref1]
 \end_layout
 
@@ -1289,7 +1320,7 @@ status open
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 [ref2]
 \end_layout
 
@@ -1302,7 +1333,7 @@ status open
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 KPP version
 \end_layout
 
@@ -1313,7 +1344,7 @@ KPP version
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 2.2.1
 \end_layout
 
@@ -1324,7 +1355,7 @@ KPP version
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 2.2.3
 \end_layout
 
@@ -1335,7 +1366,7 @@ KPP version
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 2.2.1_with_Prace_Integrator
 \end_layout
 
@@ -1348,7 +1379,7 @@ KPP version
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 ATOL(:)
 \end_layout
 
@@ -1359,7 +1390,7 @@ ATOL(:)
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 1.0d-2
 \end_layout
 
@@ -1390,7 +1421,7 @@ ATOL(:)
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 RTOL(:)
 \end_layout
 
@@ -1401,7 +1432,7 @@ RTOL(:)
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 1.0d-2
 \end_layout
 
@@ -1432,7 +1463,7 @@ RTOL(:)
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 ICNTRL(1)
 \end_layout
 
@@ -1443,7 +1474,7 @@ ICNTRL(1)
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 0
 \end_layout
 
@@ -1474,7 +1505,7 @@ ICNTRL(1)
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 ICNTRL(2)
 \end_layout
 
@@ -1485,7 +1516,7 @@ ICNTRL(2)
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 1
 \end_layout
 
@@ -1516,7 +1547,7 @@ ICNTRL(2)
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 ICNTRL(3)
 \end_layout
 
@@ -1527,7 +1558,7 @@ ICNTRL(3)
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 3
 \end_layout
 
@@ -1558,7 +1589,7 @@ ICNTRL(3)
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 ICNTRL(4:20)
 \end_layout
 
@@ -1569,7 +1600,7 @@ ICNTRL(4:20)
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 0
 \end_layout
 
@@ -1600,7 +1631,7 @@ ICNTRL(4:20)
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 RCNTRL(:)
 \end_layout
 
@@ -1611,7 +1642,7 @@ RCNTRL(:)
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 0.0
 \end_layout
 
@@ -2486,6 +2517,8 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+
+\size footnotesize
 \begin_inset Tabular
 <lyxtabular version="3" rows="9" columns="3">
 <features tabularvalignment="middle">
@@ -2717,6 +2750,8 @@ ICNTRL(5)
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 2
 \end_layout
 
@@ -3131,8 +3166,10 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+
+\size footnotesize
 \begin_inset Tabular
-<lyxtabular version="3" rows="13" columns="5">
+<lyxtabular version="3" rows="15" columns="5">
 <features tabularvalignment="middle">
 <column alignment="left" valignment="top" width="0">
 <column alignment="center" valignment="top" width="0">
@@ -3211,7 +3248,7 @@ KPP version
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 2.2.1_with_Prace_Integrator
 \end_layout
@@ -3263,8 +3300,7 @@ ATOL(:)
 
 \begin_layout Plain Layout
 
-\size small
-\color black
+\size footnotesize
 1.0d-2
 \end_layout
 
@@ -3315,8 +3351,7 @@ RTOL(:)
 
 \begin_layout Plain Layout
 
-\size small
-\color black
+\size footnotesize
 1.0d-2
 \end_layout
 
@@ -3366,6 +3401,8 @@ ICNTRL(1)
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0
 \end_layout
 
@@ -3375,6 +3412,8 @@ ICNTRL(1)
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 1
 \end_layout
 
@@ -3384,6 +3423,8 @@ ICNTRL(1)
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0
 \end_layout
 
@@ -3393,6 +3434,8 @@ ICNTRL(1)
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 1
 \end_layout
 
@@ -3416,8 +3459,7 @@ ICNTRL(2)
 
 \begin_layout Plain Layout
 
-\size small
-\color black
+\size footnotesize
 1
 \end_layout
 
@@ -3468,8 +3510,7 @@ ICNTRL(3)
 
 \begin_layout Plain Layout
 
-\size small
-\color black
+\size footnotesize
 3
 \end_layout
 
@@ -3489,7 +3530,7 @@ ICNTRL(3)
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 4
 \end_layout
@@ -3497,6 +3538,57 @@ ICNTRL(3)
 \end_inset
 </cell>
 <cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+ICNTRL(5)
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+1
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3523,14 +3615,13 @@ ICNTRL(6)
 
 \begin_layout Plain Layout
 
-\size small
-\color black
+\size footnotesize
 2
 \end_layout
 
 \end_inset
 </cell>
-<cell multicolumn="2" alignment="center" valignment="top" usebox="none">
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3548,7 +3639,7 @@ ICNTRL(6)
 
 \end_inset
 </cell>
-<cell multicolumn="2" alignment="center" valignment="top" usebox="none">
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3565,7 +3656,7 @@ ICNTRL(6)
 \begin_layout Plain Layout
 
 \size footnotesize
-ICNTRL(4, 5, 6:20)
+ICNTRL(4, 5, 7:20)
 \end_layout
 
 \end_inset
@@ -3575,8 +3666,7 @@ ICNTRL(4, 5, 6:20)
 
 \begin_layout Plain Layout
 
-\size small
-\color black
+\size footnotesize
 0
 \end_layout
 
@@ -3627,8 +3717,7 @@ RCNTRL(1:7, 11:20)
 
 \begin_layout Plain Layout
 
-\size small
-\color black
+\size footnotesize
 0.0
 \end_layout
 
@@ -3679,8 +3768,7 @@ RCNTRL(8)
 
 \begin_layout Plain Layout
 
-\size small
-\color black
+\size footnotesize
 1.0
 \end_layout
 
@@ -3731,8 +3819,7 @@ RCNTRL(9)
 
 \begin_layout Plain Layout
 
-\size small
-\color black
+\size footnotesize
 2.0
 \end_layout
 
@@ -3767,7 +3854,7 @@ RCNTRL(9)
 </cell>
 </row>
 <row>
-<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -3778,14 +3865,16 @@ RCNTRL(10)
 
 \end_inset
 </cell>
-<cell multicolumn="1" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 
-\size small
-\color black
-1.0
+\size footnotesize
+\begin_inset Formula $10^{-3}$
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -3818,11 +3907,62 @@ RCNTRL(10)
 \end_inset
 </cell>
 </row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+I_DO_LIN_INTERP
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="1" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\size footnotesize
+0
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell multicolumn="2" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
 </lyxtabular>
 
 \end_inset
 
-
+	
 \end_layout
 
 \begin_layout Plain Layout
@@ -7973,7 +8113,7 @@ c) in total
 \begin_layout Plain Layout
 
 \series bold
-\size small
+\size footnotesize
 \color black
 [ref0]
 \end_layout
@@ -7984,6 +8124,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.1906E-06
 \end_layout
 
@@ -7993,6 +8135,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 59
 \end_layout
 
@@ -8002,7 +8146,9 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-66.554
+
+\size footnotesize
+64.296
 \end_layout
 
 \end_inset
@@ -8011,6 +8157,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 8
 \end_layout
 
@@ -8020,7 +8168,9 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-11.045
+
+\size footnotesize
+10.726
 \end_layout
 
 \end_inset
@@ -8029,6 +8179,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 266
 \end_layout
 
@@ -8038,7 +8190,9 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-331.341
+
+\size footnotesize
+321.770
 \end_layout
 
 \end_inset
@@ -8050,7 +8204,7 @@ c) in total
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [ref1]
 \end_layout
@@ -8061,6 +8215,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.4712E-07
 \end_layout
 
@@ -8070,6 +8226,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 21
 \end_layout
 
@@ -8079,7 +8237,9 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-26.440
+
+\size footnotesize
+26.237
 \end_layout
 
 \end_inset
@@ -8088,6 +8248,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 11
 \end_layout
 
@@ -8097,7 +8259,9 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-14.510
+
+\size footnotesize
+14.378
 \end_layout
 
 \end_inset
@@ -8106,6 +8270,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 346
 \end_layout
 
@@ -8115,7 +8281,9 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-435.300
+
+\size footnotesize
+431.349
 \end_layout
 
 \end_inset
@@ -8127,7 +8295,7 @@ c) in total
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [ref2]
 \end_layout
@@ -8138,6 +8306,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.4712E-07
 \end_layout
 
@@ -8147,6 +8317,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 21
 \end_layout
 
@@ -8156,7 +8328,9 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-8.376
+
+\size footnotesize
+5.006
 \end_layout
 
 \end_inset
@@ -8165,6 +8339,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 11
 \end_layout
 
@@ -8174,7 +8350,9 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-4.603
+
+\size footnotesize
+2.738
 \end_layout
 
 \end_inset
@@ -8183,6 +8361,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 346
 \end_layout
 
@@ -8192,7 +8372,9 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-138.098
+
+\size footnotesize
+82.155
 \end_layout
 
 \end_inset
@@ -8204,7 +8386,7 @@ c) in total
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [timestep_1_2]
 \end_layout
@@ -8215,6 +8397,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.5346E-06
 \end_layout
 
@@ -8224,6 +8408,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 47
 \end_layout
 
@@ -8233,7 +8419,9 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-17.299
+
+\size footnotesize
+10.238
 \end_layout
 
 \end_inset
@@ -8242,6 +8430,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 6
 \end_layout
 
@@ -8251,7 +8441,9 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-2.419
+
+\size footnotesize
+1.441
 \end_layout
 
 \end_inset
@@ -8260,6 +8452,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 183
 \end_layout
 
@@ -8269,7 +8463,9 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-72.561
+
+\size footnotesize
+43.221
 \end_layout
 
 \end_inset
@@ -8281,7 +8477,7 @@ c) in total
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [timestep_1_4]
 \end_layout
@@ -8292,6 +8488,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.8385E-07
 \end_layout
 
@@ -8301,6 +8499,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 22
 \end_layout
 
@@ -8310,7 +8510,9 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-8.642
+
+\size footnotesize
+5.095
 \end_layout
 
 \end_inset
@@ -8319,6 +8521,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 8
 \end_layout
 
@@ -8328,7 +8532,9 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-3.454
+
+\size footnotesize
+2.049
 \end_layout
 
 \end_inset
@@ -8337,6 +8543,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 258
 \end_layout
 
@@ -8346,7 +8554,9 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-103.635
+
+\size footnotesize
+61.466
 \end_layout
 
 \end_inset
@@ -8358,7 +8568,7 @@ c) in total
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [linint1]
 \end_layout
@@ -8369,6 +8579,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.4712E-07
 \end_layout
 
@@ -8378,6 +8590,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 21
 \end_layout
 
@@ -8387,7 +8601,9 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-25.059
+
+\size footnotesize
+23.730
 \end_layout
 
 \end_inset
@@ -8396,6 +8612,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 11
 \end_layout
 
@@ -8405,7 +8623,9 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-13.753
+
+\size footnotesize
+13.023
 \end_layout
 
 \end_inset
@@ -8414,6 +8634,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 346
 \end_layout
 
@@ -8423,7 +8645,9 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
-412.575
+
+\size footnotesize
+390.689
 \end_layout
 
 \end_inset
@@ -8435,7 +8659,7 @@ c) in total
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [linint2]
 \end_layout
@@ -8446,6 +8670,8 @@ c) in total
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -8455,6 +8681,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -8464,6 +8692,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -8473,6 +8703,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -8482,6 +8714,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -8491,6 +8725,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -8500,6 +8736,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -8512,7 +8750,7 @@ NaN
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [posdef1]
 \end_layout
@@ -8523,6 +8761,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.4712E-07
 \end_layout
 
@@ -8532,6 +8772,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 21
 \end_layout
 
@@ -8541,7 +8783,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-8.410
+
+\size footnotesize
+4.985
 \end_layout
 
 \end_inset
@@ -8550,6 +8794,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 11
 \end_layout
 
@@ -8559,7 +8805,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-4.621
+
+\size footnotesize
+2.741
 \end_layout
 
 \end_inset
@@ -8568,6 +8816,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 346
 \end_layout
 
@@ -8577,7 +8827,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-138.618
+
+\size footnotesize
+82.240
 \end_layout
 
 \end_inset
@@ -8589,7 +8841,7 @@ NaN
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [posdef2]
 \end_layout
@@ -8600,6 +8852,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.4712E-07
 \end_layout
 
@@ -8609,6 +8863,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 21
 \end_layout
 
@@ -8618,7 +8874,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-8.453
+
+\size footnotesize
+4.983
 \end_layout
 
 \end_inset
@@ -8627,6 +8885,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 11
 \end_layout
 
@@ -8636,7 +8896,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-4.638
+
+\size footnotesize
+2.744
 \end_layout
 
 \end_inset
@@ -8645,6 +8907,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 346
 \end_layout
 
@@ -8654,7 +8918,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-139.132
+
+\size footnotesize
+82.320
 \end_layout
 
 \end_inset
@@ -8666,7 +8932,7 @@ NaN
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [QSSA2_1E-9]
 \end_layout
@@ -8677,6 +8943,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.5352E-07
 \end_layout
 
@@ -8686,6 +8954,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 21
 \end_layout
 
@@ -8695,7 +8965,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-8.551
+
+\size footnotesize
+5.015
 \end_layout
 
 \end_inset
@@ -8704,6 +8976,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 11
 \end_layout
 
@@ -8713,7 +8987,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-4.698
+
+\size footnotesize
+2.768
 \end_layout
 
 \end_inset
@@ -8722,6 +8998,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 346
 \end_layout
 
@@ -8731,7 +9009,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-140.946
+
+\size footnotesize
+83.047
 \end_layout
 
 \end_inset
@@ -8743,7 +9023,7 @@ NaN
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [QSSA3_1E-9]
 \end_layout
@@ -8754,6 +9034,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.5352E-07
 \end_layout
 
@@ -8763,6 +9045,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 21
 \end_layout
 
@@ -8772,7 +9056,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-8.498
+
+\size footnotesize
+5.029
 \end_layout
 
 \end_inset
@@ -8781,6 +9067,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 11
 \end_layout
 
@@ -8790,7 +9078,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-4.692
+
+\size footnotesize
+2.774
 \end_layout
 
 \end_inset
@@ -8799,6 +9089,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 346
 \end_layout
 
@@ -8808,7 +9100,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-140.762
+
+\size footnotesize
+83.224
 \end_layout
 
 \end_inset
@@ -8820,7 +9114,7 @@ NaN
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [QSSA6_1E-9]
 \end_layout
@@ -8831,6 +9125,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -8840,6 +9136,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -8849,6 +9147,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -8858,6 +9158,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -8867,6 +9169,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -8876,6 +9180,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -8885,6 +9191,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -8897,7 +9205,7 @@ NaN
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [QSSA2_1E-6]
 \end_layout
@@ -8908,6 +9216,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.5352E-07
 \end_layout
 
@@ -8917,6 +9227,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 21
 \end_layout
 
@@ -8926,7 +9238,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-8.493
+
+\size footnotesize
+4.987
 \end_layout
 
 \end_inset
@@ -8935,6 +9249,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 11
 \end_layout
 
@@ -8944,7 +9260,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-4.684
+
+\size footnotesize
+2.765
 \end_layout
 
 \end_inset
@@ -8953,6 +9271,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 346
 \end_layout
 
@@ -8962,7 +9282,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-140.516
+
+\size footnotesize
+82.957
 \end_layout
 
 \end_inset
@@ -8974,7 +9296,7 @@ NaN
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [QSSA3_1E-6]
 \end_layout
@@ -8985,6 +9307,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.5352E-07
 \end_layout
 
@@ -8994,6 +9318,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 21
 \end_layout
 
@@ -9003,7 +9329,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-8.532
+
+\size footnotesize
+5.003
 \end_layout
 
 \end_inset
@@ -9012,6 +9340,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 11
 \end_layout
 
@@ -9021,7 +9351,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-4.701
+
+\size footnotesize
+2.777
 \end_layout
 
 \end_inset
@@ -9030,6 +9362,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 346
 \end_layout
 
@@ -9039,7 +9373,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-141.042
+
+\size footnotesize
+83.310
 \end_layout
 
 \end_inset
@@ -9051,7 +9387,7 @@ NaN
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [QSSA6_1E-6]
 \end_layout
@@ -9062,6 +9398,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9071,6 +9409,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9080,6 +9420,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9089,6 +9431,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9098,6 +9442,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9107,6 +9453,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9116,6 +9464,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9128,7 +9478,7 @@ NaN
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [QSSA2_1E-3]
 \end_layout
@@ -9139,6 +9489,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.5352E-07
 \end_layout
 
@@ -9148,6 +9500,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 21
 \end_layout
 
@@ -9157,7 +9511,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-8.555
+
+\size footnotesize
+5.032
 \end_layout
 
 \end_inset
@@ -9166,6 +9522,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 11
 \end_layout
 
@@ -9175,7 +9533,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-4.705
+
+\size footnotesize
+2.777
 \end_layout
 
 \end_inset
@@ -9184,6 +9544,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 346
 \end_layout
 
@@ -9193,7 +9555,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-141.156
+
+\size footnotesize
+83.321
 \end_layout
 
 \end_inset
@@ -9205,7 +9569,7 @@ NaN
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [QSSA3_1E-3]
 \end_layout
@@ -9216,6 +9580,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.5352E-07
 \end_layout
 
@@ -9225,6 +9591,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 21
 \end_layout
 
@@ -9234,7 +9602,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-8.579
+
+\size footnotesize
+5.050
 \end_layout
 
 \end_inset
@@ -9243,6 +9613,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 11
 \end_layout
 
@@ -9252,7 +9624,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-4.721
+
+\size footnotesize
+2.786
 \end_layout
 
 \end_inset
@@ -9261,6 +9635,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 346
 \end_layout
 
@@ -9270,7 +9646,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-141.635
+
+\size footnotesize
+83.594
 \end_layout
 
 \end_inset
@@ -9282,7 +9660,7 @@ NaN
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [QSSA6_1E-3]
 \end_layout
@@ -9293,6 +9671,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9302,6 +9682,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9311,6 +9693,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9320,6 +9704,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9329,6 +9715,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9338,6 +9726,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9347,6 +9737,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9359,7 +9751,7 @@ NaN
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [QSSA2_1E0]
 \end_layout
@@ -9370,6 +9762,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.2264E-03
 \end_layout
 
@@ -9379,6 +9773,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 21
 \end_layout
 
@@ -9388,7 +9784,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-8.579
+
+\size footnotesize
+5.051
 \end_layout
 
 \end_inset
@@ -9397,6 +9795,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 4
 \end_layout
 
@@ -9406,7 +9806,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-2.049
+
+\size footnotesize
+1.215
 \end_layout
 
 \end_inset
@@ -9415,6 +9817,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 146
 \end_layout
 
@@ -9424,7 +9828,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-61.472
+
+\size footnotesize
+36.464
 \end_layout
 
 \end_inset
@@ -9436,7 +9842,7 @@ NaN
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [QSSA3_1E0]
 \end_layout
@@ -9447,6 +9853,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 0.2264E-03
 \end_layout
 
@@ -9456,6 +9864,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 21
 \end_layout
 
@@ -9465,7 +9875,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-8.530
+
+\size footnotesize
+5.020
 \end_layout
 
 \end_inset
@@ -9474,6 +9886,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 4
 \end_layout
 
@@ -9483,7 +9897,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-2.060
+
+\size footnotesize
+1.220
 \end_layout
 
 \end_inset
@@ -9492,6 +9908,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 146
 \end_layout
 
@@ -9501,7 +9919,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-61.790
+
+\size footnotesize
+36.593
 \end_layout
 
 \end_inset
@@ -9513,7 +9933,7 @@ NaN
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [QSSA6_1E0]
 \end_layout
@@ -9524,6 +9944,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9533,6 +9955,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9542,6 +9966,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9551,6 +9977,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9560,6 +9988,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9569,6 +9999,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9578,6 +10010,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 NaN
 \end_layout
 
@@ -9590,7 +10024,7 @@ NaN
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [opt_ros4_a]
 \end_layout
@@ -9601,7 +10035,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.2287E-03
+
+\size footnotesize
+0.5421E-06
 \end_layout
 
 \end_inset
@@ -9610,6 +10046,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 47
 \end_layout
 
@@ -9619,7 +10057,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-16.959
+
+\size footnotesize
+9.805
 \end_layout
 
 \end_inset
@@ -9628,7 +10068,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-4
+
+\size footnotesize
+6
 \end_layout
 
 \end_inset
@@ -9637,7 +10079,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-1.820
+
+\size footnotesize
+1.383
 \end_layout
 
 \end_inset
@@ -9646,7 +10090,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-138
+
+\size footnotesize
+183
 \end_layout
 
 \end_inset
@@ -9655,7 +10101,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-54.595
+
+\size footnotesize
+41.475
 \end_layout
 
 \end_inset
@@ -9667,7 +10115,7 @@ NaN
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [opt_rodas3_a]
 \end_layout
@@ -9678,7 +10126,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.2256E-03
+
+\size footnotesize
+0.2144E-06
 \end_layout
 
 \end_inset
@@ -9687,6 +10137,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 18
 \end_layout
 
@@ -9696,7 +10148,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-6.859
+
+\size footnotesize
+3.979
 \end_layout
 
 \end_inset
@@ -9705,7 +10159,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-3
+
+\size footnotesize
+4
 \end_layout
 
 \end_inset
@@ -9714,7 +10170,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-1.458
+
+\size footnotesize
+1.058
 \end_layout
 
 \end_inset
@@ -9723,7 +10181,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-107
+
+\size footnotesize
+135
 \end_layout
 
 \end_inset
@@ -9732,7 +10192,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-43.735
+
+\size footnotesize
+31.731
 \end_layout
 
 \end_inset
@@ -9744,7 +10206,7 @@ NaN
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [opt_ros4_na]
 \end_layout
@@ -9755,7 +10217,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.2287E-03
+
+\size footnotesize
+0.5421E-06
 \end_layout
 
 \end_inset
@@ -9764,6 +10228,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 47
 \end_layout
 
@@ -9773,7 +10239,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-17.446
+
+\size footnotesize
+10.175
 \end_layout
 
 \end_inset
@@ -9782,7 +10250,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-4
+
+\size footnotesize
+6
 \end_layout
 
 \end_inset
@@ -9791,7 +10261,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-1.892
+
+\size footnotesize
+1.461
 \end_layout
 
 \end_inset
@@ -9800,7 +10272,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-138
+
+\size footnotesize
+183
 \end_layout
 
 \end_inset
@@ -9809,7 +10283,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-56.749
+
+\size footnotesize
+43.839
 \end_layout
 
 \end_inset
@@ -9821,7 +10297,7 @@ NaN
 
 \begin_layout Plain Layout
 
-\size small
+\size footnotesize
 \color black
 [opt_rodas3_na]
 \end_layout
@@ -9832,7 +10308,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-0.2256E-03
+
+\size footnotesize
+0.2144E-06
 \end_layout
 
 \end_inset
@@ -9841,6 +10319,8 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
+
+\size footnotesize
 18
 \end_layout
 
@@ -9850,7 +10330,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-7.197
+
+\size footnotesize
+4.236
 \end_layout
 
 \end_inset
@@ -9859,7 +10341,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-3
+
+\size footnotesize
+4
 \end_layout
 
 \end_inset
@@ -9868,7 +10352,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-1.536
+
+\size footnotesize
+1.129
 \end_layout
 
 \end_inset
@@ -9877,7 +10363,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-107
+
+\size footnotesize
+135
 \end_layout
 
 \end_inset
@@ -9886,7 +10374,9 @@ NaN
 \begin_inset Text
 
 \begin_layout Plain Layout
-46.075
+
+\size footnotesize
+33.872
 \end_layout
 
 \end_inset
@@ -9902,7 +10392,7 @@ NaN
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Results for all tests on Piz Daint.
+Results for all tests on Piz Dora.
  
 \begin_inset CommandInset label
 LatexCommand label
@@ -10308,13 +10798,7 @@ status collapsed
 \end_layout
 
 \begin_layout Section
-Conclusions
-\end_layout
-
-\begin_layout Standard
-All results are only discussed with regard to option a) first call only.
- This decision has been guided by the comment in footnote 1.
- 
+Conclusion
 \end_layout
 
 \begin_layout Paragraph
@@ -10401,10 +10885,6 @@ key "poster_wp9"
 
 \end_layout
 
-\begin_layout Paragraph
-Discussion measurements on Piz Daint at CSCS
-\end_layout
-
 \begin_layout Standard
 Table 
 \begin_inset CommandInset ref
@@ -10413,18 +10893,17 @@ reference "tab:Results-for-all"
 
 \end_inset
 
- shows the results for measurements carried out on one node of Piz Daint
- at CSCS.
- All tests led to very small errors 
-\begin_inset Formula $<10^{-4}$
-\end_inset
+ shows the results for measurements carried out on one node of Piz Dora
+ at CSCS using the GNU compiler version 4.9.1.
+ The first observation is that in the case of the pure Prace implementation
+ [ref2] (Ros4 with no additional options such as QSSA, posdef and linear
+ interpolation) already outperforms [ref1] (KPP-2.2.3) by a factor 5 and [ref1]
+ (KPP-2.2.1) by a factor 13 for the time spent in the first call only.
+ 
+\end_layout
 
-.
- The integrator [ref2] led to results, which were approx.
- 3x faster than [ref0] and [ref1].
- Again, both tests of the new time stepping algorithm are significantly
- faster than the reference [ref0], also faster than [ref1].
- Best performance was achieved with 
+\begin_layout Standard
+Best performance for total runtime was achieved with 
 \begin_inset Formula $b=1$
 \end_inset
 
@@ -10432,14 +10911,55 @@ reference "tab:Results-for-all"
 \begin_inset Formula $k=2$
 \end_inset
 
-, which was approximately 5x faster than the reference [ref0].
- Further, all QSSA tests with ICNTRL(6) = 2 or 3 were faster than the reference
- [ref0].
+ representing 183 timesteps and 43 s in total, against 258 timesteps and
+ 61 s with 
+\begin_inset Formula $b=1$
+\end_inset
+
+ and 
+\begin_inset Formula $k=4$
+\end_inset
+
+.
+ However the time stepping control mechanism is faster with 
+\begin_inset Formula $b=1$
+\end_inset
+
+ and 
+\begin_inset Formula $k=4$
+\end_inset
+
+ if we consider only the first call, requiring with roughly twice less timesteps
+ than the case 
+\begin_inset Formula $b=1$
+\end_inset
+
+ and 
+\begin_inset Formula $k=2$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The second point is that the linear interpolation scheme to smoothly vary
+ the rate coefficients is quite costy in this case in terms of performance.
+ However it would actually really make sense during night/day transitions
+ and not in this test simulating a 1h scenario at high noon.
+\end_layout
+
+\begin_layout Standard
+Then, we can see clearly that all QSSA tests with ICNTRL(6) = 2 or 3 are
+ faster than the reference [ref0].
  All other choices for ICNTRL(6) led to very (>> reference*10) long computing
- times or errors.
- These tests have therefore only been executed partly.
- The fastest results could be achieved with the parameters chosen in accordance
- to the poster by Taraborelli et al.
+ times or errors, therefore these tests have only been executed partly.
+ 
+\end_layout
+
+\begin_layout Standard
+Finally, four configurations have been tested according to the results presented
+ on a poster by Taraborelli et al.
  
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -10447,11 +10967,11 @@ key "poster_wp9"
 
 \end_inset
 
-, including a QSSA assumption ( ICNTRL(6) = 2 ) and 
-\begin_inset Formula $\tau_{QSSA}^{max}=1\;\text{sec}$
-\end_inset
-
- and the new time stepping control h211b with 
+, by varying only the Rosenbrock solver (Ros4 or Rodas3) and the mode (autonomou
+s or not).
+ The fastest run has been achieved for the Rodas3 solver including a QSSA
+ assumption ( ICNTRL(6) = 2 ), an artificial preservation of positivity
+ of the solution, and the new time stepping control h211b with 
 \begin_inset Formula $b=1$
 \end_inset
 
@@ -10460,8 +10980,18 @@ key "poster_wp9"
 \end_inset
 
  in autonomous mode.
- Rodas3 shows better results (3.5x faster) than Ros4 in terms of performance.
- 
+ The result is an impressive x 16 reduction in the time spent in the first
+ loop w.r.t.
+ [ref0].
+ The only difference with the conclusion of Taraborelli et al., is 
+\begin_inset Formula $\tau_{QSSA}^{max}=10^{-3}$
+\end_inset
+
+ which was chosen in favor of 
+\begin_inset Formula $\tau_{QSSA}^{max}=1s$
+\end_inset
+
+ in order to optimize the numerical accuracy.
 \end_layout
 
 \begin_layout Standard
