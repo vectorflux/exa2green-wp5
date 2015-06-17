@@ -3656,7 +3656,7 @@ ICNTRL(6)
 \begin_layout Plain Layout
 
 \size footnotesize
-ICNTRL(4, 5, 7:20)
+ICNTRL(4, 7:20)
 \end_layout
 
 \end_inset
