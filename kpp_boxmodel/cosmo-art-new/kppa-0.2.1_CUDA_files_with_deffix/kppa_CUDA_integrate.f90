@@ -1,7 +1,7 @@
 !-------------------- BEGIN kppa_CUDA_integrate.f90 BEGIN --------------------
 ! @file kppa_CUDA_integrate.f90                                               
 ! @author charlesj                                                            
-! @date 2015-01-22 16:21:36.377184                                            
+! @date 2015-07-06 14:41:45.145335                                            
 ! @brief Interface to time stepping integrator                                
 !                                                                             
 ! Definitions of interface functions for the Kppa-generated                   

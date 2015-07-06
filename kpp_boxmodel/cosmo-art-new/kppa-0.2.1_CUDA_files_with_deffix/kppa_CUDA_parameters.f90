@@ -1,7 +1,7 @@
 !-------------------- BEGIN kppa_CUDA_parameters.f90 BEGIN -------------------
 ! @file kppa_CUDA_parameters.f90                                              
 ! @author charlesj                                                            
-! @date 2015-01-22 16:21:35.520422                                            
+! @date 2015-07-06 14:41:44.223591                                            
 ! @brief Program parameters                                                   
 !                                                                             
 ! Integration tolerances, program constants, and species indices.             

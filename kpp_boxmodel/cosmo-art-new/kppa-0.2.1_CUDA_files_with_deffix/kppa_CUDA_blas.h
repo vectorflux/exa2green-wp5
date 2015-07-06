@@ -1,7 +1,7 @@
 /*------------------------ BEGIN kppa_CUDA_blas.h BEGIN -----------------------*/
 /* @file kppa_CUDA_blas.h                                                      */
 /* @author charlesj                                                            */
-/* @date 2015-01-22 16:21:35.894440                                            */
+/* @date 2015-07-06 14:41:44.583147                                            */
 /* @brief Basic linear algebra subprogram definitions                          */
 /*                                                                             */
 /* A reduced set of BLAS routines optimized for Kppa-generated solvers         */

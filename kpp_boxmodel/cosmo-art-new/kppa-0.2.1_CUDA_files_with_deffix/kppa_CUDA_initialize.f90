@@ -1,7 +1,7 @@
 !-------------------- BEGIN kppa_CUDA_initialize.f90 BEGIN -------------------
 ! @file kppa_CUDA_initialize.f90                                              
 ! @author charlesj                                                            
-! @date 2015-01-22 16:21:36.468189                                            
+! @date 2015-07-06 14:41:45.249677                                            
 ! @brief Species concentration initialization                                 
 !                                                                             
 ! Species concentration initialization                                        

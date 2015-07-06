@@ -1,7 +1,7 @@
 /*----------------------- BEGIN kppa_CUDA_rates.h BEGIN -----------------------*/
 /* @file kppa_CUDA_rates.h                                                     */
 /* @author charlesj                                                            */
-/* @date 2015-01-22 16:21:36.008050                                            */
+/* @date 2015-07-06 14:41:44.704324                                            */
 /* @brief Reaction rate calculation and utility functions                      */
 /*                                                                             */
 /* Reaction rate calculation and utility functions                             */

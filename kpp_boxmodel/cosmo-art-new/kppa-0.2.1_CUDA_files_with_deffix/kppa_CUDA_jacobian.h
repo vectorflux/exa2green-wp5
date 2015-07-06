@@ -1,7 +1,7 @@
 /*---------------------- BEGIN kppa_CUDA_jacobian.h BEGIN ---------------------*/
 /* @file kppa_CUDA_jacobian.h                                                  */
 /* @author charlesj                                                            */
-/* @date 2015-01-22 16:21:36.312306                                            */
+/* @date 2015-07-06 14:41:45.057983                                            */
 /* @brief The Jacobian of the chemical model                                   */
 /*                                                                             */
 /* The Jacobian of the chemical model                                          */

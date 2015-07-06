@@ -1,7 +1,7 @@
 /*---------------------- BEGIN kppa_CUDA_decomp.cu BEGIN ----------------------*/
 /* @file kppa_CUDA_decomp.cu                                                   */
 /* @author charlesj                                                            */
-/* @date 2015-01-22 16:21:36.103751                                            */
+/* @date 2015-07-06 14:41:44.835941                                            */
 /* @brief LU decomposition of the row-compressed sparse Jacobian               */
 /*                                                                             */
 /* LU decomposition of the row-compressed sparse Jacobian                      */

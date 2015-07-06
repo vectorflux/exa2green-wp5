@@ -1,7 +1,7 @@
 /*---------------------- BEGIN kppa_CUDA_function.h BEGIN ---------------------*/
 /* @file kppa_CUDA_function.h                                                  */
 /* @author charlesj                                                            */
-/* @date 2015-01-22 16:21:36.071101                                            */
+/* @date 2015-07-06 14:41:44.798541                                            */
 /* @brief The ODE function of the chemical model                               */
 /*                                                                             */
 /* The ODE function of the chemical model                                      */
