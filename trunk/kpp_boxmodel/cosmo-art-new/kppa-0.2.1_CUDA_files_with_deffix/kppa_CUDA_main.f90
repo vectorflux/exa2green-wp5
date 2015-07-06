@@ -1,7 +1,7 @@
 !----------------------- BEGIN kppa_CUDA_main.f90 BEGIN ----------------------
 ! @file kppa_CUDA_main.f90                                                    
 ! @author charlesj                                                            
-! @date 2015-01-22 16:21:36.585204                                            
+! @date 2015-07-06 14:41:45.380834                                            
 ! @brief Fortran90 driver with plplot                                         
 !                                                                             
 ! Fortran90 driver with plplot                                                

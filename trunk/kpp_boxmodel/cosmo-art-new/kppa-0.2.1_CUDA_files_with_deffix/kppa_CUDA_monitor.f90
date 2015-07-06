@@ -1,7 +1,7 @@
 !--------------------- BEGIN kppa_CUDA_monitor.f90 BEGIN ---------------------
 ! @file kppa_CUDA_monitor.f90                                                 
 ! @author charlesj                                                            
-! @date 2015-01-22 16:21:36.581937                                            
+! @date 2015-07-06 14:41:45.377069                                            
 ! @brief Mechanism monitoring                                                 
 !                                                                             
 ! Species names, equations, etc.                                              

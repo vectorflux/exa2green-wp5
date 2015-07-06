@@ -1,7 +1,7 @@
 /*----------------------- BEGIN kppa_CUDA_sparse.h BEGIN ----------------------*/
 /* @file kppa_CUDA_sparse.h                                                    */
 /* @author charlesj                                                            */
-/* @date 2015-01-22 16:21:35.641358                                            */
+/* @date 2015-07-06 14:41:44.324430                                            */
 /* @brief Data and utilities for row-compressed sparse matrices                */
 /*                                                                             */
 /* The following matrices are represented here in row-compressed form:         */

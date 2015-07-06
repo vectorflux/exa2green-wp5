@@ -1,7 +1,7 @@
 /*-------------------- BEGIN kppa_CUDA_cu_integrate.h BEGIN -------------------*/
 /* @file kppa_CUDA_cu_integrate.h                                              */
 /* @author charlesj                                                            */
-/* @date 2015-01-22 16:21:35.851685                                            */
+/* @date 2015-07-06 14:41:44.537508                                            */
 /* @brief Interface to time stepping integrator                                */
 /*                                                                             */
 /* Definitions of interface functions for the Kppa-generated                   */

@@ -1,7 +1,7 @@
 /*--------------------- BEGIN kppa_CUDA_rosenbrock.h BEGIN --------------------*/
 /* @file kppa_CUDA_rosenbrock.h                                                */
 /* @author charlesj                                                            */
-/* @date 2015-01-22 16:21:36.314312                                            */
+/* @date 2015-07-06 14:41:45.067337                                            */
 /* @brief Solves the system y' = F(t,y) using a Rosenbrock method              */
 /*                                                                             */
 /* Solves the system y' = F(t,y) using a Rosenbrock method defined by:         */

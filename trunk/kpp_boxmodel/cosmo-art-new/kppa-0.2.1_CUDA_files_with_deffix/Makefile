@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------
 # @file Makefile
 # @author charlesj
-# @date 2015-01-22 16:21:36.669294
+# @date 2015-07-06 14:41:45.475894
 # @brief Makefile for mixed language (Fortran90, CUDA) compilation
 # 
 # Makefile for mixed language (Fortran90, CUDA) compilation

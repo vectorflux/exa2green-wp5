@@ -1,7 +1,7 @@
 /*----------------------- BEGIN kppa_CUDA_rates.cu BEGIN ----------------------*/
 /* @file kppa_CUDA_rates.cu                                                    */
 /* @author charlesj                                                            */
-/* @date 2015-01-22 16:21:35.954951                                            */
+/* @date 2015-07-06 14:41:44.647816                                            */
 /* @brief Reaction rate calculation and utility functions                      */
 /*                                                                             */
 /* Reaction rate calculation and utility functions                             */
@@ -16,7 +16,7 @@
 #include "kppa_CUDA_cu_parameters.h"
 #include "kppa_CUDA_rates.h"
 
-/* BEGIN INLINE declared at /users/charlesj/KPP_BOXMODEL/cosmo-art-new/kppa-0.2.1_CUDA_files/radm2_kpp_eleni_0714_kppa.def:308,1 */
+/* BEGIN INLINE declared at /users/charlesj/KPP_BOXMODEL/cosmo-art-new/kppa-0.2.1_CUDA_files_with_deffix/radm2_kpp_eleni_0714_kppa.def:311,1 */
 
 __device__
 double TROE(double const K0300, double const Q, double const KU300, double const R, double const M, double const T)
@@ -75,7 +75,7 @@ double SPEZ(double const A0, double const B0, double const A2, double const B2, 
 }
 
 
-/* END INLINE declared at /users/charlesj/KPP_BOXMODEL/cosmo-art-new/kppa-0.2.1_CUDA_files/radm2_kpp_eleni_0714_kppa.def:308,1 */
+/* END INLINE declared at /users/charlesj/KPP_BOXMODEL/cosmo-art-new/kppa-0.2.1_CUDA_files_with_deffix/radm2_kpp_eleni_0714_kppa.def:311,1 */
 
 
 /* Be friendly to Fortran mathmatical intrinsics */
@@ -358,7 +358,7 @@ void d_Rates(size_t const ncells32, double const time, size_t const idx,
     rct[40*ncells32] = TROE( 2.2e-30, 4.3e0, 1.5e-12, 0.5e0, M, TEMP );
     rct[41*ncells32] =
         EQT(2.2e-30,4.3e0,1.5e-12,0.5e0,M,TEMP,9.09e+26,11200.e0);
-    rct[42*ncells32] = HET(1);
+    rct[42*ncells32] = HET;
     rct[43*ncells32] = TROE( 2.6e-30, 3.2e0, 2.4e-11, 1.3e0, M, TEMP );
     rct[44*ncells32] =
         SPEZ(7.2e-15,785.e0,4.1e-16,1440.e0,1.9e-33,725.e0,M,TEMP);
@@ -472,23 +472,23 @@ void d_Rates(size_t const ncells32, double const time, size_t const idx,
     rct[152*ncells32] = 4.20E-14 * exp( 220. / TEMP );
     rct[153*ncells32] = 3.60E-16 * exp( 220. / TEMP );
     rct[154*ncells32] = 1.21E-11 * exp( 444. / TEMP );
-    rct[155*ncells32] = ARR2(1.19E-12,490.);
-    rct[156*ncells32] = ARR2(1.01E-15,-736.);
+    rct[155*ncells32] = ARR2(1.19E-12,490.,TEMP);
+    rct[156*ncells32] = ARR2(1.01E-15,-736.,TEMP);
     rct[157*ncells32] = 4e-12;
     rct[158*ncells32] = 1.5e-11;
-    rct[159*ncells32] = ARR2(3.56E-14,708.);
-    rct[160*ncells32] = ARR2(7.40E-13,765.);
+    rct[159*ncells32] = ARR2(3.56E-14,708.,TEMP);
+    rct[160*ncells32] = ARR2(7.40E-13,765.,TEMP);
     rct[161*ncells32] = 1.2e-12;
     rct[162*ncells32] = 1.7e-10;
     rct[163*ncells32] = 1.22e-11;
     rct[164*ncells32] = 2e-16;
     rct[165*ncells32] = 4e-12;
     rct[166*ncells32] = 1.5e-11;
-    rct[167*ncells32] = ARR2(3.56E-14,708.);
-    rct[168*ncells32] = ARR2(7.40E-13,765.);
+    rct[167*ncells32] = ARR2(3.56E-14,708.,TEMP);
+    rct[168*ncells32] = ARR2(7.40E-13,765.,TEMP);
     rct[169*ncells32] = 1.2e-12;
-    rct[170*ncells32] = ARR2(2.43E-12,360.);
-    rct[171*ncells32] = ARR2(2.05E-13,1300.);
+    rct[170*ncells32] = ARR2(2.43E-12,360.,TEMP);
+    rct[171*ncells32] = ARR2(2.05E-13,1300.,TEMP);
     rct[172*ncells32] = 2e-12;
     rct[173*ncells32] = 1e-10;
     rct[174*ncells32] = 1.3e-11;
@@ -496,20 +496,20 @@ void d_Rates(size_t const ncells32, double const time, size_t const idx,
         175. / TEMP ));
     rct[176*ncells32] = 0.5*(1.36E-15 * exp( -2112. / TEMP ) + 7.51E-16 *
         exp( -1521. / TEMP ));
-    rct[177*ncells32] = ARR2(2.54E-12,360.);
-    rct[178*ncells32] = ARR2(1.82E-13,1300.);
+    rct[177*ncells32] = ARR2(2.54E-12,360.,TEMP);
+    rct[178*ncells32] = ARR2(1.82E-13,1300.,TEMP);
     rct[179*ncells32] = 2e-12;
     rct[180*ncells32] = TROE( 9.7e-29, -5.6e0, 9.3e-12, -1.5e0, M, TEMP );
     rct[181*ncells32] = TROE( 9.7e-29, -5.6e0, 9.3e-12, -1.5e0, M, TEMP
-        )/(ARR2(9.0E-19,14000.));
+        )/(ARR2(9.0E-19,14000.,TEMP));
     rct[182*ncells32] = 3.6e-12;
     rct[183*ncells32] = 3e-11;
     rct[184*ncells32] = 3e-12;
-    rct[185*ncells32] = ARR2(5.60E-12,270.);
-    rct[186*ncells32] = ARR2(1.9E-13,500.);
-    rct[187*ncells32] = ARR2(9.6E-12,-234.);
+    rct[185*ncells32] = ARR2(5.60E-12,270.,TEMP);
+    rct[186*ncells32] = ARR2(1.9E-13,500.,TEMP);
+    rct[187*ncells32] = ARR2(9.6E-12,-234.,TEMP);
     rct[188*ncells32] =
-        ARR2(3.04E-12,350.)*ARR2(1.106E-31,7460.)*M/(1+ARR2(1.106E-31,7460.)*M);
+        ARR2(3.04E-12,350.,TEMP)*ARR2(1.106E-31,7460.,TEMP)*M/(1+ARR2(1.106E-31,7460.,TEMP)*M);
     rct[189*ncells32] = 5.8e-11;
     rct[190*ncells32] = 2.5e-12;
     rct[191*ncells32] = 2.5e-12;

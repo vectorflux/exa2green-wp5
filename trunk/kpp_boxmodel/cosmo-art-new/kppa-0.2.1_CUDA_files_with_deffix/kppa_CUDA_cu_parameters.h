@@ -1,7 +1,7 @@
 /*------------------- BEGIN kppa_CUDA_cu_parameters.h BEGIN -------------------*/
 /* @file kppa_CUDA_cu_parameters.h                                             */
 /* @author charlesj                                                            */
-/* @date 2015-01-22 16:21:35.607681                                            */
+/* @date 2015-07-06 14:41:44.280753                                            */
 /* @brief CUDA interface to program parameters                                 */
 /*                                                                             */
 /* CUDA interface to program parameters, such as integration tolerances,       */

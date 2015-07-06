@@ -1,7 +1,7 @@
 /*----------------------- BEGIN kppa_CUDA_solve.h BEGIN -----------------------*/
 /* @file kppa_CUDA_solve.h                                                     */
 /* @author charlesj                                                            */
-/* @date 2015-01-22 16:21:36.144312                                            */
+/* @date 2015-07-06 14:41:44.881798                                            */
 /* @brief Solve Ax=b by forward-backward substitution                          */
 /*                                                                             */
 /* Solve Ax=b by forward-backward substitution                                 */
