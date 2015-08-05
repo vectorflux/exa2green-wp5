@@ -26,7 +26,8 @@ FC_LAHEY   = lf95
 #FOPT_LAHEY = -Cpp --pca -O
 FOPT_LAHEY = -Cpp --chk a,e,s,u --pca --ap -O0 -g --trap --trace --chkglobal
 FC_INTEL   = ftn
-FOPT_INTEL = -fpp -O3 -openmp -fp-model strict
+#FOPT_INTEL = -fpp -O3 -openmp -fp-model strict (very slow)
+FOPT_INTEL = -fpp -O1 -openmp
 FC_PGF     = pgf90
 #FOPT_PGF   = -Mpreprocess -O -fast -pc 80 -Kieee
 FOPT_PGF   = -Mpreprocess -O0 -Mbounds -Mchkfpstk -Mchkptr -Mchkstk \
@@ -116,14 +117,14 @@ clean:
 	rm -f kpp*.o kpp*.mod wrap_netcdf.mod Wrap_NETCDF.o \
 	kpp*.dat kpp.exe kpp*.mexglx \
 	kpp.map gmon.out Makefile_kpp \
-	boxmodel.* *.txt
+	boxmodel.* *.txt *~
 
 distclean:
 	rm -f kpp*.o kpp*.mod wrap_netcdf.mod Wrap_NETCDF.* \
 	kpp*.dat kpp.exe kpp.map \
 	kpp*.f90 kpp_*.mexglx \
 	gmon.out Makefile_kpp \
-	boxmodel.* *.txt Makefile
+	boxmodel.* *.txt *~ Makefile
 
 kpp_Precision.o: kpp_Precision.f90 
 	$(FC) $(FOPT) -c $<
