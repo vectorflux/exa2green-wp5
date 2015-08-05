@@ -1261,11 +1261,15 @@ END SUBROUTINE KppSolveTR
 
       INTEGER  :: i,N
       REAL(kind=dp) :: X(N),Y(N),Alpha
+      REAL(kind=dp), PARAMETER :: ZERO = 0.0_dp
 
 #ifdef FINE_TIMING
       CALL SYSTEM_CLOCK(CLOCK_AXPY_1)
 #endif
 !      CALL DAXPY( N , Alpha, X , 1  , Y , 1  )
+
+      IF (Alpha .EQ. ZERO) RETURN
+      IF (N .LE. 0) RETURN
 
       DO i = 1,N
         Y(i) = Y(i) + Alpha * X(i)
