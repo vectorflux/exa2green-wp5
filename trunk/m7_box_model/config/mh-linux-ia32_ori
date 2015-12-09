@@ -1,0 +1,209 @@
+#-----------------------------------------------------------------------------
+#
+# IA32/Linux
+#
+#-----------------------------------------------------------------------------
+#
+# Get Linux distribution (Debian at ZMAW only)
+#
+if [[ -f /etc/debian_version ]]; then
+    ac_distribution="Debian_$(cat /etc/debian_version)"
+else
+    ac_distribution=""
+    echo "Only Debian Installation at ZMAW is automatically supported."
+    echo "For other sites config/mh-linux-ia32 needs to be adapted." 	
+fi
+#
+# Define site dependend library paths
+#
+case "$ac_sitename" in
+    zmaw.de)
+        case "$host" in 
+            x86_64-*-linux-*)         # squall                
+                # temporary disabled 
+                echo
+                echo
+                echo x86_64-*-linux-* not supported yet
+                echo
+		exit
+                # 
+		;;
+            i686-*-linux-*)           # MPI/ZMAW workstation
+		case "$ac_distribution" in
+                    Debian_4.0)
+			NETCDFROOT = /sw/etch-ia32/netcdf-4.0.1
+			HDF5ROOT   = /sw/etch-ia32/hdf5-1.8.2
+			SZIPROOT   = /sw/etch-ia32/szip-2.1-static
+			ZLIBROOT   = /sw/etch-ia32/zlib-1.2.3
+			case "$fortran_compiler" in
+			    default|nag)
+				MPIROOT  = /sw/etch-ia32/mpich2-1.2.1-nag52
+				MPI_LIB  = -lmpichf90 -lmpich -lpthread -lrt
+				fortran_compiler=nag
+				;;
+			    gcc)
+				MPIROOT  = /sw/etch-ia32/mpich2-1.2.1-gcc43
+				MPI_LIB  = -lmpichf90 -lmpich -lpthread -lrt
+				;;
+			    pgi)
+				MPIROOT  = /sw/etch-ia32/mpich2-1.2.1-pgi9
+				MPI_LIB  = -lmpichf90 -lmpich -lpthread -lrt
+				;;
+			    intel)
+				MPIROOT  = /sw/etch-ia32/mpich2-1.2.1-intel11
+				MPI_LIB  = -lmpichf90 -lmpich -lpthread -lrt
+				;;
+			    sun)
+                                # disabled 
+				echo
+				echo
+				echo "SunStudio12 (Oracle) is not supported anymore"
+				echo
+				exit
+				;;			
+			esac
+			;;
+                    Debian_5.0)
+			echo
+			echo
+			echo "Debian 5.0 (Lenny) in 32-bit mode not supported"
+			echo
+			exit
+			;;			
+		esac
+		;;
+	esac
+	;;
+esac
+#
+#-----------------------------------------------------------------------------
+#
+case $fortran_compiler in
+#
+#-----------------------------------------------------------------------------
+# NAG f95 - this is for testing and debugging
+
+nag)
+
+    ARCH     = LINUX
+
+    CC       = gcc
+    CFLAGS   = -std=gnu99 -march=native -O -DNAGf90Fortran -g
+
+    F90      = nagfor
+    FFLAGS   = -w=obs -O
+    F90FLAGS = -colour -O0 -C=all -maxcontin=99 -float-store -nan -gline -g -fpp -D__NAG -DARGCHECK -wmismatch=mpi_bcast,mpi_send,mpi_recv,mpi_isend,mpi_irecv,mpi_allreduce,mpi_get_address,mpi_gather,nf_get_var_double,nf_put_var_double,nf_def_var,nf_put_vara_double,dgemm -Wc,-pthread
+
+    DEFOPT   = -D
+    MODOPT   = -I
+
+    SRCDIRS  = blas lapack
+
+    LIBS     = -L../lib -lsupport -llapack -lblas
+
+    ;;
+
+#-----------------------------------------------------------------------------
+# GCC gfortran - this is for testing and debugging
+
+gcc)
+
+    ARCH     = LINUX
+
+    CC       = gcc
+    CFLAGS   = -std=gnu99 -march=native -O2 -DpgiFortran -g
+
+    F90      = gfortran
+    FFLAGS   = -march=native -O  -fomit-frame-pointer -ffast-math
+
+    FCPP     = -xf95-cpp-input
+    FWARN    = -Wall -Wcharacter-truncation -Wconversion -Wunderflow -Wunused-parameter
+    FDEBUG   = -g -fbacktrace
+    FCHECK   = -finit-real=nan
+    FOPTIONS = "$FCPP" "$FWARN" "$FDEBUG" "$FCHECK"
+
+    F90FLAGS = -march=native -O  -fomit-frame-pointer -ffast-math "$FOPTIONS"
+
+    DEFOPT   = -D
+    MODOPT   = -I
+
+    SRCDIRS  = blas lapack
+
+    LIBS     = -static-libgfortran -L../lib -lsupport -llapack -lblas
+
+    ;;
+
+#-----------------------------------------------------------------------------
+# PGI pgf95
+
+pgi) 
+
+    ARCH     = LINUX
+
+    CC       = gcc
+    CFLAGS   = -std=c99 -march=native -O -DpgiFortran 
+
+    F90      = pgf95
+#    FFLAGS   = -O3 -Kieee -Mpreprocess -tp amd64e
+#    F90FLAGS = -O3 -Kieee -Mpreprocess -tp amd64e 
+    FFLAGS   = -O3 -Kieee -Mpreprocess 
+    F90FLAGS = -O3 -Kieee -Mpreprocess 
+#
+    DEFOPT   = -D
+    MODOPT   = -I
+
+    SRCDIRS  = blas lapack
+
+    LIBS     = -L../lib -lsupport  -llapack -lblas
+
+    ;;
+ 
+#-----------------------------------------------------------------------------
+# Intel ifort
+
+intel)
+    
+    ARCH     = LINUX
+
+    CC       = gcc
+    CFLAGS   = -std=c99 -march=native -O -DpgiFortran -g
+
+    F90      = ifort
+    FFLAGS   = -xW -mieee-fp -O1 -g
+    F90FLAGS = -xW -mieee-fp -O1 -g -fpp 
+
+    DEFOPT   = -D
+    MODOPT   = -I
+
+    SRCDIRS  = blas lapack
+    LIBS     = -L../lib -lsupport -llapack -lblas
+
+    ;;
+
+#-----------------------------------------------------------------------------
+# Sun f95 
+
+sun)
+
+    ARCH     = LINUX
+
+    CC       = gcc
+    CFLAGS   = -std=c99 -march=native -O -DpgiFortran -g 
+
+    F90      = sunf95
+    FFLAGS   = -fast -fsimple=1 -g
+    F90FLAGS = -fast -fsimple=1 -g -fpp -DHAVE_LIBNETCDF64
+
+    DEFOPT   = -D
+    MODOPT   = -M
+
+    SRCDIRS  = blas lapack
+    LIBS     = -L../lib -lsupport -llapack -lblas
+
+    ;;
+
+#-----------------------------------------------------------------------------
+#
+esac
+#
+#-----------------------------------------------------------------------------

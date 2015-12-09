@@ -1,0 +1,75 @@
+#! /bin/ksh
+#=============================================================================
+#
+# This section of the run script contains the header lines for the 
+# environment variables for OpenMP.
+#
+# NTHREADS must be defined as environment variables or it must be 
+# substituted with an appropriate value.
+# 
+# Marco Giorgetta, MPI-M, 2010-04-21
+#
+#-----------------------------------------------------------------------------
+#
+# default for systems without queueing systems
+# ============================================
+#
+# openmp environment variables
+# ----------------------------
+#
+#! /bin/bash
+#-----------------------------------------------------------------------------
+# @ shell                = /bin/bash
+# @ job_name             = BuildBot
+# @ output               = $(job_name).$(jobid)
+# @ error                = $(output)
+# @ job_type             = parallel
+# @ class                = cluster
+# @ node_usage           = not_shared
+# @ network.MPI          = sn_all,not_shared,us
+# @ resources            = ConsumableMemory(768Mb)
+# @ task_geometry        = {(0,1,2,3,4,5) \
+# }
+# @ rset                 = RSET_MCM_AFFINITY
+# @ mcm_affinity_options = mcm_distribute,mcm_mem_req,mcm_sni_none
+# @ task_affinity        = cpu
+# @ notification         = error
+# @
+# @ queue
+
+export PREATTACH_PROCESSOR_LIST=AUTO_SELECT
+
+export MP_SHARED_MEMORY=yes
+export MP_SINGLE_THREAD=yes
+export MP_LABELIO=yes
+export MP_WAIT_MODE=poll
+export MP_STDINMODE=none
+export TARGET_CPU_LIST=-1
+
+export MP_LABELIO=YES
+export MP_PRINTENV=YES
+export MP_STATISTICS=PRINT
+export MP_STDINMODE=NONE
+
+export MP_EUIDEVELOP=min
+export MP_RC_USE_LMC=YES
+export MP_EAGER_LIMIT=32k
+export MP_BUFFER_MEM=32M,512M
+export MP_USE_BULK_XFER=NO
+export MP_BULK_MIN_MSG_SIZE=128k
+export MP_FIFO_MTU=4k
+export MP_RDMA_MTU=4k
+export MP_RFIFO_SIZE=16M
+export LAPI_DEBUG_STRIPE_SEND_FLIP=4
+export LAPI_DEBUG_QP_NOTIFICATION=NO
+export MP_SHM_ATTACH_THRESH=256000
+
+export MP_PRIORITY_NTP=YES
+export MP_PRIORITY_LOG=NO
+
+#export XLSMPOPTS=parthds=<ECHAM5_THREADS>:stack=100000000
+export XLRTEOPTS=intrinthds=1
+
+ulimit -c 0
+
+/client/etc/profile.zmaw

@@ -1,0 +1,19 @@
+#!/bin/bash
+#
+#$ -S /bin/bash
+#$ -N BB_0001
+#$ -o BB_0001.$JOB_ID.o
+#$ -j y
+#$ -pe orte _NPROCS
+#$ -q cluster
+#$ -M walter.sauf@zmaw.de
+#$ -m a
+#$ -cwd
+###########################################################################
+
+. /client/etc/profile.zmaw
+
+echo -n " Job started at: "
+date
+echo -n " Execution host: "
+hostname

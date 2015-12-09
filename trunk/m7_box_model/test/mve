@@ -1,0 +1,52 @@
+#!/bin/ksh
+CONF=.false.
+while getopts "i" OPT $@; do
+   case $OPT in
+     i  ) CONF=.true. ;;
+     *  ) echo 'usage: mve [-i] files old_pattern new_pattern'; exit 1;;
+   esac
+done
+shift `expr $OPTIND - 1`
+ARGS=$#
+DAT="$*"
+set -A DATV "$@"
+ARGSM=`expr $ARGS - 1`
+NEWM=${DATV[$ARGSM]}
+ARGSM=`expr $ARGS - 2`
+OLDM=${DATV[$ARGSM]}
+DAT=${DAT%${NEWM}}
+DAT=${DAT%${OLDM}' '}
+DATEIEN=`ls $DAT`
+#echo 'DATEIEN= '$DATEIEN
+for DATEI in $DATEIEN
+do
+    NDATEI=$1
+    NDATEI=`echo ${DATEI} ${OLDM} ${NEWM} | awk '{gsub($2, $3, $1); print($1)}'`
+    COPY=.true.
+    if [ $CONF = '.true.' ]; then
+        COPY=.false.
+	echo 'mv file '${DATEI}' to new name '${NDATEI}' (y,j/n)'
+	read AW
+	LAW=${#AW}
+	AWT=${AW#y}
+	if [ ${LAW} -ne ${#AWT} ]; then
+	    COPY='.true.'
+	fi
+	AWT=${AW#Y}
+	if [ ${LAW} -ne ${#AWT} ]; then
+	    COPY='.true.'
+	fi
+	AWT=${AW#j}
+	if [ ${LAW} -ne ${#AWT} ]; then
+	    COPY='.true.'
+	fi
+	AWT=${AW#J}
+	if [ ${LAW} -ne ${#AWT} ]; then
+	    COPY='.true.'
+	fi
+     fi
+     if [ $COPY = '.true.' ]; then
+        mv ${DATEI} ${NDATEI}
+        echo 'mv '${DATEI}' to new name '${NDATEI}
+     fi
+done 

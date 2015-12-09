@@ -1,0 +1,5 @@
+sending incremental file list
+./
+
+sent 46 bytes  received 15 bytes  122.00 bytes/sec
+total size is 0  speedup is 0.00

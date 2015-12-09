@@ -1,0 +1,272 @@
+#!/bin/ksh
+
+#------------------------------------------------------------------------------
+# This script is called on all buildbot slaves and should be used to call
+# test jobs or performance jobs.
+# The buildbot server sets the two environment variable BB_SYSTEM and BB_SLAVE
+#
+# +--------------+-----------+----------+
+# | builder      | BB_SYSTEM | BB_SLAVE |
+# +--------------+-----------+----------+
+# | aix53_1      | blizzard  | slave_1  |
+# | aix53_2      | blizzard  | slave_2  |
+# | aix53_3      | blizzard  | slave_3  |
+# |              |           |          |
+# | sles10-x64_1 | tornado   | slave_1  |
+# | sles10-x64_2 | tornado   | slave_2  |
+# | sles10-x64_3 | tornado   | slave_3  |
+# |              |           |          |
+# | etch-x64_1   | squall    | slave_1  |
+# | etch-x64_2   | squall    | slave_2  |
+# |              |           |          |
+# | etch-ia32_1  | mpipc51   | slave_1  |
+# | etch-ia32_2  | mpipc51   | slave_2  |
+# +--------------+-----------+----------+
+#
+# More info for 'builder' can be find on 
+#	http://mpipc51.mpi.zmaw.de:8011/buildslaves
+# or
+# 	http://mpipc51.mpi.zmaw.de:8011/waterfall
+#
+#------------------------------------------------------------------------------
+# First version by Walter Sauf (MPI-M, 2009-10-22)
+#
+# $Rev: 1122 $:     Revision of last commit
+# $Author: walter.sauf $:  Author of last commit
+# $Date: 2009-11-30 11:56:41 +0100 (Mon, 30 Nov 2009) $:    Date of last commit
+#------------------------------------------------------------------------------
+
+# 
+#==============================================================================
+#
+# With this function the environment variable "CALL" is set.
+# With this environment variable it is posibility to use different 
+# startup scripts like './', 'qsub' and 'llsubmit'
+#
+#==============================================================================
+
+ stop_on_error()
+{
+
+  if [ $2 == TRUE ] 
+  then
+
+# Check if the first parameter (return status) is not OK 
+
+    if [[ $1 -ne 0 || ${STATUS_IN_FILE} -ne 0 ]] 
+    then
+      if [[ $1 -ne 0 ]] 
+      then
+        exit $1
+      else
+        exit ${STATUS_IN_FILE}
+      fi
+
+# Stop running this script and return the error status
+
+    fi
+  fi
+
+}
+
+
+. ./target_functions.ksh
+
+#==============================================================================
+#
+#
+#==============================================================================
+
+build_testscripts()
+{
+# Change to directory 'run' 
+
+  EXP_FILES=`ls run/exp.t*`
+
+  for EXP_FILE in $EXP_FILES
+  do 
+#    EXP_FILE=`basename $EXP_FILE .exp`
+     echo "EXP_FILE(): $EXP_FILE"
+     EXP_FILE=`echo ${EXP_FILE} | cut -d '.' -f2 `
+     echo "EXP_FILE(): $EXP_FILE"
+    ./target_echam6.ksh $target $EXP_FILE
+    stop_on_error $? TRUE
+  done
+}
+
+#==============================================================================
+#
+#
+#==============================================================================
+
+run_scripts()
+{
+# Change to directory 'run' 
+
+   echo "run_scripts $1 $2"
+  cd $1 
+  pwd
+
+  EXP_FILES=`ls $2`
+
+  for EXP_FILE in $EXP_FILES
+  do 
+
+# Run job by using the correct submit call. Also save the calling status in STATUS
+
+    case ${submit} in
+      qsub)
+        echo "Start. ${submit} -sync y ./$EXP_FILE"
+        OUT=`$submit -sync y ./$EXP_FILE`
+        STATUS=$?
+        JOBID=`echo $OUT |  awk '{print $3}'`
+
+        if   [ $JOBID != 0 ] 
+	then
+          cat *$JOBID*
+	fi
+        ;;
+      llsubmit)
+        echo "Start. $submit -s ./$EXP_FILE"
+        OUT=`$submit -s ./$EXP_FILE`
+        STATUS=$?
+        JOBID=`echo $OUT | cut -d'"' -f2 | cut -d'.' -f4`
+        if   [ $JOBID != 0 ] 
+	then
+          cat *$JOBID*
+	fi
+        ;;
+      *)
+        echo "Start. ./$EXP_FILE"
+        ./$EXP_FILE
+        STATUS=$?
+        ;;
+    esac
+    STATUS_IN_FILE=`cat ${STATUS_FILE}`
+    stop_on_error $STATUS TRUE
+  done
+
+  cd ..
+
+}
+
+
+#==============================================================================
+#
+# With this function it is possible to stop or continue this script on an 
+# error  The function has two parameter. The first one must be a return status. 
+# The second one has to be 'TRUE' or 'FALSE'. If the second parameter is 'TRUE'
+# and the return status is unequal '0' the script exit with the return status.
+# In all other cases the script continues running the script
+#
+#==============================================================================
+
+stop_on_error()
+{
+
+# Check if the second parameter (Stop if there is an error ) is 'TRUE' 
+
+  if [ $2 == TRUE ] 
+  then
+
+# Check if the first parameter (return status) is not OK 
+
+    if [ $1 -ne 0 ] 
+    then
+
+# Stop running this script and return the error status
+
+      exit $1
+    fi
+  fi
+
+}
+
+
+#==============================================================================
+#
+#  Start of script
+#
+#==============================================================================
+
+scriptname="bb_run.ksh"
+
+echo "$scriptname: start"
+
+#------------------------------------------------------------------------------
+
+# Set target variable, which is used to select case specific parameters from a
+# built in data base.
+
+if   [ "$1" != "" ]          # --> from argument
+then
+
+    target="$1"
+    source="argument"
+
+elif [ "$BB_SLAVE" != "" ]   # --> from environment variable BB_SLAVE
+then
+
+    target="$BB_SLAVE"
+    source='$BB_SLAVE'
+
+else                         # --> as default
+    target="default"
+    source="$scriptname"
+fi
+
+echo "$scriptname: target          = $target (source = $source)"
+
+#------------------------------------------------------------------------------
+
+. ./target_database.ksh
+
+echo "|======================================================|"
+echo "|                                                      |"
+echo "|          Building testscripts to run                 |"
+echo "|                                                      |"
+echo "|======================================================|"
+
+build_testscripts 
+
+echo "|======================================================|"
+echo "|                                                      |"
+echo "|         Running testscripts                          |"
+echo "|                                                      |"
+echo "|======================================================|"
+
+run_scripts run "test_*.$target"
+
+# #==============================================================
+# # Because squall and tornado have different queue names we have 
+# # to change the queue name for the squall
+# #==============================================================
+# 
+#  FILES=`ls run/post_*.bash`
+# 
+#   for FILE in $FILES
+#   do 
+#     if [ $header == squall ]
+#     then
+#       echo "|======================================================|"
+#       echo "|                                                      |"
+#       echo "|          Change queue on squall                      |"
+#       echo "|                                                      |"
+#       echo "|======================================================|"
+#       sed -i 's/#$ -q serial/#$ -q squall/g' $FILE
+#     fi
+#   done
+# 
+# echo "|======================================================|"
+# echo "|                                                      |"
+# echo "|          Running postprocessing                      |"
+# echo "|                                                      |"
+# echo "|======================================================|"
+# 
+# run_scripts run "post_*.bash"
+
+# return OK Status
+
+return_ok
+
+

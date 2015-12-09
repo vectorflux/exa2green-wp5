@@ -1,0 +1,80 @@
+
+
+usage: target_echam6.ksh -exp=<experiment_name> -target=<computer_compiler> [-exp_id=<ID>] [-account=<projekt-account>]]
+
+This script is used to  build the running script for a special computer
+It use the three parts (header-, exp-, exec-) and builds the 
+run-script <exp-name>.<computer>_<compiler> in the run directory. 
+All needed parameter for the chose of header, number of cpu's etc.
+has to be defined in the target_database.ksh file
+ 
+
+Possible parameter are:
+
+-exp
+    Name of the exp-file in the run directory
+    e.g
+           exp.echam6run -> -exp=echam6run
+-exp_id
+    Name of a exp-identifier
+    e.g
+           -exp_id=was0001
+-account
+    DKRZ Project ID the
+    e.g
+           Project ID mh0081 -> -account=mh0081
+-target
+    A combination of computer and compiler name
+
+    e.g
+       +----------+----------+---------------+
+       | Computer | Compiler | use           |
+       +----------+----------+---------------+
+       | tornado  | default  | tornado       |
+       |          | gcc      | tornado_gcc   |
+       |          | nag      | tornado_nag   |
+       |          | intel    | tornado_intel |
+       |          | nag      | tornado_nag   |
+       |          | pgi      | tornado_pgi   |
+       |          | sun      | tornado_sun   |
+       +- - - - - + - - - - -+ - - - - - - - +
+       | squall   | default  | squall        |
+       |          | gcc      | squall_gcc    |
+       |          | nag      | squall_nag    |
+       |          | intel    | squall_intel  |
+       |          | nag      | squall_nag    |
+       |          | pgi      | squall_pgi    |
+       |          | sun      | squall_sun    |
+       +- - - - - + - - - - -+ - - - - - - - +
+       | mpipc    | default  | mpipc         |
+       |          | gcc      | mpipc_gcc     |
+       |          | nag      | mpipc_nag     |
+       |          | intel    | mpipc_intel   |
+       |          | nag      | mpipc_nag     |
+       |          | pgi      | mpipc_pgi     |
+       |          | sun      | mpipc_sun     |
+       +- - - - - + - - - - -+ - - - - - - - +
+       | blizzard | default  | blizzard      |
+       |          | xlf      | blizz_nMnO    |
+       |          |          | blizz_nMyO    |
+       |          |          | blizz_yMnO    |
+       |          |          | blizz_yMyO    |
+       |          |          | blizz_amip    |
+       +----------+----------+---------------+
+      
+       Where xMyO is:
+        nMnO  --> no   MPI no   OpenMP
+        nMyM  --> no   MPI with OpenMP
+        yMnO  --> with MPI no OpenMP
+        yMyO  --> with MPI with OpenMP
+        amip  --> Setting for AMIP experiment
+    
+  For more possible target parameter have a look into
+  target_database.ksh
+
+-list
+   List all experiments which are stored in the run directory
+
+-h
+  List this information
+

@@ -1,0 +1,433 @@
+#-----------------------------------------------------------------------------
+#
+# AMD64/EMT64/Linux
+#
+#-----------------------------------------------------------------------------
+#
+# Define site dependend library paths
+#
+case "$ac_sitename" in
+    cscs.ch)  # CSCS, Cray XE6 (rosa), as of 2011.12
+        case "$host" in 
+            x86_64-*-linux-*)
+                MPIROOT            = $MPICH_DIR
+                SZIPROOT           = $SZIP_DIR
+                ZLIBROOT           = /usr
+                HDF5ROOT           = $HDF5_DIR
+                NETCDFROOT         = $NETCDF_DIR
+                ;;
+        esac
+        ;;
+    dkrz.de)
+        case "$host" in 
+            x86_64-*-linux-*)         # tornado
+                POSTGRESQLROOT = /sw/sles10-x64/postgresql-9.0.2
+	        NETCDFROOT     = /sw/sles10-x64/netcdf-4.0.1
+		HDF5ROOT       = /sw/sles10-x64/hdf5-1.8.2
+                SZIPROOT       = /sw/sles10-x64/szip-2.1-static
+                ZLIBROOT       = /sw/sles10-x64/zlib-1.2.3
+                case "$fortran_compiler" in
+                    nag)
+                        IB_LIBS    = -lrdmacm -libverbs -lnuma -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl
+                        MPIROOT    = /sw/sles10-x64/ofed/openmpi-1.4.0-nag52
+                        MPI_LIB    = -Wl,-pthread -lmpi_f90 -lmpi_f77 -lmpi -lopen-rte -lopen-pal "$IB_LIBS"
+                        ;;
+                    gcc)
+                        IB_LIBS    = -lrdmacm -libverbs -lnuma -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl
+                        MPIROOT    = /sw/sles10-x64/ofed/openmpi-1.4.0-gcc43
+                        MPI_LIB    = -WL,-pthread -lmpi_f90 -lmpi_f77 -lmpi -lopen-rte -lopen-pal "$IB_LIBS"
+                        ;;
+                    default|pgi)
+                        IB_LIBS    = -lrdmacm -libverbs -lnuma -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl
+                        MPIROOT    = /sw/sles10-x64/ofed/openmpi-1.4.0-pgi9
+                        MPI_LIB    = -lmpi_f90 -lmpi_f77 -lmpi -lopen-rte -lopen-pal "$IB_LIBS" 
+                        fortran_compiler=pgi
+                        ;;
+                    intel)
+                        IB_LIBS    = -lrdmacm -libverbs -lnuma -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl
+                        MPIROOT    = /sw/sles10-x64/ofed/openmpi-1.4.0-intel11
+                        MPI_LIB    = -Bstatic -lmpi_f90 -lmpi_f77 -lmpi -lopen-rte -lopen-pal -Bdynamic "$IB_LIBS" 
+                        ;;
+                    sun)
+                        echo
+                        echo
+                        echo Sun/Oracle compiler not supported anymore
+                        echo
+		        exit
+                        # 
+                        ;;                
+                esac
+                ;;
+        esac
+        ;;
+    zmaw.de)
+        case "$host" in 
+            i686-*-linux-*)           # MPI/ZMAW workstation
+                # temporary disabled 
+                echo
+                echo
+                echo i686-*-linux-* not supported yet
+                echo
+		exit
+                # 
+		;;
+            x86_64-*-linux-*)         # squall                
+                POSTGRESQLROOT = /usr
+		HDF5ROOT       = /sw/lenny-x64/hdf5-1.8.5-p1-static
+                SZIPROOT       = /sw/lenny-x64/szip-2.1-static
+                ZLIBROOT       = /usr
+                case "$fortran_compiler" in
+                    default|nag)
+                        NETCDFROOT = /sw/lenny-x64/netcdf-4.1.1-static-nag52
+                        MPIROOT    = /sw/lenny-x64/mpi/mpich2-1.3.1-static-nag52
+                        MPI_LIB    = -lmpichf90 -lmpich -lopa -lmpl -lpthread -lrt
+                        fortran_compiler=nag
+                        ;;
+                    gcc)
+                        NETCDFROOT = /sw/lenny-x64/netcdf-4.1.1-static-gcc45
+                        MPIROOT    = /sw/lenny-x64/mpi/mpich2-1.3.1-static-gcc45
+                        MPI_LIB    = -lmpichf90 -lmpich -lopa -lmpl -lpthread -lrt
+                        ;;
+                    pgi)
+                        NETCDFROOT = /sw/lenny-x64/netcdf-4.1.1-static-pgi11
+                        MPIROOT    = /sw/lenny-x64/mpi/mpich2-1.3.1-static-pgi11
+                        MPI_LIB    = -lmpichf90 -lmpich -lopa -lmpl -lpthread -lrt
+                        ;;
+                    intel)
+                        NETCDFROOT = /sw/lenny-x64/netcdf-4.1.1-static-intel12
+                        MPIROOT    = /sw/lenny-x64/mpi/mpich2-1.3.1-static-intel12
+                        MPI_LIB    = -lmpichf90 -lmpich -lopa -lmpl -lpthread -lrt
+                        ;;
+                    sun)
+                        echo
+                        echo
+                        echo Sun/Oracle compiler not supported anymore
+                        echo
+		        exit
+                        # 
+                        ;;			
+                esac
+                ;;
+        esac
+        ;;
+    jj*|fz-juelich.de|kfa-juelich.de)
+        case "$host" in 
+            x86_64-*-linux-*)         # Juropa
+	        NETCDFROOT = /usr/local_64/netcdf/v4.1.1
+		HDF5ROOT   = /usr/local_64/hdf5/v1.8.5
+                SZIPROOT   = /usr/local_64/szip
+                ZLIBROOT   = /usr/local_64/zlib
+                case "$fortran_compiler" in
+                    default)
+                        F90              = mpif90
+                        MPIROOT          = /opt/parastation/mpi2-intel
+                        MPI_LIB          = -L$(MPIROOT)/lib -Wl,-rpath,$(MPIROOT)/lib -lmpichf90 -lmpich -L/opt/parastation/lib64 -Wl,-rpath,/opt/parastation/lib64 -lpscom -lrt
+                        fortran_compiler = inteljuropa
+                        ;;			
+                esac
+                CC = icc
+                ;;
+        esac
+        ;;
+    pp.ccn|dust.ccn) #cluster, ETH
+        case "$host" in 
+            x86_64-*-linux-*)         # cluster
+	        NETCDFROOT = /direct/Software/netcdf-4.1.1
+		HDF5ROOT   = /direct/Software/hdf5-1.8.5-patch1/hdf5
+                SZIPROOT   = /direct/Software/szip-2.1
+                ZLIBROOT   = /direct/Software/zlib-1.2.5
+                OTHER_LIB = -L/usr/kerberos/lib64 -lcurl -ldl -lgssapi_krb5 -lkrb5 -lk5crypto -lcom_err -lidn -lssl -lcrypto -lz
+
+                case "$fortran_compiler" in
+                    default|nag)
+                        MPIROOT    = /direct/Software/mpich2-1.3.2p1-nag
+                        MPI_LIB    = -Wl,-pthread -lmpichf90 -lmpich -lmpl -ldl -Wl,--export-dynamic -lnsl -lutil -lm -ldl
+                        ;;			
+                    intel)
+                        MPIROOT    =  /opt/parastation/mpi2-intel
+                        MPI_LIB    = -Wl,-rpath,${MPIROOT}/lib -lmpichf90 -lmpich -L/opt/parastation/lib64 -Wl,-rpath,/opt/parastation/lib64 -lpscom  -lrt 
+                        ;;			
+                esac
+                ;;
+        esac
+        ;;
+esac
+#
+#-----------------------------------------------------------------------------
+#
+case $fortran_compiler in
+#
+#-----------------------------------------------------------------------------
+# NAG f95 - this is for testing and debugging
+
+nag)
+
+    ARCH     = LINUX
+
+    CC       = gcc
+    #CFLAGS   = -std=gnu99 -march=native -O -DNAGf90Fortran -g
+    CFLAGS   = -std=gnu99 -O -DNAGf90Fortran -g
+
+    F90      = nagfor
+    FFLAGS   = -w=obs -O
+    F90FLAGS = -colour -O0 -C=all -maxcontin=99 -float-store -nan -gline -g -fpp -D__NAG -DARGCHECK -wmismatch=mpi_bcast,mpi_send,mpi_recv,mpi_isend,mpi_irecv,mpi_allreduce,mpi_get_address,mpi_gather,nf_get_var_double,nf_put_var_double,nf_def_var,nf_put_vara_double,dgemm -Wc,-pthread -DHAMMOZ
+
+    DEFOPT   = -D
+    MODOPT   = -I
+
+#    SRCDIRS  = blas lapack
+
+    LIBS     = -L../lib -lsupport "$OTHER_LIB"
+
+    ;;
+
+#-----------------------------------------------------------------------------
+# GCC gfortran - this is for testing and debugging
+
+gcc)
+
+    ARCH     = LINUX
+
+    CC       = gcc
+    CFLAGS   = -std=gnu99 -march=native -O2 -DpgiFortran -g
+
+    F90      = gfortran
+    FFLAGS   = -march=native -O  -fomit-frame-pointer -ffast-math
+
+    FCPP     = -xf95-cpp-input
+    FWARN    = -Wall -Wcharacter-truncation -Wconversion -Wunderflow -Wunused-parameter
+    FDEBUG   = -g -fbacktrace
+    FCHECK   = -finit-real=nan
+    FOPTIONS = "$FCPP" "$FWARN" "$FDEBUG" "$FCHECK"
+
+    F90FLAGS = -march=native -O  -fomit-frame-pointer -ffast-math "$FOPTIONS" -DHAMMOZ
+
+    DEFOPT   = -D
+    MODOPT   = -I
+
+#    SRCDIRS  = blas lapack
+
+    LIBS     = -static-libgfortran -L../lib -lsupport
+
+    ;;
+
+#-----------------------------------------------------------------------------
+# PGI pgf95
+
+pgi) 
+
+    ARCH     = LINUX
+
+    CC       = gcc
+    CFLAGS   = -std=gnu99 -march=native -O -DpgiFortran 
+
+    F90      = pgf95
+    FFLAGS   = -O3 -Kieee -Mpreprocess -tp amd64e
+    F90FLAGS = -O3 -Kieee -Mpreprocess -tp amd64e -DHAMMOZ
+
+    DEFOPT   = -D
+    MODOPT   = -I
+
+#    SRCDIRS  = blas lapack
+
+    LIBS     = -L../lib -lsupport
+
+    ;;
+ 
+#-----------------------------------------------------------------------------
+# Intel ifort
+
+intel)
+    
+    ARCH     = LINUX
+
+    CC       = gcc
+    #CFLAGS   = -std=gnu99 -march=native -O -DpgiFortran -g #on ETH cluster, march=native does not work
+    CFLAGS   = -std=gnu99 -O -DpgiFortran -g 
+
+    F90      = ifort
+    #>>SF replace -mieee-fp which is obsolete, and add -O2 (see #175)
+    FFLAGS   = -msse2 -fp-model precise -fp-model source -O2 -g
+    F90FLAGS = -msse2 -fp-model precise -fp-model source -O2 -g -fpp -DHAMMOZ
+    #<<SF
+
+    DEFOPT   = -D
+    MODOPT   = -I
+
+#    SRCDIRS  = blas lapack
+    LIBS     = -L../lib -lsupport "$OTHER_LIB"
+
+    ;;
+
+#-----------------------------------------------------------------------------
+# Sun f95 
+
+sun)
+
+    ARCH     = LINUX
+
+    CC       = gcc
+    CFLAGS   = -std=gnu99 -march=native -O -DpgiFortran -g 
+
+    F90      = sunf95
+    FFLAGS   = -fast -fsimple=1 -g
+    F90FLAGS = -fast -fsimple=1 -g -fpp -DHAVE_LIBNETCDF64 -DHAMMOZ
+
+    DEFOPT   = -D
+    MODOPT   = -M
+
+#    SRCDIRS  = blas lapack
+    LIBS     = -L../lib -lsupport
+
+    ;;
+
+#-----------------------------------------------------------------------------
+# ftnpgi, pgi compiler, cscs; module load PrgEnv-pgi/4.0.30(default)
+# man pgf95 , man pgcc
+# CSCS, Cray XE6 (rosa), as of 2011.12
+
+ftnpgi)
+
+    ARCH     = LINUX
+
+    CC       = cc
+    CFLAGS   = -DLITTLE_ENDIAN -fastsse -DpgiFortran -D__XE6__
+
+    F90      = ftn
+    FFLAGS   = -DLITTLE_ENDIAN -O2 -m64 -fastsse -Kieee -Mpreprocess -tp=amd64
+    F90FLAGS = -DLITTLE_ENDIAN -O2 -m64 -fastsse -Kieee -Mpreprocess -tp=amd64 -DHAVE_LIBNETCDF  -DHAMMOZ
+
+    MODOPT   = -I
+
+    LIBS     = -L../lib -lsupport   
+   
+    ;;
+#-----------------------------------------------------------------------------
+# ftnintel, intel compiler, cscs; module load PrgEnv-intel/4.0.30(default)
+# man ifort , man icc
+# CSCS, Cray XE6 (rosa), as of 2011.12
+
+ftnintel)
+
+    ARCH     = LINUX
+
+    CC       = cc
+    CFLAGS   = -std=gnu99 -O2 -DpgiFortran -D__XE6__
+
+    F90      = ftn
+    FFLAGS   = -O2 -fpp -fp-model precise -fp-model source 
+    F90FLAGS = -DLITTLE_ENDIAN -O2 -DHAVE_LIBNETCDF -fpp -fp-model precise -fp-model source  -DHAMMOZ
+
+    MODOPT   = -I
+
+    LIBS     = -L../lib -lsupport
+
+    ;;
+#-----------------------------------------------------------------------------
+# ftncray, cray compiler, cscs; module load PrgEnv-cray/4.0.30(default)
+# man crayftn , man craycc
+# CSCS, Cray XE6 (rosa), as of 2011.12
+
+#SF update (20121002): ftncray does not configure ok (linking pb to Fortran libraries from C), therefore I disable the following lines for now
+
+#ftncray)
+#
+#    ARCH     = LINUX
+#
+#    CC       = cc
+#    #CFLAGS   = -O2 -eE -Df2cFortran -D__XE6__
+#
+#    F90      = ftn
+#    #FFLAGS   = -O2 -eE -eF -h
+#    #F90FLAGS = -DLITTLE_ENDIAN -O2 -eE -eF -h -DHAVE_LIBNETCDF -DHAMMOZ
+#
+#    MODOPT   = -I
+#
+#    LIBS     = -L../lib -lsupport
+#
+#    ;;
+#-----------------------------------------------------------------------------
+# ftngnu, gnu compiler, cscs; module load PrgEnv-gnu/4.0.30(default)
+# man gfortran , man gcc
+# CSCS, Cray XE6 (rosa), as of 2011.12
+
+ftngnu)
+
+    ARCH     = LINUX
+
+    CC       = cc
+    CFLAGS   = -std=gnu99 -O2 -DpgiFortran -D__XE6__
+
+    F90      = ftn
+    FFLAGS   = -O2 -cpp
+    F90FLAGS = -DLITTLE_ENDIAN -O2 -DHAVE_LIBNETCDF -cpp  -DHAMMOZ
+
+    MODOPT   = -I
+
+    LIBS     = -L../lib -lsupport
+
+    ;;
+#-----------------------------------------------------------------------------
+#
+#    ARCH     = LINUX
+#
+#    CC       = cc
+#    #CFLAGS   = -O2 -eE -Df2cFortran -D__XE6__
+#
+#    F90      = ftn
+#    #FFLAGS   = -O2 -eE -eF -h
+#    #F90FLAGS = -DLITTLE_ENDIAN -O2 -eE -eF -h -DHAVE_LIBNETCDF -DHAMMOZ
+#
+#    MODOPT   = -I
+#
+#    LIBS     = -L../lib -lsupport
+#
+#    ;;
+#-----------------------------------------------------------------------------
+# ftngnu, gnu compiler, cscs; module load PrgEnv-gnu/4.0.30(default)
+# man gfortran , man gcc
+# CSCS, Cray XE6 (rosa), as of 2011.12
+
+ftngnu)
+
+    ARCH     = LINUX
+
+    CC       = cc
+    CFLAGS   = -std=gnu99 -O2 -DpgiFortran -D__XE6__
+
+    F90      = ftn
+    FFLAGS   = -O2 -cpp
+    F90FLAGS = -DLITTLE_ENDIAN -O2 -DHAVE_LIBNETCDF -cpp  -DHAMMOZ
+
+    MODOPT   = -I
+
+    LIBS     = -L../lib -lsupport
+
+    ;;
+#-----------------------------------------------------------------------------
+# intel, Juropa (FZJ)
+# there are still differences to INTEL at ETHZ
+inteljuropa)
+    
+    ARCH     = LINUX
+    CC       = icc
+# classic version of NETCDF doesn't know about "nf_netcdf4" (mo_netcdf.f90)
+# version 4.1.1 has (for whatever reason) MPI compiled in
+    CFLAGS   = -std=gnu99 -O -DpgiFortran -g -I"$MPIROOT"/include
+
+    F90      = mpif90
+    FFLAGS   = -msse2 -fp-model precise -fp-model source -O2 -g
+    F90FLAGS = -msse2 -fp-model precise -fp-model source -O2 -g -fpp -DHAMMOZ
+
+    DEFOPT   = -D
+    MODOPT   = -I
+
+#    SRCDIRS  = blas lapack
+    LIBS     = -L../lib -lsupport "$OTHER_LIB"
+
+    ;;
+#-----------------------------------------------------------------------------
+#
+esac
+#
+#-----------------------------------------------------------------------------

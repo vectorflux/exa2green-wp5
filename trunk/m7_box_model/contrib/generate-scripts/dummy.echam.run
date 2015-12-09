@@ -1,0 +1,341 @@
+#! /bin/bash
+#-----------------------------------------------------------------------------
+# @ shell                = /bin/bash
+# @ job_name             = EXP-ID
+# @ wall_clock_limit     = 03:00:00
+# @ job_type             = parallel
+# @ node_usage           = not_shared
+# @ network.MPI          = sn_all,not_shared,us
+# @ rset                 = rset_mcm_affinity
+# @ mcm_affinity_options = mcm_distribute
+# @ resources            = ConsumableMemory(768Mb)
+# @ node                 = NODE
+# @ tasks_per_node       = 32
+# @ task_affinity        = cpu(2)
+# @ output               = $(job_name).$(jobid)
+# @ error                = $(output)
+# @ notification         = error
+# @ account_no           = ACCOUNT
+# @ parallel_threads     = 2
+# @
+# @ queue
+
+export MP_INFOLEVEL=0
+export MP_PRINTENV=no
+export MP_LABELIO=no
+export MP_SHARED_MEMORY=yes
+export MP_SHM_ATTACH_THRESH=256000
+export MP_USE_BULK_XFER=yes
+export MP_BULK_MIN_MSG_SIZE=128k
+export MP_RDMA_MTU=4k
+export MP_EAGER_LIMIT=64k
+export MP_BUFFER_MEM=32m,512m
+export MP_FIFO_MTU=4k
+export MP_RFIFO_SIZE=16m
+export MP_SINGLE_THREAD=no
+export OMP_STACKSIZE=64M
+export OMP_NUM_THREADS=1
+export XLFRTEOPTS="intrinthds=1:err_recovery=no:langlvl=2003std"
+
+ulimit -c 0
+
+#-----------------------------------------------------------------------------
+#
+# Version for shell script running on DKRZ blizzard (Power6)
+#
+#-----------------------------------------------------------------------------
+#
+#                        Job file to run ECHAM 6
+#
+#-----------------------------------------------------------------------------
+#
+# If a command has a non-zero exit status, execute ERR trap, if set, and exit
+#
+set -ex
+#
+#-----------------------------------------------------------------------------
+#
+START=0
+#
+# START=0: restart from CMIP5-AMIP-restartfiles
+# START=1: restart from restartfiles of EXP-ID or initial
+#           run (set RERUN=.false. for the first experiment/edit namelist)
+#
+# experiment identifier: your given experimenter-id according to
+# http://svn.zmaw.de/dokuwiki/doku.php?id=listofids:list_of_experimenter_ids
+# followed by a number for the current experiment
+#
+EXP_USER=USER_ID
+EXP_GROUP=GROUP_ID
+#
+EXP="EXP-ID"      # experiment identifier
+expname="EXPNAME" # experiments name
+#
+RERUN=.true.      # Rerun switch; .false. for initial run, .true. else
+#
+NTHREADS=2
+export ECHAM6_THREADS=$NTHREADS
+#
+case ${expname} in
+  amip-LR | sstClim-LR )
+   RES=63           # spectral truncation of run
+   LEVELS=47        # number of levels
+   OCERES=GR15      # ocean resolution used for the land-sea mask
+  ;;
+  amip-MR | sstClim-MR )
+   RES=63           # spectral truncation of run
+   LEVELS=95        # number of levels
+   OCERES=TP04      # ocean resolution used for the land-sea mask
+  ;;
+  * )
+   echo "ERROR: EXPNAME not supported."
+   exit 1
+  ;;
+esac
+#
+#-----------------------------------------------------------------------------
+#
+WORK_DIR=/home/zmaw/USER_ID/REPOS_NAM
+#
+# absolute path to directory with job scripts:
+SCRIPTDIR=/home/zmaw/USER_ID/REPOS_NAM/experiments/EXP-ID/scripts
+#
+# absolute path to directory with plenty of space:
+EXPDIR=/work/GROUP_ID/USER_ID/REPOS_NAM/experiments/EXP-ID
+#
+# absolute path to directory with initial data:
+INI_DATA=/pool/data/ECHAM6
+INIECH=/pool/data/ECHAM6/T${RES}
+#
+# absolute path to directory with SST and sea ice files:
+BOUNDARY_DATA=${INI_DATA}/T${RES}/amip2
+#
+# absolute path to directory with initial data for JSBACH:
+INIJSB=/pool/data/JSBACH/T${RES}
+INIJSBTRANS=/pool/data/JSBACH/T${RES}/New_Hampshire_LCC
+#
+# absolute path to model binary, including the executable
+MODEL=${WORK_DIR}/bin/ECHAM_EXE
+#
+#-----------------------------------------------------------------------------
+#
+# the directory for the experiment will be created, if not already there
+if [ ! -d $EXPDIR ]; then
+    mkdir -p $EXPDIR
+fi
+#
+# in case of Newstart from CMIP5-experiments copy the restart files
+#
+case ${expname} in
+  amip-LR )
+    odate=19781231; ndate=""
+    pexp=amip_r1i1p1-LR
+  ;;
+  sstClim-LR )
+    odate=18491231; ndate=""
+    pexp=sstClim_r1i1p1-LR
+  ;;
+  amip-MR )
+    odate=19781231; ndate=""
+    pexp=amip_r1i1p1-MR
+  ;;
+  sstClim-MR )
+    odate=18491231; ndate=""
+    pexp=sstClim_r1i1p1-MR
+  ;;
+  * )
+   echo "ERROR: EXPNAME not supported, restartfiles not available."
+   exit 1
+  ;;
+esac
+if [ "${START}" -ne 1 ]; then
+  restart_dir=/work/mh0081/m214002/experiments/restarts/${pexp}
+  cp ${restart_dir}/rerun_${pexp}_echam_${odate}${ndate}  ${EXPDIR}/rerun_${EXP}_echam
+  cp ${restart_dir}/rerun_${pexp}_co2_${odate}${ndate}    ${EXPDIR}/rerun_${EXP}_co2
+  cp ${restart_dir}/rerun_${pexp}_jsbach_${odate}${ndate} ${EXPDIR}/rerun_${EXP}_jsbach
+  cp ${restart_dir}/rerun_${pexp}_surf_${odate}${ndate}   ${EXPDIR}/rerun_${EXP}_surf
+  cp ${restart_dir}/rerun_${pexp}_veg_${odate}${ndate}    ${EXPDIR}/rerun_${EXP}_veg
+fi
+#-----------------------------------------------------------------------------
+#
+cd $EXPDIR           #  output and rerun files are written into $EXPDIR
+
+#-----------------------------------------------------------------------------
+#
+# specification of files for ECHAM
+#
+#-----------------------------------------------------------------------------
+#
+rm -f unit.?? sst* ice* hdpara.nc hdstart.nc rrtadata lctlib.def jsbach.nc rrtmg_lw.nc
+rm -f ECHAM6_CldOptProps.nc aero* swflux* ozon* greenhouse_gases.nc strat_aerosol_*
+rm -f landuse*
+#
+ln -s  ${INIECH}/T${RES}L${LEVELS}_jan_spec.nc                       unit.23
+ln -s  ${INIECH}/T${RES}${OCERES}_jan_surf.nc                        unit.24
+#
+ln -s  ${INIECH}/T${RES}${OCERES}_VLTCLIM.nc                         unit.90
+ln -s  ${INIECH}/T${RES}${OCERES}_VGRATCLIM.nc                       unit.91
+ln -s  ${INIECH}/T${RES}_TSLCLIM2.nc                                 unit.92
+#
+ln -s  ${INI_DATA}/surrta_data                                       rrtadata
+ln -s  ${INI_DATA}/rrtmg_lw.nc                                       rrtmg_lw.nc
+ln -s  ${INI_DATA}/ECHAM6_CldOptProps.nc                             ECHAM6_CldOptProps.nc
+ln -s  ${INI_DATA}/hdpara.nc                                         hdpara.nc
+ln -s  ${INI_DATA}/hdstart.nc                                        hdstart.nc
+#
+case ${expname} in
+  sstClim-LR | sstClim-MR )
+  year=1849
+  while [[ $year -lt 1880 ]]
+  do
+  ln -s ${INIECH}/aero2/T${RES}_aeropt_kinne_sw_b14_coa.nc             aero_coarse_${year}.nc
+  ln -s ${INIECH}/aero2/T${RES}_aeropt_kinne_sw_b14_fin_1865.nc        aero_fine_${year}.nc
+  ln -s ${INIECH}/aero2/T${RES}_aeropt_kinne_lw_b16_coa.nc             aero_farir_${year}.nc
+  ln -s ${INIECH}/T${RES}_ozone_CMIP5_1850-1860.nc                     ozon${year}
+  ln -s ${INIJSBTRANS}/hist/LUH_harvest_T${RES}_1850.nc                landuseHarvest.${year}.nc
+  ln -s ${INIJSBTRANS}/no_LUH_transitions_T${RES}.nc                   landuseTransitions.${year}.nc
+  (( year = year+1 ))
+  done
+  case ${expname} in
+    sstClim-LR )
+      ln -s  ${INIECH}/T${RES}${OCERES}_piControl-LR_sst_1880-2379.nc  unit.20
+      ln -s  ${INIECH}/T${RES}${OCERES}_piControl-LR_sic_1880-2379.nc  unit.96
+    ;;
+    sstClim-MR )
+      ln -s  ${INIECH}/T${RES}${OCERES}_piControl-MR_sst_1850-2349.nc  unit.20
+      ln -s  ${INIECH}/T${RES}${OCERES}_piControl-MR_sic_1850-2349.nc  unit.96
+    ;;
+  esac
+  ;;
+#
+  amip-LR | amip-MR )
+    year=1975
+    while [[ $year -lt 2006 ]]
+    do
+    ln -s  ${BOUNDARY_DATA}/T${RES}_amip2sst_${year}.nc                  sst${year}
+    ln -s  ${BOUNDARY_DATA}/T${RES}_amip2sic_${year}.nc                  ice${year}
+    # aerosols
+    ln -s ${INIECH}/aero2/T${RES}_aeropt_kinne_sw_b14_coa.nc             aero_coarse_${year}.nc
+    ln -s ${INIECH}/aero2/T${RES}_aeropt_kinne_sw_b14_fin_${year}.nc     aero_fine_${year}.nc
+    ln -s ${INIECH}/aero2/T${RES}_aeropt_kinne_lw_b16_coa.nc             aero_farir_${year}.nc
+    # ozone
+    ln -s ${INIECH}/ozone2/T${RES}_ozone_CMIP5_${year}.nc ozon${year}
+    # solar irradiance
+    ln -s ${INI_DATA}/solar_irradiance/swflux_14band_${year}.nc          swflux_${year}.nc
+    # volcanic aerosols
+    ln -s ${INIECH}/volcano_aerosols/strat_aerosol_ir_T${RES}_${year}.nc strat_aerosol_ir_${year}.nc
+    ln -s ${INIECH}/volcano_aerosols/strat_aerosol_sw_T${RES}_${year}.nc strat_aerosol_sw_${year}.nc
+    # jsbach transitions
+    ln -s ${INIJSBTRANS}/hist/LUH_harvest_T${RES}_${year}.nc             landuseHarvest.${year}.nc
+    ln -s ${INIJSBTRANS}/hist/LUH_transitions_T${RES}_${year}.nc         landuseTransitions.${year}.nc
+     (( year = year+1 ))
+    done
+    year=2006
+    while [[ $year -lt 2010 ]]
+    do
+    ln -s  ${BOUNDARY_DATA}/T${RES}_amip2sst_${year}.nc                  sst${year}
+    ln -s  ${BOUNDARY_DATA}/T${RES}_amip2sic_${year}.nc                  ice${year}
+    # aerosols
+    ln -s ${INIECH}/aero2/T${RES}_aeropt_kinne_sw_b14_coa.nc             aero_coarse_${year}.nc
+    ln -s ${INIECH}/aero2/T${RES}_aeropt_kinne_sw_b14_fin_${year}.nc     aero_fine_${year}.nc
+    ln -s ${INIECH}/aero2/T${RES}_aeropt_kinne_lw_b16_coa.nc             aero_farir_${year}.nc
+    # ozone
+    ln -s ${INIECH}/ozone2/T${RES}_ozone_CMIP5_${year}.nc ozon${year}
+    # solar irradiance
+    ln -s ${INI_DATA}/solar_irradiance/swflux_14band_${year}.nc          swflux_${year}.nc
+    # volcanic aerosols
+    ln -s ${INIECH}/volcano_aerosols/strat_aerosol_ir_T${RES}_${year}.nc strat_aerosol_ir_${year}.nc
+    ln -s ${INIECH}/volcano_aerosols/strat_aerosol_sw_T${RES}_${year}.nc strat_aerosol_sw_${year}.nc
+    # jsbach transitions
+    ln -s ${INIJSBTRANS}/rcp45/LUH_harvest_T${RES}_rcp45_${year}.nc      landuseHarvest.${year}.nc
+    ln -s ${INIJSBTRANS}/rcp45/LUH_transitions_T${RES}_rcp45_${year}.nc  landuseTransitions.${year}.nc
+     (( year = year+1 ))
+    done
+  ;;
+  * )
+   echo "ERROR: EXPNAME not supported, inputfiles not available."
+   exit 1
+  ;;
+esac
+#
+# greenhouse gases
+#
+ln -s ${INI_DATA}/greenhouse_rcp45.nc                greenhouse_gases.nc
+#
+#-----------------------------------------------------------------------------
+#
+# specification of files for JSBACH
+# jsbach.nc has to fit the first year of transitions (e.g. 1976)
+#
+#-----------------------------------------------------------------------------
+ln -s  ${INI_DATA}/jsbach/lctlib_nlct21.def_rev4154                  lctlib.def
+ln -s  ${INIJSB}/jsbach_T${RES}${OCERES}_11tiles_1976.nc             jsbach.nc
+#-----------------------------------------------------------------------------
+#
+# ECHAM6 namelist
+#
+cp /pool/data/ECHAM6/cmip5_namelists/EXPNAME/namelist.echam .
+sed -e '1,$s/${EXPID}/EXP-ID/' namelist.echam>namelist.echam1
+mv namelist.echam1 namelist.echam
+
+echo "* ----------------------------------------------------------------------"
+echo "* Namelist of ECHAM6: namelist.echam"
+echo "* ----------------------------------------------------------------------"
+cat namelist.echam
+echo "* ----------------------------------------------------------------------"
+echo "*    end of namelist.echam"
+echo "* ----------------------------------------------------------------------"
+echo ""
+#------------------------------------------------------------------------------
+#-- Namelist JSBACH
+#
+cp /pool/data/ECHAM6/cmip5_namelists/EXPNAME/namelist.jsbach .
+
+echo "* ----------------------------------------------------------------------"
+echo "* Namelist of JSBACH: namelist.jsbach"
+echo "* ----------------------------------------------------------------------"
+cat namelist.jsbach
+echo "* ----------------------------------------------------------------------"
+echo "*    end of namelist.jsbach"
+echo "* ----------------------------------------------------------------------"
+echo ""
+#-----------------------------------------------------------------------------
+# Start the run:
+#
+cp $SCRIPTDIR/job1 .
+cp $SCRIPTDIR/job2 .
+#
+# IBM/POE startup
+#
+poe $MODEL 
+#
+case $? in
+0)
+    echo "Model experiment checkpointed."
+    #-- save restart data
+    chmod u+x subjob1
+    ./subjob1
+    #-- submit post-processing job
+    llsubmit subjob2
+    #-- submit next production job
+    cd $SCRIPTDIR
+    chmod u+x EXP-ID.run
+    llsubmit EXP-ID.run
+    ;;
+127)
+    echo "Model finished experiment."
+    #-- save restart data
+    chmod u+x subjob1
+    ./subjob1
+    #-- submit post-processing job
+    llsubmit subjob2
+    ;;
+*)
+    echo "ERROR: model run stopped with poe return value ${?}."
+    exit 1
+    ;;
+esac
+#
+exit
+#
+#-----------------------------------------------------------------------------

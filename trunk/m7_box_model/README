@@ -1,0 +1,104 @@
+Readme - 2012-02-23
+
+  !----------------------------------------------------------------------------------
+  ! Copyright 2012 by Max Planck Institute for Meteorology
+  !
+  ! This software can be used only under the conditions of the
+  ! "MPI-M Software Licence Agreement" v2, see
+  ! http://www.mpimet.mpg.de/fileadmin/models/MPIESM/mpi-m_sla_201202.pdf
+  !
+  ! The "MPI-M Software Licence Agreement", the information about
+  ! accessing and contributing to the MPI-M models and the data
+  ! necessary to use them are available at:
+  !
+  ! http://www.mpimet.mpg.de/en/science/models/model-distribution/mpi-esm-users-forum
+  !
+  ! The ECHAM6 web page for developers (login required) is at:
+  !
+  ! https://code.zmaw.de/projects/echam
+  !
+  !----------------------------------------------------------------------------------
+
+This is a new major release of ECHAM6, "echam-6.1.00"
+=====================================================
+
+Fitness of the code
+-------------------
+echam-6.1.00 contains the ECHAM6 atmospheric model and the JSBACH land vegetation model.
+echam-6.1.00 was used by itself and as part of the Earth system model MPI-ESM for the
+CMIP5 simulations executed at DKRZ. 
+
+For CMIP5 ECHAM6 has been used at two resolutions:
+- T63L47 in the MPI-ESM-LR configuration, and 
+- T63L95 in the MPI-ESM-MR configuration
+
+echam-6.1.00 has been tested to compile on "Blizzard" at DKRZ 
+using the IBM/xlf13.1.0.2 compiler.
+
+SVN references:
+- tags/echam-6.1.00 = revision r2593 on trunk/echam-dev
+
+Changes with respect to version "echam-6.1.nn"
+-----------------------------------------------------------
+n/a
+
+Compared to the CMIP5 output data the results remain unchanged 
+using default settings. 
+Using cdo diff leads to zero differences for all variables of the
+echam-stream only (due to extensive changes in jsbach).
+
+
+Known issues
+------------
+- echam6 will produce bit identical output data after a restart compared 
+  to a run that was not interrupted by a restart if and only if the 
+  calculation of the radiation coincides with the restart date
+
+Release plan
+------------
+- Minor updates for bug fixes, tuning adjustments and optimizations
+  are collected on a weekly base and will produce echam-6.1.nn versions.
+
+- Major updates changing the physical formulation are collected twice
+  a year, typically in December and June, and will produce echam-6.m.00 versions.
+
+----------------------------------------------------------------------------
+
+
+INSTALLATION
+------------
+
+ECHAM6 is doing IO for the initial and restart files based on UCAR's 
+netCDF (see http://www.unidata.ucar.edu/packages/netcdf).  Take care 
+that you use the right setup for your Fortran compiler when installing 
+netCDF.
+
+Configuration files for a number of operating systems and/or compilers
+are provided in the config directory. Please check your system's
+configuration file and edit it according to your needs.
+
+In the machine specific mh-'file' you have to set the variable NETCDFROOT 
+to the netCDF root directory on your machine.
+
+For use of the parallelized version you have to set the MPIROOT path
+and the MPI-LIB libary information in the respective mh-'file' which enables a 
+compilation with MPI.
+
+For postprocessing of the ECHAM6 code you need the afterburner software
+package. For dokumentation and download of the latest revision see
+https://code.zmaw.de/projects/afterburner
+In case of questions contact Uwe Schulzweida (uwe.schulzweida@mpimet.mpg.de).
+
+
+COMPILING AND RUNNING
+---------------------
+
+To compile and run echam6 cd to echam6/contrib/generate-scripts and follow
+the instructions given in README_ECHAM6.
+
+
+
+ADDITIONAL INFORMATION
+----------------------
+
+Bug reports/info/comments to: monika.esch@mpimet.mpg.de

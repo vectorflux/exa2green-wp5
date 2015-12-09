@@ -1,0 +1,75 @@
+# Mac OS X (Darwin)
+#-----------------------------------------------------------------------------
+#
+ARCH           = DARWIN
+
+POSTGRESQLROOT = /opt/local
+NETCDFROOT     = /opt/local
+HDF5ROOT       = /opt/local
+SZIPROOT       = /opt/local
+ZLIBROOT       = /opt/local
+
+#-----------------------------------------------------------------------------
+#
+case "$fortran_compiler" in
+#
+#-----------------------------------------------------------------------------
+# GCC gfortran - this is for testing and debugging
+
+default|gcc)
+    CC          = gcc
+    CFLAGS      = -std=gnu99 -march=native -O -DpgiFortran -g
+
+    F90         = gfortran   
+    FFLAGS      = -march=native  -O -ffloat-store -g
+
+    FCPP        = -xf95-cpp-input
+    FWARN       = -Wall -Wcharacter-truncation -Wconversion -Wunderflow -Wunused-parameter
+    FDEBUG      = -g -fbacktrace
+    FCHECK      = -finit-real=nan
+    FOPTIONS    = "$FCPP" "$FWARN" "$FDEBUG" "$FCHECK"
+
+    F90FLAGS    = -march=native -O -ffloat-store -pthread "$FOPTIONS"
+
+    OMPFLAG     = -fopenmp
+
+    DEFOPT      = -D
+    MODOPT      = -I
+
+    MPIROOT     = /opt/local
+    MPI_LIB     = -lmpi_f90 -lmpi_f77 -lmpi -lopen-rte -lopen-pal -lutil
+
+    ;;
+#-----------------------------------------------------------------------------
+# NAG f95 - this is for testing and debugging
+
+nag)
+    CC          = gcc
+    CFLAGS      = -std=gnu99 -march=native -O -DNAGf90Fortran -g
+
+    F90         = nagfor
+    FFLAGS      = -w=obs -O
+
+    FCPP        = -fpp -D__NAG -DARGCHECK
+    FWARN       = -colour -C=all
+    FDEBUG      = -O0 -g -gline
+    FCHECK      = -nan
+    FMISMATCH   = -wmismatch=mpi_bcast,mpi_send,mpi_recv,mpi_isend,mpi_irecv,mpi_allreduce,mpi_get_address,mpi_gather,nf_get_var_double,nf_put_var_double,nf_def_var,nf_put_vara_double,dgemm 
+    FOPTIONS    = "$FCPP" "$FWARN" "$FDEBUG" "$FCHECK" "$FMISMATCH"
+
+    F90FLAGS    = -f2003 -float-store -Wc,-pthread "$FOPTIONS"
+
+    DEFOPT   = -D
+    MODOPT   = -I
+
+    MPIROOT     = /usr/local/openmpi-1.4.2-nag52
+    MPI_LIB     = -lmpi_f90 -lmpi_f77 -lmpi -lopen-rte -lopen-pal -lutil
+
+    ;;
+esac
+
+SRCDIRS  = blas lapack
+
+LIBS     = -L../lib -lsupport -llapack -lblas
+
+

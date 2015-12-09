@@ -1,0 +1,104 @@
+#!/client/bin/ksh
+###############################################################################
+# @ shell            = /client/bin/ksh
+# @ job_name         = pEXP-ID
+# @ job_type         = serial
+# @ node_usage       = shared
+# @ resources        = ConsumableMemory(50000mb)
+# @ task_affinity    = cpu(16)
+# @ parallel_threads = 16
+# @ network.MPI      = sn_all,shared,us
+# @ wall_clock_limit = 04:00:00
+# @ output           = $(job_name).o$(jobid)
+# @ error            = $(output)
+# @ notification     = error
+# @ account_no       = ACCOUNT
+#
+# @ queue
+###############################################################################
+set -ex
+###############################################################################
+#PATH
+#EXP
+#DAY
+#MONTH
+#YEAR
+###############################################################################
+export expid=EXP-ID
+export LEVELS=47
+#
+export jobdir=/home/zmaw/USER_ID/REPOS_NAM/experiments/$expid
+export data=/work/GROUP_ID/USER_ID/REPOS_NAM/experiments/$expid
+#
+export cdo=/client/bin/cdo
+export after=/sw/aix61/after-4.6.2/bin/after
+#
+###############################################################################
+#
+#  Postprocessing of ECHAM
+#
+###############################################################################
+if [[ "$MONTH" = "12" ]]; then
+# postprocess only for full years
+###############################################################################
+#
+if [ ! -d $data/post_${YEAR} ]; then
+    mkdir -p $data/post_${YEAR}
+fi
+#
+cd $data
+#
+# remove unused outputfiles
+#
+rm ${EXP}_${YEAR}??.01*codes
+rm ${EXP}_${YEAR}??.01_vphysc
+###############################################################################
+
+monthlist="01 02 03 04 05 06 07 08 09 10 11 12"
+#
+for MM in $monthlist ; do
+#
+
+input_file=${EXP}_${YEAR}${MM}.01_echam
+
+${after} -p < /pool/data/ECHAM6/post/inputlists/inp_list1 $input_file $data/post_${YEAR}/BOT_${EXP}_${YEAR}${MM}
+#
+${after} -P 8 < /pool/data/ECHAM6/post/inputlists/SELECT1 $input_file $data/post_${YEAR}/ATM_1_${EXP}_${YEAR}${MM}
+${after} -P 8 < /pool/data/ECHAM6/post/inputlists/SELECT2 $input_file $data/post_${YEAR}/ATM_2_${EXP}_${YEAR}${MM}
+#
+if [ ${LEVELS} -eq 47 ];  then
+# for L47
+   ${after} -P 8 < /pool/data/ECHAM6/post/inputlists/SELECT3 $input_file $data/post_${YEAR}/LOG_${EXP}_${YEAR}${MM}
+else
+# for L95
+   ${after} -P 8 < /pool/data/ECHAM6/post/inputlists/SELECT3_h $input_file $data/post_${YEAR}/LOG_${EXP}_${YEAR}${MM}
+# QBO only for L95
+   ${after} -P 8 < /pool/data/ECHAM6/post/inputlists/SELECT4 $input_file $data/post_${YEAR}/QBO_${EXP}_${YEAR}${MM}
+fi 
+#
+done
+#
+date
+#
+cd $data/post_${YEAR}
+#
+cdo cat BOT_${EXP}_${YEAR}?? ../BOT_${EXP}_${YEAR}
+cdo cat LOG_${EXP}_${YEAR}?? ../LOG_${EXP}_${YEAR}
+if [ ${LEVELS} -eq 95 ];  then
+# QBO only for L95
+   cdo cat QBO_${EXP}_${YEAR}?? ../QBO_${EXP}_${YEAR}
+fi 
+cdo cat ATM_1_${EXP}_${YEAR}?? ATM_1
+cdo cat ATM_2_${EXP}_${YEAR}?? ATM_2
+cdo merge ATM_1 ATM_2 ../ATM_${EXP}_${YEAR}
+#
+cd ..
+rm -rf post_${YEAR}
+#
+#################################################################################
+# end of year-loop
+fi
+#
+date
+#
+exit

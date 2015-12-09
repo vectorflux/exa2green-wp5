@@ -1,0 +1,4 @@
+&MVCTL
+  PUTMEAN = 1,'months','last',0
+  meannam = 'all'
+/

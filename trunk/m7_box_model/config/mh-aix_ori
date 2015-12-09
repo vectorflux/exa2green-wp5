@@ -1,0 +1,65 @@
+#-----------------------------------------------------------------------------
+#
+# Setup for IBM PowerPC based machines running AIX
+#
+#-----------------------------------------------------------------------------
+#
+case $fortran_compiler in
+#
+#-----------------------------------------------------------------------------
+# IBM xlf - this is the default
+
+default|ibm)
+
+    ARCH       = POWER
+
+    ARFLAGS    = -X64 crv	
+
+    CC         = xlc_r
+    CFLAGS     = -q64 -O3 -qhot -qarch=pwr6 -g -qfullpath -Dextname -qlanglvl=stdc99
+
+    F90        = xlf95_r
+    F90_efix   =
+#    F90_efix   = -tchbI -B/sw/ibm/xlf/xlfix_fixed_shape/xlf13.1.0.2/100722/exe/
+
+    FFLAGS     = -q64 -qextname -O3 -g -qstrict -qfixed
+
+    FCPP       = -WF,-q64 -qsuffix=cpp=f90
+    FWARN      = -qsuppress=1500-036  -qlistopt -qreport
+    FDEBUG     = -qfullpath -g
+    FOPT       = -O3 -qarch=pwr6 -qtune=balanced -qcache=auto -qxflag=nvectver -qxflag=nsmine -qfloat=fltint -qessl
+    FOPTIONS   = "$FCPP" "$FOPT" "$FWARN" "$FDEBUG"
+
+    F90FLAGS   = "$F90_efix" -q64 -qextname -qzerosize "$FOPTIONS" -bdatapsize:64k -bstackpsize:64k
+
+    OMPFLAG    = -qsmp=omp -qdirective
+
+    DEFOPT     = -WF,-D
+    MODOPT     = -I
+
+    SRCDIRS    =
+
+    LIBS       = -L../lib -lsupport -L/sw/aix53/lapack-3.2.0/lib -llapack -lessl -lblas -lmass -lmassvp6
+
+    MPIROOT    =
+    MPI_LIB    =
+
+    NETCDFROOT = /sw/aix61/netcdf-4.1.1-rc1
+
+    HDF5ROOT   = /sw/aix61/hdf5-1.8.4-patch1
+
+    SZIPROOT   = /sw/aix53/szip-2.1
+
+    ZLIBROOT   = /sw/aix53/zlib-1.2.3
+
+    POSTGRESQLROOT = /sw/aix53/postgresql-8.3.7
+
+    ;;
+
+#-----------------------------------------------------------------------------
+#
+esac
+#
+#-----------------------------------------------------------------------------
+
+

@@ -1,0 +1,93 @@
+#! /bin/bash
+#-----------------------------------------------------------------------------
+# Version for Sun GridEngine
+#
+#$ -S /bin/bash
+#$ -N job1
+#$ -o sub$JOB_NAME.o$JOB_ID
+#$ -j y
+#$ -cwd
+#$ -q serial
+#
+#-----------------------------------------------------------------------------
+#
+set -x
+#
+#-----------------------------------------------------------------------------
+#
+# setup required for using GridFTP in batch jobs
+#
+if [ "${HOSTNAME%[0-9]}" = "tornado" ]; then
+    export X509_USER_PROXY_DIR=${WORK}/$(id -un)/.proxy
+    if [ ! -e $X509_USER_PROXY_DIR ]; then
+        mkdir $X509_USER_PROXY_DIR
+    fi
+    export X509_USER_PROXY=${X509_USER_PROXY_DIR}/credential
+fi
+#
+#-----------------------------------------------------------------------------
+#
+# this section gets parsed und updated by subroutine subjob during model run:
+#
+#DAY
+#MONTH
+#YEAR
+#
+#-----------------------------------------------------------------------------
+#
+# ok, now we can process the parsed model information:
+# - the experiment id
+EXP=xxx9999
+#
+base_dir=/scratch/work/mh0081/m214002/echam-5.5.00_rc1
+#
+# - the working directory
+work_dir=$base_dir/experiments/${EXP}
+#
+# - the date:
+day=$DAY
+month=$MONTH
+year=$YEAR
+#
+#-----------------------------------------------------------------------------
+#
+# the archive directory:
+#
+archive_restart_dir=gsiftp://gridftp.dkrz.de/prj/mh0081/arch/m214002/xxx9999/restart
+#
+# now generate the name of the tar file which should contain the restart files
+#
+restart_files=${EXP}_restart${year}${month}.tar
+#
+#-----------------------------------------------------------------------------
+#
+# goto working directory
+#
+cd $work_dir
+# 
+# do the work
+#
+if [[ "$month" = "06" || "$month" = "12" ]]; then
+
+    # do always tar file; overhead is small and process is so always the same
+
+    tar cvf $restart_files rerun_${EXP}_* \
+	&& (echo "rerun file ${restart_files} tared.") \
+	|| (echo "rerun file ${restart_files} tar failed."; exit 1)	
+
+    # save restartfile in archive
+    
+    # GridFTP (needs URL for local files):
+    source_dir="file://$work_dir"
+
+    # no error checking! 
+    globus-url-copy -vb -p 10 \
+	$work_dir/$restart_files \
+	$archive_restart_dir/$restart_files
+
+fi
+#-----------------------------------------------------------------------------
+#
+exit
+#
+#-----------------------------------------------------------------------------

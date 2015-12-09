@@ -1,0 +1,37 @@
+ Opened namelist file --> namelist.echam
+ Opened namelist file --> namelist.echam
+ setham: Reading namelist hamctl...
+ Namelist file --> namelist.echam --> already opened, rewind file to beginning
+ setham: Reading namelist hamctl...
+ Namelist file --> namelist.echam --> already opened, rewind file to beginning
+forrtl: severe (19): invalid reference to variable in NAMELIST input, unit 100, file /scratch/rosa/mariaf/test_boxmodel/namelist.echam, line 75, position 16
+Image              PC                Routine            Line        Source             
+m7_box             00000000007769BA  Unknown               Unknown  Unknown
+m7_box             00000000007754B6  Unknown               Unknown  Unknown
+m7_box             000000000072D310  Unknown               Unknown  Unknown
+m7_box             00000000006E06EE  Unknown               Unknown  Unknown
+m7_box             00000000006DFC2F  Unknown               Unknown  Unknown
+m7_box             0000000000701F1B  Unknown               Unknown  Unknown
+m7_box             0000000000404BC3  Unknown               Unknown  Unknown
+m7_box             0000000000405B00  Unknown               Unknown  Unknown
+m7_box             0000000000400442  Unknown               Unknown  Unknown
+m7_box             000000000040033C  Unknown               Unknown  Unknown
+m7_box             0000000000786334  Unknown               Unknown  Unknown
+m7_box             0000000000400209  Unknown               Unknown  Unknown
+forrtl: severe (19): invalid reference to variable in NAMELIST input, unit 100, file /scratch/rosa/mariaf/test_boxmodel/namelist.echam, line 75, position 16
+Image              PC                Routine            Line        Source             
+m7_box             00000000007769BA  Unknown               Unknown  Unknown
+m7_box             00000000007754B6  Unknown               Unknown  Unknown
+m7_box             000000000072D310  Unknown               Unknown  Unknown
+m7_box             00000000006E06EE  Unknown               Unknown  Unknown
+m7_box             00000000006DFC2F  Unknown               Unknown  Unknown
+m7_box             0000000000701F1B  Unknown               Unknown  Unknown
+m7_box             0000000000404BC3  Unknown               Unknown  Unknown
+m7_box             0000000000405B00  Unknown               Unknown  Unknown
+m7_box             0000000000400442  Unknown               Unknown  Unknown
+m7_box             000000000040033C  Unknown               Unknown  Unknown
+m7_box             0000000000786334  Unknown               Unknown  Unknown
+m7_box             0000000000400209  Unknown               Unknown  Unknown
+Application 3442605 exit codes: 19
+Application 3442605 resources: utime ~0s, stime ~0s
+ERROR: model run stopped with return value 19.

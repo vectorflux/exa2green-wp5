@@ -1,0 +1,1828 @@
+#!/client/bin/ksh
+###############################################################################
+#                              EXP-ID.run
+###############################################################################
+#
+#   R U N - Script for the coupled model configuration
+#
+#   coupled model configuration with the components
+#      ECHAM - global atmosphere GCM (MPI-M)
+#      JSBACH - global land surface model (MPI-M)
+#      MPIOM  - global ocean GCM (MPI-M)
+#      HAMOCC - global ocean bio-geo-chemistry model (MPI-M)
+# when using this script:
+#
+# - only restarts are possible
+# - only yearly chunks
+# - only coupled experiments
+# - either LR or MR experiments
+# - no special output, like trdiag or cfmip files
+#
+# - only predefined experiment settings (cmip5-style) possible:
+#   piControl-LR, historical-LR, rcp26/45/85-LR, 1pctCo2, piControl-P
+#   piControl-MR, historical-MR, rcp45-MR
+#
+#   Whenever you want to use differing namelists simply copy the lists into
+#   your scripts directory and modify them. Then copy the modified list(s) 
+#   from the scripts directory into your work (see README_MPIESM).
+#
+# RERUN-files are taken from the original CMIP5 experiments (1st realization)
+#
+###############################################################################
+### Batch Queuing System is LL
+# @ shell            = /client/bin/ksh
+# @ job_type         = parallel
+# @ node_usage       = not_shared
+# @ rset             = rset_mcm_affinity
+# @ mcm_affinity_options = mcm_distribute,mcm_mem_req,mcm_sni_none
+# @ node             = NODE
+# @ tasks_per_node   = 64
+# @ resources        = ConsumableMemory(750mb)
+# @ task_affinity    = cpu(1)
+# @ network.MPI      = sn_all,not_shared,us
+# @ wall_clock_limit = 08:00:00
+# @ job_name         = EXP-ID.run
+# @ output           = $(job_name).o$(jobid)
+# @ error            = $(job_name).o$(jobid)
+# @ notification     = error
+# @ account_no       = ACCOUNT
+# @ queue
+###############################################################################
+
+set -ex
+export task=RUN     # The task: RUN, ARCH, POST, MON, REM
+print "\n This ${task} script\n - is started at\t$(date)\n - on host\t$(hostname)"
+
+###############################################################################
+#
+#        SETUP OF EXPERIMENT EXP-ID
+#
+###############################################################################
+#------------------------------------------------------------------------------
+#   0.1   Experiment settings
+#------------------------------------------------------------------------------
+
+#
+#-- Experiment ID
+#
+
+export expid=EXP-ID
+
+#
+#-- Coupled model name
+#
+
+export cplmod=mpiesm-asob
+
+#
+#-- Node name / OS of the computing host
+#
+
+export node=aix
+
+#------------------------------------------------------------------------------
+# Setup
+#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
+#   0.2   Model components
+#------------------------------------------------------------------------------
+
+atmmod=echam6
+srfmod=jsbach
+ocemod=mpiom
+bgcmod=hamocc
+coupler=oasis3
+
+###############################################################################
+#
+#     USER INTERFACE
+#
+###############################################################################
+#------------------------------------------------------------------------------
+#   Configuration of component(s)
+#------------------------------------------------------------------------------
+#
+# set experiment name
+#
+export expname=EXPNAME
+#
+
+#
+#-- ECHAM
+#
+case ${expname} in
+  piControl-MR | historical-MR | rcp26-MR | rcp45-MR | rcp85-MR )
+    res_atm=T63             # grid acronym (T21/T31/T42/T63/T85/T106/T127/T159)
+    vres_atm=95             # number of vertical levels
+  ;;
+  * )
+    res_atm=T63             # grid acronym (T21/T31/T42/T63/T85/T106/T127/T159)
+    vres_atm=47             # number of vertical levels
+  ;;
+esac
+hd=true                 # hydrological discharge model activated
+#lco2=false     # true: prognostic CO2 mass mixing ratio
+
+#
+#-- JSBACH
+#
+ntiles=11               # number of tiles
+#read_cpools=false       # read cpools file at start of initialized exp
+case ${expname} in
+ pi_Control-P)
+   refyear=pi
+ ;;
+
+ *    )
+   refyear=1850         # reference year of initial data (e.g. cpools)
+  ;;
+esac
+srf_out_filetype=GRIB   # output file format: GRIB / NETCDF
+
+#
+#-- MPIOM/HAMOCC
+#
+case ${expname} in
+  piControl-MR | historical-MR | rcp26-MR | rcp45-MR | rcp85-MR )
+    res_oce=TP04            # grid acronym (GR30/GR15/TP10/TP04/TP01)
+    vres_oce=40             # number of vertical levels
+  ;;
+  * )
+    res_oce=GR15            # grid acronym (GR30/GR15/TP10/TP04/TP01)
+    vres_oce=40             # number of vertical levels
+  ;;
+esac
+
+#
+#-- COUPLER
+#
+jobname=mbe            # OASIS experiment-id (3 characters)
+nlogprt=0               # Standard output extent:
+                        #    0: little
+                        #    1: much
+                        #    2: very much std. output
+run_mode=concurrent     # sequential / concurrent (=parallel)
+
+# remapping parameters
+
+scripwr=0               # writing of SCRIP remapping matrices
+                        #  0: use SCRIP matrice if exists; else (re)calculation
+                        #  1: unconditional (re)calculation of SCRIP matrices
+
+gridswr=0               # writing of grid description files for OASIS   
+                        #  0: use grid descr. files if exist; else (re)generation
+                        #  1: unconditional (re)generation of grid descr. files
+
+extrapwr=0              # writing of extrapolation matrix (NINENN)
+                        #   0: use of existing extrapolation matrix 
+                        #      (error if not available)
+                        #   1: unconditional (re)generation of the extrap. matrix
+                        #  Note: if gridswr=1 extrapwr needs to be 1 too
+
+FV_cpl=_frac            #
+
+# time interval of data exchange or coupling time step 
+
+dto2a=86400             # time step from ocean to atmosphere (86400/43200) [s]
+                        # Note: time step from atmosphere to ocean is 86400 s
+
+# treatment of coupling fields (see OASIS documentation for more information)
+
+timtranso2a=INSTANT     # INSTANT / AVERAGE
+export=EXPORTED         # EXPORTED / EXPOUT
+
+#------------------------------------------------------------------------------
+#   1.2 TASK SPECIFICATION
+#------------------------------------------------------------------------------
+#
+#
+#-- postprocessing:  yes: create and run a script for postprocessing
+#                    no:  no postprocessing
+postprocessing=yes
+
+#
+#-- monitoring :     yes: create and run a script for monitoring
+#                    no:  no monitoring
+monitoring=no
+
+#------------------------------------------------------------------------------
+#   1.3 TIME CONTROL
+#------------------------------------------------------------------------------
+#-- declarations
+integer nyear nmonth nday nhour nminute nsecond
+
+#
+#-- calendar type: Available calendar options:
+#     0   : No leap year (365 days per year)
+#     1   : Gregorian (365/366 days per year)
+#     n   : Equal months of "n" days (30 for 30 day months)
+
+caltype=1
+
+#
+#-- initial and final date of the experiment
+#   Format: YearMMDD[_hh[mm[ss]]], Year-MM-DD[_hh[:mm[:ss]]] or 
+#           Year-MM-DD[Thh[:mm[:ss]]]
+#   Note: The experiment will not stop within a run/chunk even if the
+#         final date is reached.
+case ${expname} in
+
+ piControl-LR | piControl-P | piControl-MR)
+   initial_date=1850-01-01 # initial date of the experiment
+#   final_date=1950-12-31   # final date of the experiment
+   final_date=1851-12-31   # final date of the experiment for testing only!
+ ;;
+
+ historical-LR | historical-MR )
+   initial_date=1850-01-01 # initial date of the experiment, starting with piControl
+   final_date=2005-12-31   # final date of the experiment
+ ;;
+
+ rcp26-LR | rcp45-LR | rcp85-LR | rcp26-MR | rcp45-MR | rcp85-MR )
+   initial_date=2006-01-01 # initial date of the experiment, starting with historical
+   final_date=2100-12-31   # final date of the experiment
+ ;;
+
+ 1pctCo2 )
+   initial_date=1850-01-01 # initial date of the experiment, starting with piControl
+   final_date=1999-12-31   # final date of the experiment
+ ;;
+
+ *    )
+  echo " initial and final dates for ${expname} not fully available yet!"
+  exit 1
+  ;;
+
+esac
+
+#
+#-- duration of a run/chunk
+#      Specify the length of each run in one of the below units.
+
+nyear=1          # number of years per run
+nmonth=0         # number of months per run
+nday=0           # number of days per run
+nhour=0          # number of hours per run
+nminute=0        # number of minutes per run
+nsecond=0        # number of seconds per run
+nstep_atm=0      # number of atmosphere model time steps per run
+nstep_oce=0      # number of ocean model time steps per run
+
+#------------------------------------------------------------------------------
+#   1.4 INITIAL SETTINGS
+#------------------------------------------------------------------------------
+#
+#-- file and directory permissons of the output
+#
+
+export dir_permits=755
+export file_permits=644
+
+#------------------------------------------------------------------------------
+#   1.5 MESSAGE PASSING
+#------------------------------------------------------------------------------
+#
+#-- number of MPI-processors/openMP-threads
+#
+
+integer nproca_atm nprocb_atm nproma_atm nthreadatm nproca_oce nprocb_oce nthreadoce
+integer nprocoasis
+
+case ${expname} in
+  piControl-MR | historical-MR | rcp26-MR | rcp45-MR | rcp85-MR )
+    nproca_atm=16  #
+    nprocb_atm=16  # total number of MPI processors for the atmosphere is nproca_atm * nprocb_atm
+    nproma_atm=72  # vector length (see http://svn.zmaw.de/echam5/decomposition-sx.html)
+    nthreadatm=1   # number of openMP threads for the atmosphere model
+# ---------
+    nproca_oce=16   #
+    nprocb_oce=23   # total number of MPI processors for the ocean is nproca_oce * nprocb_oce
+    nthreadoce=1   # number of openMP threads for the ocean model
+# ------------
+    nprocoasis=16     # number of processors dedicated for OASIS (1/0)
+  ;;
+  * )
+    nproca_atm=16  #
+    nprocb_atm=12  # total number of MPI processors for the atmosphere is nproca_atm * nprocb_atm
+    nproma_atm=72  # vector length (see http://svn.zmaw.de/echam5/decomposition-sx.html)
+    nthreadatm=1   # number of openMP threads for the atmosphere model
+# ---------
+    nproca_oce=9   # 
+    nprocb_oce=7   # total number of MPI processors for the ocean is nproca_oce * nprocb_oce
+    nthreadoce=1   # number of openMP threads for the ocean model
+# ------------
+    nprocoasis=1     # number of processors dedicated for OASIS (1/0)
+  ;;
+esac
+#
+#-- launching mode (spawned by coupler: MPI2; MPI1 otherwise)
+#
+
+message_passing=MPI1
+
+#
+#-- buffered MPI Send 
+#      yes: buffered send
+#       no: simple send
+
+bsend=no
+
+#
+#-- number of processors used for the mpiexec
+# 
+nprocmpi=0
+
+#------------------------------------------------------------------------------
+#   1.6 FILE SYSTEMS
+#------------------------------------------------------------------------------
+#
+#-- home:  Permanent file system for the SCRIPTS on the COMPUTING HOST
+#          (only needs to be specified if the tasks are NOT generated on the 
+#          computing host)
+
+export home=/home/zmaw/USER_ID/REPOS_NAM/experiments
+
+#
+#-- data:  Root directory of the SHORT TERM data server.
+#          Model OUTPUT will be written to 
+#          this file system of the computing host
+#
+#  - The parent-directory of ${data} needs to exist before submission of the job 
+
+export data=/work/GROUP_ID/USER_ID/REPOS_NAM/experiments
+
+#
+#-- work:  Root directory for the temporary working directory
+#             (for production runs use $TMPDIR on NEC)
+#
+#  - The parent-directory of ${work} needs to exist before submission of the job 
+
+work=/scratch/m/USER_ID/REPOS_NAM/experiments
+
+#
+#-- Path to the IMDI function directory
+#
+export fpath=/home/zmaw/USER_ID/REPOS_NAM/util/running/functions
+export PATH=${fpath}:$PATH
+#------------------------------------------------------------------------------
+#   1.7 RESTART CONTROL
+#------------------------------------------------------------------------------ 
+#
+#-- 'component'_restart: start from restart or initial files (climatology)
+#         1  : start experiment from restart files for 'component'
+#         0  : start experiment from initial conditions for 'component'
+#      If the experiment starts from restart files you need to specify:
+# 
+#   'component'_age: the age of the restart file used in years
+#   'component'_restart_file: filename of the restart file (including path)
+#
+case ${expname} in
+ piControl-LR )
+   odate=18491231; ndate="-18491231"
+   pexp=piControl_r1i1p1-LR
+  ;;
+
+ piControl-MR | historical-MR )
+   odate=18491231; ndate=""
+   pexp=piControl_r1i1p1-MR
+  ;;
+
+ piControl-P )
+   odate=18651231; ndate="-18491231"
+   pexp=piControl_r1i1p1-P
+  ;;
+
+ historical-LR )
+   odate=18791231; ndate="-18491231"
+   pexp=piControl_r1i1p1-LR
+  ;;
+
+ rcp26-LR | rcp45-LR | rcp85-LR )
+   odate=20051231; ndate=""
+   pexp=historical_r1i1p1-LR
+  ;;
+
+ rcp26-MR | rcp45-MR | rcp85-MR )
+   odate=20051231; ndate=""
+   pexp=historical_r1i1p1-MR
+  ;;
+
+ 1pctCo2 )
+   odate=18791231; ndate="-18491231"
+   pexp=piControl_r1i1p1-LR
+  ;;
+
+ *    )
+  echo " Restart files for ${expname} not available yet!"
+  exit 1
+  ;;
+
+esac
+
+   restart_dir=/work/mh0081/m214002/experiments/restarts/${pexp}
+
+   atm_restart=1
+   atm_age=0
+   atm_restart_file=${restart_dir}/rerun_${pexp}_echam_${odate}${ndate}
+   atm_restart_co2=${restart_dir}/rerun_${pexp}_co2_${odate}${ndate}
+   hd_restart_file=${restart_dir}/rerun_${pexp}_hd_${odate}${ndate}.nc
+
+   srf_restart=1
+   srf_age=0
+   srf_restart_jsbach=${restart_dir}/rerun_${pexp}_jsbach_${odate}${ndate}
+   srf_restart_surf=${restart_dir}/rerun_${pexp}_surf_${odate}${ndate}
+   srf_restart_veg=${restart_dir}/rerun_${pexp}_veg_${odate}${ndate}
+
+   oce_restart=1
+   oce_age=0
+   oce_restart_file=${restart_dir}/rerun_${pexp}_mpiom_${odate}${ndate}.nc
+
+   bgc_restart=1
+   bgc_age=0
+   bgc_restart_file=${restart_dir}/rerun_${pexp}_hamocc_${odate}${ndate}.nc
+
+   cpl_restart=1
+   cpl_restart_file_sstocean=${restart_dir}/sstocean_${pexp}_${odate}${ndate}.tar
+   cpl_restart_file_flxatmos=${restart_dir}/flxatmos_${pexp}_${odate}${ndate}.tar
+
+#------------------------------------------------------------------------------
+#   1.8 PLATFORM DEPENDEND SPECIFICATIONS
+#------------------------------------------------------------------------------
+#
+#-- batch queueing system ( PBS | SGE | LL | NQS2 | LSF | INTERACTIVE )  
+#
+queueing_system=LL
+
+#
+#-- number of CPUs (tasks) per node
+#
+cpu_per_node=64    # SMT mode
+#cpu_per_node=32     # ST  mode
+
+#
+#-- email address (for queuing system)
+#
+email=EMAIL
+
+#
+#-- job classes/queues (for queueing system)
+#
+queue=default           # site dependent class/queue name for run job
+queue_post=default      # site dependent class/queue name for postprocessing job 
+#------------------------------------------------------------------------------
+#   1.9 UNIX COMMANDS
+#------------------------------------------------------------------------------
+
+export mkdir="mkdir -p"    # create a new directory
+export cp="cp -p"          # copy without changing the time stamp
+export ln="ln -sf"         # soft link (if no links are wanted: same as cp)
+export rm=rm               # remove
+export rtp="pftp"          # remote transfer protocol
+export rtp_post="$rtp"     # transfer protocol to remote processing host
+export gunzip="gzip -d"    # unzip a file that was zipped using gzip
+
+export cdo=/sw/aix61/cdo-1.4.6/bin/cdo
+export python=/sw/aix61/Python-2.6.4/bin/python
+export afterburner=/sw/aix61/after-4.6.2/bin/after
+
+###############################################################################
+#
+#      END OF THE USER INTERFACE
+#
+###############################################################################
+
+set -e
+
+#------------------------------------------------------------------------------
+#  Complete setup (parameters wich cannot be changed)
+#------------------------------------------------------------------------------
+
+# declarations
+integer ntproc nprocatm nprococe nprocmpi ncplprocatm ncplprococe
+
+#
+# treatment of coupling fields
+#
+timtransa2o=INSTANT
+
+#
+# Exchange time steps
+#
+dta2o=86400
+dto2a=${dto2a}
+
+# Parameters for ECHAM and MPIOM
+# ------------------------------
+case ${expname} in
+  piControl-MR | historical-MR | rcp26-MR | rcp45-MR | rcp85-MR )
+    nadt=450
+    nodt=3600
+  ;;
+  * )
+    nadt=600
+    nodt=4320
+  ;;
+esac
+
+# Parameters for JSBACH
+# ---------------------
+res_srf=${res_atm}
+
+#
+# Parameters for HAMOCC
+# ---------------------
+res_bgc=${res_oce}
+
+#
+# Number of MPI-processors/openMP-threads
+# ---------------------------------------
+ncplprococe=1  # number of ocean MPI processes communicating with oasis
+ncplprocatm=1  # number of atmosphere MPI processes communicating with oasis
+
+nprocatm=nproca_atm*nprocb_atm  # total number of atm. MPI processes
+nprococe=nproca_oce*nprocb_oce  # total number of ocean MPI processes
+
+# total number of MPI processes
+ntproc=nprocatm+nprococe+nprocmpi+nprocoasis
+
+export OMP_NUM_THREADS=1
+export MPIOM_THREADS=${nthreadoce}
+export ECHAM6_THREADS=${nthreadatm}
+
+#------------------------------------------------------------------------------
+#   Job specification
+#------------------------------------------------------------------------------
+
+qsub="$(submit_command -q LL)"        # submit command
+
+if [ -z ${qsub} ]; then # interactive run
+  jobdir=$(dirname $0) ; cd ${jobdir} ; jobdir=$(pwd) # script directory
+  print " - submitted        \tinteractively"
+else                 
+  jobdir=${home}/${expid}/scripts                     # script directory
+  print " - submitted by     \tLL"
+fi
+
+job=$(job_name -q LL -s $(basename $0))    # script name
+jobid=$(job_identifier -q LL -e ${expid})  # job-id
+print " - job name         \t${job}"
+print " - job id           \t${jobid}\n - job directory    \t${jobdir}\n"
+
+#------------------------------------------------------------------------------
+#
+#     3. CALENDAR
+#
+#------------------------------------------------------------------------------
+#
+#-- calculate length of the run in seconds for the case that (optionally)
+#   the length of run is given in number of model steps of any of the models.
+#
+if   [ "${nstep_atm}" -ne 0 ] && [ "${nstep_atm}" -ne "" ]; then
+  (( nsecond = nstep_atm * nadt ))
+elif [ "${nstep_oce}" -ne 0 ] && [ "${nstep_oce}" -ne "" ]; then
+  (( nsecond = nstep_oce * nodt ))
+elif [ "${nstep_che}" -ne 0 ] && [ "${nstep_che}" -ne "" ]; then
+  (( nsecond = nstep_che * ncdt ))
+elif [ "${nstep_srf}" -ne 0 ] && [ "${nstep_srf}" -ne "" ]; then
+  (( nsecond = nstep_srf * nsdt ))
+fi
+
+#
+#-- find out smallest time unit in inidate and job length
+#
+inidate=`format_date -- ${initial_date}`   # transform to format (YearMMDD_hhmmss)
+findate=`format_date -- ${final_date}`
+
+nwords=$(format_date -f4 -- ${inidate} | wc -w) 
+if [ ${nwords} -eq 6 ] || [ ${nsecond} -ne 0 ]; then
+  inidate=$(format_date -s -- ${inidate})
+  findate=$(format_date -s -- ${final_date})
+elif [ ${nwords} -eq 5 ] || [ ${nminute} -ne 0 ]; then
+  inidate=$(format_date -m -- ${inidate})
+  findate=$(format_date -m -- ${final_date})
+elif [ ${nwords} -eq 4 ] || [ ${nhour} -ne 0 ]; then
+  inidate=$(format_date -h  -- ${inidate})
+  findate=$(format_date -h  -- ${final_date})
+fi
+
+#
+#-- date of this run
+#
+
+cd ${jobdir}
+space_error="no"
+
+datefmt='%a %b %d %H:%M:%S %Z %Y'  # date format for expid.log file
+
+export startdate
+if [ ! -f ${expid}.date ]; then
+
+  startdate=${inidate}
+  jobnum=1
+  if [ -f  ${expid}.log ]; then
+    rm ${expid}.log
+  fi
+  print "$(date +"${datefmt}") :  Beginning of Experiment ${expid}" > ${expid}.log.new || { 
+      space_error="yes"; print "Could not create ${expid}.log"; 
+  }
+else
+  read startdate jobnum < ${expid}.date
+  cp ${expid}.log ${expid}.log.new || { 
+    space_error="yes"; print "Could not save ${expid}.log"; 
+  }
+fi
+
+print "$(date +"${datefmt}") :  ${jobnum} ${startdate} ${jobid}  - start" >> ${expid}.log.new || { 
+  space_error="yes"; print "Could not append to ${expid}.log"; 
+}
+if [ "${space_error}" = "no" ]; then
+  mv ${expid}.log.new ${expid}.log
+else
+  print "  |- ERROR: No disk space left or quota exceeded?"
+  exit 1
+fi
+
+integer scrcap
+line=$(df -k $data | tail -1)
+scrfs=${line##* }
+line=${line%%\%*} ;scrcap=${line##* }
+
+if (( scrcap > 99 )); then
+  print "  |- ERROR: Less than 1% disc space left on filesystem $scrfs, where your"
+  print "  |    workshare data=$data is mounted. Please clean up before you continue !"
+  exit 1
+fi
+
+nextdate=$(calc_date plus -c${caltype} -Y${nyear} -M${nmonth} -D${nday} -h${nhour} -m${nminute} -s${nsecond} -- ${startdate})
+
+print " |+ Time integration and run periode"
+print "  |- Initial date of the experiment\t${inidate}"
+print  "  |- Final date of the experiment\t${findate}"
+print "   |- Beginning of this run    \t ${startdate}"
+print "   |- Beginning of the next run\t ${nextdate}\n"
+
+#------------------------------------------------------------------------------
+#   Definition of the functions 
+#------------------------------------------------------------------------------
+
+. function_get_file
+. function_make_directories
+. function_make_ppdirectories
+. function_get_model_resolution
+
+#------------------------------------------------------------------------------
+#   Directory definitions
+#------------------------------------------------------------------------------
+
+exphome=${data}/${expid}          # Root directory of the experiment (data)
+
+export bindir=${exphome}/bin      # Directory of the executables
+export inpdir=${exphome}/input    # Directory of the input files
+export restdir=${exphome}/restart # Directory of the restart files
+export outdir=${exphome}/outdata  # Directory of the output data files
+export logdir=${exphome}/log      # Directory of the log data files
+export postdir=${exphome}/post    # Directory for post-processed data
+
+if [ ${jobnum} = 1 ];then
+      make_directories run ${atmmod},${srfmod},${ocemod},${bgcmod},${coupler}
+fi
+
+#------------------------------------------------------------------------------
+#
+#     save log file of the previous run
+#
+#------------------------------------------------------------------------------
+#
+# find out the id of the last run
+#
+if [ ${jobnum} != 1 ]; then
+  loginfo=$(get_logpid -d ${startdate} -f ${jobdir}/${expid}.log)                
+  previd=${loginfo%[ ]*}
+  if [ "${previd}" = "${expid}" ]; then 
+    echo "No logfile of the previous run available (interactive run)"
+  else
+    date=${loginfo#*[ ]}
+    logfile=${jobdir}/${job}.o${previd}
+    prevlogfile=${logdir}/${job}_${date}.o${previd}
+    if [ ! -f ${logfile} ] && [ ! -f ${prevlogfile} ]; then
+      printf "waiting for the log files of current (${logfile}) or\n"
+      printf " of the previous (${logfile}) run ...\n"
+      sleep 300
+    fi
+
+    if [ -f ${logfile} ]; then
+      mv ${logfile} ${logdir}/${job}_${date}.o${previd}
+    elif [ ! -f ${logdir}/${job}_${date}.o${previd} ]; then
+      printf "Can not access logfile of the previous run - exit\n"
+      exit 1
+    fi
+  fi
+fi
+
+#------------------------------------------------------------------------------
+#   4.4 PRE - PROCESSING : Computing environment
+#------------------------------------------------------------------------------
+
+# create and go to the temporary working directory
+
+if [ "${work}" = "" ]; then
+  print "\n |- ERROR: Can't create the temporary working directory"
+  print " |     Variable 'work' is empty"
+  exit
+fi
+cd ${work}
+if [ ! -d ${expid} ]; then
+  ${mkdir} ${expid}
+fi
+if [ ! -d ${expid}/work ]; then
+  ${mkdir} ${expid}/work
+fi
+cd ${expid}/work
+rm -rf *
+
+printf "\n |- Temporary working directory   \t$(pwd)\n"
+printf " |- Data workshare on compute node  \t$data/$expid\n\n"
+
+#------------------------------------------------------------------------------
+#     4.5 PRE - PROCESSING : Provide the executables
+#------------------------------------------------------------------------------
+
+print " |+ Get executables"
+#   EXECUTABLES
+cp /home/zmaw/USER_ID/REPOS_NAM/AIX-xlf/bin/MPIOM_EXE   mpiom
+cp /home/zmaw/USER_ID/REPOS_NAM/AIX-xlf/bin/ECHAM_EXE   echam6
+cp /home/zmaw/USER_ID/REPOS_NAM/AIX-xlf/bin/OASIS_EXE   oasis.x
+
+#------------------------------------------------------------------------------
+#     4.6 PRE - PROCESSING : Provide the input data 
+#------------------------------------------------------------------------------
+
+printf " |- Get input and restart data\n"
+
+#------------------------------------------------------------------------------
+# Input files for the coupler (OASIS3)
+#-------------------------------------
+
+# List of variable names according to cf conventions 
+#
+cp /pool/data/ECHAM6/${res_atm}/oasis3/cf_name_table.txt cf_name_table.txt
+
+# Grid and analysis auxiliary data files
+#
+
+n=0
+while (( n < ${nprocoasis} )); do
+cp /pool/data/ECHAM6/${res_atm}/oasis3/rmp_oces_to_atmo_CONSERV_FRACAREA_${res_atm}_${res_oce}.nc \
+              rmp_oces_to_atmo_CONSERV_FRACAREA_${n}.nc
+cp /pool/data/ECHAM6/${res_atm}/oasis3/rmp_atmo_to_oces_CONSERV_FRACAREA_${res_atm}_${res_oce}.nc \
+              rmp_atmo_to_oces_CONSERV_FRACAREA_${n}.nc
+cp /pool/data/ECHAM6/${res_atm}/oasis3/rmp_atml_to_oces_CONSERV_FRACAREA_${res_atm}_${res_oce}.nc \
+              rmp_atml_to_oces_CONSERV_FRACAREA_${n}.nc
+case ${expname} in
+ piControl-MR | historical-MR | rcp26-MR | rcp45-MR | rcp85-MR )
+   cp /pool/data/ECHAM6/${res_atm}/oasis3/rmp_atmo_to_oces_BICUBIC_${res_atm}_${res_oce}.nc \
+               rmp_atmo_to_oces_BICUBIC_${n}.nc
+ ;;
+esac
+
+#
+cp /pool/data/ECHAM6/${res_atm}/oasis3/nweights_${res_atm}_${res_oce}${FV_cpl} nweights_${n}
+
+  (( n = n + 1 ))
+done
+#
+# get grid description files
+cp /pool/data/ECHAM6/${res_atm}/oasis3/grids_${res_atm}_${res_oce}${FV_cpl}.nc grids.nc
+cp /pool/data/ECHAM6/${res_atm}/oasis3/areas_${res_atm}_${res_oce}${FV_cpl}.nc areas.nc
+cp /pool/data/ECHAM6/${res_atm}/oasis3/masks_${res_atm}_${res_oce}${FV_cpl}.nc masks.nc
+
+# Restart files
+# -------------
+
+prevdate=`calc_date minus -c${caltype} -D1 -- ${startdate}`
+if [ ${jobnum} = 1 ]; then
+  if [ ${cpl_restart} = 1 ]; then
+    \cp  ${cpl_restart_file_flxatmos}*  flxatmos.tar
+    # as it is a tar file we now need to extract
+    tar -xf flxatmos.tar; rm flxatmos.tar
+    \cp  ${cpl_restart_file_sstocean}* sstocean.tar
+    # as it is a tar file we now need to extract
+    tar -xf sstocean.tar; rm sstocean.tar
+  fi
+else
+#
+# We now get the tar file, unpack and remove
+#
+  get_file ${coupler} restart flxatmos_${expid}_${prevdate}.tar flxatmos.tar
+  tar -xf flxatmos.tar; rm flxatmos.tar
+  get_file ${coupler} restart sstocean_${expid}_${prevdate}.tar sstocean.tar
+  tar -xf sstocean.tar; rm sstocean.tar
+fi
+
+#------------------------------------------------------------------------------
+# Input files for the atmosphere (ECHAM)
+#----------------------------------------
+
+#
+#-- Initialization and forcing
+#   --------------------------
+#
+# 3d initial file of atmosphere (spectral, no dependence on lsmask)
+#
+ln -s /pool/data/ECHAM6/${res_atm}/${res_atm}L${vres_atm}_jan_spec.nc     unit.23
+
+#
+# surface boundary conditions (land/sea mask, albedo etc.)
+#    annual mean data; file depends on lsmask
+#
+ln -s /pool/data/ECHAM6/${res_atm}/${res_atm}${res_oce}_jan_surf.nc  unit.24
+
+#
+# ozone climatology (m.m., zonal) (no dependence on lsmask)
+#
+ln -s /pool/data/ECHAM6/${res_atm}/${res_atm}_ozone_CMIP5_1850-1860.nc unit.21
+
+#
+# leaf area index climatology (monthly)
+#
+ln -s /pool/data/ECHAM6/${res_atm}/${res_atm}${res_oce}_VLTCLIM.nc   unit.90
+
+#
+#  3d vegetation climatology (a.m.) (monthly)
+#
+ln -s /pool/data/ECHAM6/${res_atm}/${res_atm}${res_oce}_VGRATCLIM.nc unit.91
+
+#
+#  land surface temperature climatology (monthly)
+#
+ln -s /pool/data/ECHAM6/${res_atm}/${res_atm}_TSLCLIM2.nc             unit.92
+
+#
+#  input data for radiation scheme
+#
+ln -s /pool/data/ECHAM6/surrta_data                    rrtadata
+ln -s /pool/data/ECHAM6/rrtmg_lw.nc                    rrtmg_lw.nc
+ln -s /pool/data/ECHAM6/ECHAM6_CldOptProps.nc          ECHAM6_CldOptProps.nc
+
+#
+# aerosols
+#
+typeset -Z4 yr yp1 ym1 ym2
+#yr=$(format_date -f4 -- ${startdate} | cut -f1 -d" ")
+yr=$(echo ${startdate} | cut -c1-4)
+(( yp1 = yr + 1 ))
+(( ym1 = yr - 1 ))
+(( ym2 = yr - 2 ))
+
+case ${expname} in
+
+ piControl-LR | piControl-P | piControl-MR )
+  for yrs in ${yr} ${yp1} ${ym1} ${ym2}; do
+    ln -s /pool/data/ECHAM6/${res_atm}/aero2/${res_atm}_aeropt_kinne_sw_b14_fin_1865.nc aero_fine_${yrs}.nc
+    ln -s /pool/data/ECHAM6/${res_atm}/aero2/${res_atm}_aeropt_kinne_sw_b14_coa.nc      aero_coarse_${yrs}.nc
+    ln -s /pool/data/ECHAM6/${res_atm}/aero2/${res_atm}_aeropt_kinne_lw_b16_coa.nc      aero_farir_${yrs}.nc
+# ozone
+    ln -s /pool/data/ECHAM6/${res_atm}/${res_atm}_ozone_CMIP5_1850-1860.nc ozon${yrs}
+  done
+ ;;
+
+ historical-LR | historical-MR )
+  for yrs in ${yr} ${yp1} ${ym1} ${ym2}; do
+# aerosol
+    ln -s /pool/data/ECHAM6/${res_atm}/aero2/${res_atm}_aeropt_kinne_sw_b14_fin_${yrs}.nc aero_fine_${yrs}.nc
+    ln -s /pool/data/ECHAM6/${res_atm}/aero2/${res_atm}_aeropt_kinne_sw_b14_coa.nc      aero_coarse_${yrs}.nc
+    ln -s /pool/data/ECHAM6/${res_atm}/aero2/${res_atm}_aeropt_kinne_lw_b16_coa.nc      aero_farir_${yrs}.nc
+# ozone
+    ln -s /pool/data/ECHAM6/${res_atm}/ozone2/${res_atm}_ozone_CMIP5_${yrs}.nc ozon${yrs}
+# solar irradiance (for isolrad=1)
+    ln -s /pool/data/ECHAM6/solar_irradiance/swflux_14band_${yrs}.nc   swflux_${yrs}.nc
+# volcanic aerosols
+   ln -s /pool/data/ECHAM6/${res_atm}/volcano_aerosols/strat_aerosol_ir_${res_atm}_${yrs}.nc strat_aerosol_ir_${yrs}.nc
+   ln -s /pool/data/ECHAM6/${res_atm}/volcano_aerosols/strat_aerosol_sw_${res_atm}_${yrs}.nc strat_aerosol_sw_${yrs}.nc
+  done
+# greenhouse gases
+  ln -s /pool/data/ECHAM6/greenhouse_rcp45.nc                greenhouse_gases.nc
+ ;;
+
+ rcp26-LR | rcp26-MR )
+  for yrs in ${yr} ${yp1} ${ym1} ${ym2}; do
+# aerosol
+    ln -s /pool/data/ECHAM6/${res_atm}/aero2/${res_atm}_aeropt_kinne_sw_b14_fin_rcp26_${yrs}.nc aero_fine_${yrs}.nc
+    ln -s /pool/data/ECHAM6/${res_atm}/aero2/${res_atm}_aeropt_kinne_sw_b14_coa.nc      aero_coarse_${yrs}.nc
+    ln -s /pool/data/ECHAM6/${res_atm}/aero2/${res_atm}_aeropt_kinne_lw_b16_coa.nc      aero_farir_${yrs}.nc
+# ozone
+    ln -s /pool/data/ECHAM6/${res_atm}/ozone2/${res_atm}_ozone_CMIP5_RCP26_${yrs}.nc ozon${yrs}
+# solar irradiance (for isolrad=1)
+    ln -s /pool/data/ECHAM6/solar_irradiance/swflux_14band_${yrs}.nc   swflux_${yrs}.nc
+# volcanic aerosols
+   ln -s /pool/data/ECHAM6/${res_atm}/volcano_aerosols/strat_aerosol_ir_${res_atm}_1999.nc strat_aerosol_ir_${yrs}.nc
+   ln -s /pool/data/ECHAM6/${res_atm}/volcano_aerosols/strat_aerosol_sw_${res_atm}_1999.nc strat_aerosol_sw_${yrs}.nc
+  done
+# greenhouse gases
+  ln -s /pool/data/ECHAM6/greenhouse_rcp26.nc                greenhouse_gases.nc
+ ;;
+
+ rcp45-LR | rcp45-MR )
+  for yrs in ${yr} ${yp1} ${ym1} ${ym2}; do
+# aerosol
+    ln -s /pool/data/ECHAM6/${res_atm}/aero2/${res_atm}_aeropt_kinne_sw_b14_fin_rcp45_${yrs}.nc aero_fine_${yrs}.nc
+    ln -s /pool/data/ECHAM6/${res_atm}/aero2/${res_atm}_aeropt_kinne_sw_b14_coa.nc      aero_coarse_${yrs}.nc
+    ln -s /pool/data/ECHAM6/${res_atm}/aero2/${res_atm}_aeropt_kinne_lw_b16_coa.nc      aero_farir_${yrs}.nc
+# ozone
+    ln -s /pool/data/ECHAM6/${res_atm}/ozone2/${res_atm}_ozone_CMIP5_RCP45_${yrs}.nc ozon${yrs}
+# solar irradiance (for isolrad=1)
+    ln -s /pool/data/ECHAM6/solar_irradiance/swflux_14band_${yrs}.nc   swflux_${yrs}.nc
+# volcanic aerosols
+   ln -s /pool/data/ECHAM6/${res_atm}/volcano_aerosols/strat_aerosol_ir_${res_atm}_1999.nc strat_aerosol_ir_${yrs}.nc
+   ln -s /pool/data/ECHAM6/${res_atm}/volcano_aerosols/strat_aerosol_sw_${res_atm}_1999.nc strat_aerosol_sw_${yrs}.nc
+  done
+# greenhouse gases
+  ln -s /pool/data/ECHAM6/greenhouse_rcp45.nc                greenhouse_gases.nc
+ ;;
+
+ rcp85-LR | rcp85-MR )
+  for yrs in ${yr} ${yp1} ${ym1} ${ym2}; do
+# aerosol
+    ln -s /pool/data/ECHAM6/${res_atm}/aero2/${res_atm}_aeropt_kinne_sw_b14_fin_rcp85_${yrs}.nc aero_fine_${yrs}.nc
+    ln -s /pool/data/ECHAM6/${res_atm}/aero2/${res_atm}_aeropt_kinne_sw_b14_coa.nc      aero_coarse_${yrs}.nc
+    ln -s /pool/data/ECHAM6/${res_atm}/aero2/${res_atm}_aeropt_kinne_lw_b16_coa.nc      aero_farir_${yrs}.nc
+# ozone
+    ln -s /pool/data/ECHAM6/${res_atm}/ozone2/${res_atm}_ozone_CMIP5_RCP85_${yrs}.nc ozon${yrs}
+# solar irradiance (for isolrad=1)
+    ln -s /pool/data/ECHAM6/solar_irradiance/swflux_14band_${yrs}.nc   swflux_${yrs}.nc
+# volcanic aerosols
+   ln -s /pool/data/ECHAM6/${res_atm}/volcano_aerosols/strat_aerosol_ir_${res_atm}_1999.nc strat_aerosol_ir_${yrs}.nc
+   ln -s /pool/data/ECHAM6/${res_atm}/volcano_aerosols/strat_aerosol_sw_${res_atm}_1999.nc strat_aerosol_sw_${yrs}.nc
+  done
+# greenhouse gases
+  ln -s /pool/data/ECHAM6/greenhouse_rcp85.nc                greenhouse_gases.nc
+ ;;
+
+ 1pctCo2 )
+  for yrs in ${yr} ${yp1} ${ym1} ${ym2}; do
+    ln -s /pool/data/ECHAM6/${res_atm}/aero2/${res_atm}_aeropt_kinne_sw_b14_fin_1865.nc aero_fine_${yrs}.nc
+    ln -s /pool/data/ECHAM6/${res_atm}/aero2/${res_atm}_aeropt_kinne_sw_b14_coa.nc      aero_coarse_${yrs}.nc
+    ln -s /pool/data/ECHAM6/${res_atm}/aero2/${res_atm}_aeropt_kinne_lw_b16_coa.nc      aero_farir_${yrs}.nc
+# ozone
+    ln -s /pool/data/ECHAM6/${res_atm}/${res_atm}_ozone_CMIP5_1850-1860.nc ozon${yrs}
+  done
+# greenhouse gases
+  ln -s /pool/data/ECHAM6/greenhouse_1pctCo2.nc               greenhouse_gases.nc
+ ;;
+
+ *    )
+  echo " ECHAM inifiles for ${expname} not fully available yet!"
+  exit 1
+  ;;
+
+esac
+
+#  input data for the hydrological discharge model
+#
+if [ $hd = true ]; then
+ln -s /pool/data/ECHAM6/hdpara.nc                   hdpara.nc
+ln -s /pool/data/ECHAM6/hdstart.nc                  hdstart.nc
+fi
+
+#
+#-- Restart files
+#   -------------
+
+if [ ${jobnum} != 1 ]; then
+  prevdate=`calc_date minus -c${caltype} -D1 -- ${startdate}`
+  get_file ${atmmod}  restart  rerun_${expid}_echam_${prevdate} \
+                               rerun_${expid}_echam
+  if [ $hd = true ]; then
+    get_file ${atmmod} restart hdrestart_${expid}_${prevdate}.nc \
+                               hdrestart.nc
+  fi
+    get_file ${atmmod} restart  rerun_${expid}_co2_${prevdate} \
+                                rerun_${expid}_co2
+  if [ "${lco2}" = "true" ]; then
+    get_file ${atmmod} restart  rerun_${expid}_tracer_${prevdate} \
+                                rerun_${expid}_tracer
+  fi
+elif [ ${atm_restart} = 1 ] ; then
+  \cp ${atm_restart_file}    rerun_${expid}_echam
+  if [ $hd = true ]; then
+    \cp ${hd_restart_file}   hdrestart.nc
+  fi
+  if [ "${lco2}" = "true" ]; then
+    \cp ${atm_restart_tracer}  rerun_${expid}_tracer
+  fi
+  \cp ${atm_restart_co2}     rerun_${expid}_co2
+fi
+ 
+#------------------------------------------------------------------------------
+# Input files for the land surface model (JSBACH)
+#------------------------------------------------
+#
+#  input for JSBACH
+#
+grid=${res_srf}${res_oce}_${ntiles}tiles
+
+ln -s /pool/data/ECHAM6/jsbach/lctlib_nlct21.def_rev4154               lctlib.def
+ln -s /pool/data/JSBACH/${res_atm}/jsbach_${grid}_${refyear}.nc jsbach.nc
+
+if [[ ${read_cpools} = true ]]; then
+  get_file ${srfmod} input Cpools_${grid}_${refyear}.nc Cpools.nc
+fi
+
+ludir=/pool/data/JSBACH/${res_atm}/New_Hampshire_LCC
+
+case ${expname} in
+ piControl-LR | piControl-MR | 1pctCo2 )
+   ln -s ${ludir}/no_LUH_transitions_${res_srf}.nc landuseTransitions.${yr}.nc
+   ln -s ${ludir}/hist/LUH_harvest_${res_srf}_${refyear}.nc landuseHarvest.${yr}.nc
+ ;;
+
+ piControl-P )
+   echo " JSBACH landuse: nothing to be done for piControl-P-like jobs "
+ ;;
+
+ historical-LR | historical-MR )
+   ln -s ${ludir}/hist/LUH_transitions_${res_srf}_${yr}.nc landuseTransitions.${yr}.nc
+   ln -s ${ludir}/hist/LUH_harvest_${res_srf}_${yr}.nc landuseHarvest.${yr}.nc
+ ;;
+
+ rcp26-LR | rcp26-MR )
+   ln -s ${ludir}/rcp26/LUH_transitions_${res_srf}_rcp26_${yr}.nc landuseTransitions.${yr}.nc
+   ln -s ${ludir}/rcp26/LUH_harvest_${res_srf}_rcp26_${yr}.nc landuseHarvest.${yr}.nc
+ ;;
+
+ rcp45-LR | rcp45-MR )
+   ln -s ${ludir}/rcp45/LUH_transitions_${res_srf}_rcp45_${yr}.nc landuseTransitions.${yr}.nc
+   ln -s ${ludir}/rcp45/LUH_harvest_${res_srf}_rcp45_${yr}.nc landuseHarvest.${yr}.nc
+ ;;
+
+ rcp85-LR | rcp85-MR )
+   ln -s ${ludir}/rcp85/LUH_transitions_${res_srf}_rcp85_${yr}.nc landuseTransitions.${yr}.nc
+   ln -s ${ludir}/rcp85/LUH_harvest_${res_srf}_rcp85_${yr}.nc landuseHarvest.${yr}.nc
+ ;;
+
+ *    )
+  echo " JSBACH landuse files for ${expname} not fully available yet!"
+  exit 1
+  ;;
+
+esac
+
+#
+#-- Restart files
+#   -------------
+
+prevdate=`calc_date minus -c${caltype} -D1 -- ${startdate}`
+if [ ${jobnum} != 1 ]; then
+  get_file ${srfmod}  restart  rerun_${expid}_jsbach_${prevdate} \
+                               rerun_${expid}_jsbach
+  get_file ${srfmod}  restart  rerun_${expid}_veg_${prevdate} \
+                               rerun_${expid}_veg
+  get_file ${srfmod}  restart  rerun_${expid}_surf_${prevdate} \
+                               rerun_${expid}_surf
+elif [ ${srf_restart} = 1 ] ; then
+  \cp ${srf_restart_jsbach}  rerun_${expid}_jsbach
+  \cp ${srf_restart_veg}     rerun_${expid}_veg
+  \cp ${srf_restart_surf}    rerun_${expid}_surf
+fi
+
+#------------------------------------------------------------------------------
+# Input files for the ocean (MPIOM)
+#----------------------------------
+
+#
+#-- Initialization and forcing
+#   --------------------------
+#
+# File containing basin masks (formatted)
+#
+cp /pool/data/ECHAM6/${res_atm}/mpiom/${res_oce}_BEK               BEK
+
+#
+# Ocean grid and bathymetry file
+#
+ln -s /pool/data/ECHAM6/${res_atm}/mpiom/${res_oce}_anta              anta
+ln -s /pool/data/ECHAM6/${res_atm}/mpiom/${res_oce}_arcgri            arcgri
+ln -s /pool/data/ECHAM6/${res_atm}/mpiom/${res_oce}_topo              topo
+
+#
+# Surface salinity file (a.m. Levitus atlas).
+#
+ln -s /pool/data/ECHAM6/${res_atm}/mpiom/${res_oce}L${vres_oce}_SURSAL_PHC  SURSAL
+
+#
+#  Initial (3D) ocean temperature/salinity file (Levitus a.m.).
+#
+ln -s /pool/data/ECHAM6/${res_atm}/mpiom/${res_oce}L${vres_oce}_INITEM_PHC  INITEM
+ln -s /pool/data/ECHAM6/${res_atm}/mpiom/${res_oce}L${vres_oce}_INISAL_PHC  INISAL
+
+#
+#-- Restart files
+#   -------------
+
+if [ ${jobnum} = 1 ]; then
+  if [ ${oce_restart} = 1 ] ; then
+    \cp ${oce_restart_file}         rerun_${expid}_mpiom.nc
+  fi
+else
+  prevdate=`calc_date minus -c${caltype} -D1 -- ${startdate}`
+  get_file ${ocemod} restart rerun_${expid}_mpiom_${prevdate}.nc  rerun_${expid}_mpiom.nc
+fi
+
+#------------------------------------------------------------------------------
+# Input files for the bio-geo-chemistry model HAMOCC
+#---------------------------------------------------
+
+#-- Get dust fields (Iron for BGC)
+#
+ln -s /pool/data/ECHAM6/${res_atm}/hamocc/${res_bgc}_MAHOWALDDUST.nc INPDUST.nc
+
+#
+#-- Restart files
+#   -------------
+if [ ${jobnum} = 1 ]; then
+  if [ ${bgc_restart} = 1 ]; then
+    \cp ${bgc_restart_file}   rerun_${expid}_hamocc.nc
+  fi
+else
+  get_file ${bgcmod} restart rerun_${expid}_hamocc_${prevdate}.nc rerun_${expid}_hamocc.nc
+fi
+
+#------------------------------------------------------------------------------
+#     4.7 PRE - PROCESSING : 
+#                 Provide and update configuration files (namelists, XML, etc.)
+#------------------------------------------------------------------------------
+
+echo "\n |- Provide configuration files (namelists, XML, etc.)"
+#------------------------------------------------------------------------------
+#-- Namelist OASIS3 (namcouple)
+#
+
+#
+# runtime: duration of the experiment (seconds)
+#
+runtime=`time_between -c${caltype} -- ${startdate} ${nextdate} seconds`
+
+#
+# startdate in format YYYYMMDD
+#
+typeset -Z8 yyyymmdd
+yyyymmdd=`echo ${startdate#-} | cut -c1-8` 
+
+#
+# sequential mode and time lag
+#
+
+nmseq=1                         # models run concurrently
+iseq=1
+lago2a=$nodt
+laga2o=$nadt
+
+#
+# buffered/simple MPI send
+#
+if [ ${bsend} = no ]; then
+  nobsend="NOBSEND"
+else
+  nobsend=""
+fi
+
+#
+# restart filenames for the atmosphere/ocean
+#
+cnfileaw=flxatmos
+cnfileow=sstocean
+
+#
+# loctrans
+#
+loctrans=LOCTRANS
+
+#
+# adaption of the namcouple template
+#
+case ${expname} in
+ piControl-MR | historical-MR | rcp26-MR | rcp45-MR | rcp85-MR )
+   cp /pool/data/ECHAM6/${res_atm}/oasis3/namcouple_${cplmod}_bicu   namcouple
+ ;;
+ * )
+   cp /pool/data/ECHAM6/${res_atm}/oasis3/namcouple_${cplmod}   namcouple
+ ;;
+esac
+
+ed -s namcouple <<EOF
+g/#Nmseq/s/#Nmseq/${nmseq}/
+g/#Chan/s/#Chan/${message_passing} ${nobsend}/
+g/#Mod1procs/s/#Mod1procs/ ${nprococe} ${ncplprococe} $arg1 /
+g/#Mod2procs/s/#Mod2procs/ ${nprocatm} ${ncplprocatm} $arg2 /
+g/#Cplexptid/s/#Cplexptid/${jobname}/
+g/#Atmmodnam/s/#Atmmodnam/echam6/
+g/#Ocemodnam/s/#Ocemodnam/mpiom/
+g/#Runtime/s/#Runtime/${runtime}/
+g/#Yyyymmdd/s/#Yyyymmdd/${yyyymmdd}/
+g/#Nlogprt/s/#Nlogprt/${nlogprt}/
+g/#Dta2o/s/#Dta2o/${dta2o}/
+g/#Dto2a/s/#Dto2a/${dto2a}/
+g/#Iseq/s/#Iseq/${iseq}/
+g/#Laga2o/s/#Laga2o/${laga2o}/
+g/#Lago2a/s/#Lago2a/${lago2a}/
+g/#TimTransa2o/s/#TimTransa2o/${timtransa2o}/
+g/#TimTranso2a/s/#TimTranso2a/${timtranso2a}/
+g/#Exp/s/#Exp/${export}/
+g/#LocTrans/s/#LocTrans/${loctrans}/
+g/#Extrapwr/s/#Extrapwr/${extrapwr}/
+g/#Cnfileaw/s/#Cnfileaw/${cnfileaw}/
+g/#Cnfileow/s/#Cnfileow/${cnfileow}/
+w
+q
+EOF
+
+#echo "* ----------------------------------------------------------------------"
+#echo "* Namelist of OASIS3: namcouple"
+#echo "* ----------------------------------------------------------------------"
+#cat namcouple
+#echo "* ----------------------------------------------------------------------"
+#echo "*    end of namcouple"
+#echo "* ----------------------------------------------------------------------"
+#echo ""
+
+#
+#------------------------------------------------------------------------------
+# Create multiple namcouple files one for each OASIS3 process
+#------------------------------------------------------------------------------
+#
+namcut.sh -n ${nprocoasis} -b namcouple
+#
+
+n=0
+while (( n < ${nprocoasis} )); do
+  echo "* ----------------------------------------------------------------------"
+  echo "* Namelist of OASIS3 instance $n : namcouple_$n"
+  echo "* ----------------------------------------------------------------------"
+  cat namcouple_$n
+  (( n = n + 1 ))
+done
+
+#------------------------------------------------------------------------------
+#-- Namelist ECHAM
+#
+#
+# initial date of the experiment (with coupled runs: one timestep before
+#    midnight)
+# Initialisation of the echam time manager can take a long time if the current
+# date is far from the initial date of the experiment. To improve this, we set
+# the year in dt_start just one year befor the the current date.
+# (Setting dt_start to the current date would lead to echam re-initialization!)
+#    Note that events that do not occur on a yearly basis will not be treated
+#    correctly!
+
+date=$(calc_date minus -c${caltype} -Y${atm_age} -s${nadt} -- ${inidate})
+year=$(format_date -f4 -- ${startdate} | cut -f1 -d" ")
+(( year = year - 2 ))
+
+month_day_time=$(format_date -f4 -s -- ${date} | cut -f2- -d" ")
+date="${year} ${month_day_time}"
+dt_start=$(echo ${date} | tr " " ,)
+
+#
+# end date of the run
+#
+dt_stop=$(format_date -f4 -s -- ${nextdate} | tr " " ,)
+
+cp /pool/data/ECHAM6/cmip5_namelists/${expname}/namelist.echam .
+sed -e '1,$s/${EXPID}/'${expid}'/' namelist.echam>namelist.echam1
+sed -e '1,$s/${dt_start}/'${dt_start}'/' namelist.echam1>namelist.echam2
+sed -e '1,$s/${dt_stop}/'${dt_stop}'/' namelist.echam2>namelist.echam
+rm namelist.echam1 namelist.echam2
+
+echo "* ----------------------------------------------------------------------"
+echo "* Namelist of ECHAM6: namelist.echam"
+echo "* ----------------------------------------------------------------------"
+cat namelist.echam
+echo "* ----------------------------------------------------------------------"
+echo "*    end of namelist.echam"
+echo "* ----------------------------------------------------------------------"
+echo ""
+
+#------------------------------------------------------------------------------
+#-- Namelist JSBACH
+#
+cp /pool/data/ECHAM6/cmip5_namelists/${expname}/namelist.jsbach .
+
+echo "* ----------------------------------------------------------------------"
+echo "* Namelist of JSBACH: namelist.jsbach"
+echo "* ----------------------------------------------------------------------"
+cat namelist.jsbach
+echo "* ----------------------------------------------------------------------"
+echo "*    end of namelist.jsbach"
+echo "* ----------------------------------------------------------------------"
+echo ""
+
+#------------------------------------------------------------------------------
+#-- Namelist MPIOM
+#
+
+cp /pool/data/ECHAM6/cmip5_namelists/${expname}/OCECTL .
+sed -e '1,$s/${EXPID}/'${expid}'/' OCECTL >OCECTL1
+mv OCECTL1 OCECTL
+
+echo "* ----------------------------------------------------------------------"
+echo "* Namelist of MPIOM: OCECTL"
+echo "* ----------------------------------------------------------------------"
+cat OCECTL
+echo "* ----------------------------------------------------------------------"
+echo "*    end of OCECTL"
+echo "* ----------------------------------------------------------------------"
+echo ""
+
+#------------------------------------------------------------------------------
+#-- Namelist HAMOCC
+#
+cp /pool/data/ECHAM6/cmip5_namelists/${expname}/NAMELIST_BGC .
+sed -e '1,$s/${EXPID}/'${expid}'/' NAMELIST_BGC>NAMELIST_BGC1
+mv NAMELIST_BGC1 NAMELIST_BGC
+
+echo "* ----------------------------------------------------------------------"
+echo "* Namelist of HAMOCC: NAMELIST_BGC"
+echo "* ----------------------------------------------------------------------"
+cat NAMELIST_BGC
+echo "* ----------------------------------------------------------------------"
+echo "*    end of NAMELIST_BGC"
+echo "* ----------------------------------------------------------------------"
+echo ""
+
+#------------------------------------------------------------------------------
+#
+#     5. LAUNCHING THE MODEL
+#
+#------------------------------------------------------------------------------
+
+#ls -al
+date
+
+# Create a test file. The date of output files will be compared to the date
+# of this reference file to assure, that the output files are newer. 
+# (script save_file)
+
+echo "The date of the output files is compared to the date of this file" \
+	  > reference_file
+
+# This line to diagnose run time versus pre- and postprocessing performance (grep output):
+print "\n This ${task} script prepares model launch   at\t$(date | tr -s ' ' | cut -f2-4 -d' ') on host $(hostname)\n"
+
+###############################################################################
+#
+# debug options
+#
+export MP_PRINTENV=no
+export MP_LABELIO=no
+export MP_INFOLEVEL=0
+
+#
+# memory affinity
+#
+export MEMORY_AFFINITY=MCM
+#
+# use shared memory for intra node communication
+#
+export MP_SHARED_MEMORY=yes
+export MP_SHM_ATTACH_THRESH=256000
+#
+# RDMA
+#
+export MP_USE_BULK_XFER=yes
+export MP_BULK_MIN_MSG_SIZE=128k
+export MP_RDMA_MTU=4k
+#
+export MP_EAGER_LIMIT=64k
+export MP_BUFFER_MEM=32m,512m
+#
+export MP_FIFO_MTU=4k
+export MP_RFIFO_SIZE=16m
+#
+export MP_SINGLE_THREAD=no
+#
+export MP_WAIT_MODE=poll
+#
+export MP_EUIDEVELOP=min
+export LAPI_DEBUG_QP_NOTIFICATION=no
+#
+export MP_PRIORITY_NTP=yes
+export MP_PRIORITY_LOG=no
+#
+ulimit -c 0
+#
+###############################################################################
+set -e
+
+print "\n |-------------------------------|\n |- $(date) |"
+print " |- Launch the model ${cplmod} |\n |-------------------------------|\n"
+
+if [ "${message_passing}" = "MPI1" ]; then
+
+  n=0
+  while (( n < ${nprocoasis} )); do
+     echo "./oasis.x" >> mpmd.lst
+     (( n = n + 1 ))
+  done
+  n=0
+  while (( n < nprococe )); do
+    echo "./mpiom" >> mpmd.lst
+    (( n = n + 1 ))
+  done
+  n=0
+  while (( n < nprocatm )); do
+    echo "./echam6" >> mpmd.lst
+    (( n = n + 1 ))
+  done
+
+  poe -pgmmodel mpmd -labelio yes -cmdfile mpmd.lst || {
+  ls -lta
+  exit 1
+  }      
+
+  rm -f mpmd.lst 
+
+elif [ "${message_passing}" = "MPI2" ]; then
+  echo MPI dynamic process generation not tested.
+  exit 1
+else
+  echo 'Invalid start mode (OASIS) specified !'
+  exit 1
+fi
+
+print "\n |-------------------------------|\n |- $(date) |"
+print " |- Model integration completed  |\n |-------------------------------|\n"
+ls -lat
+
+set -ex
+#
+#-- Generate profiling protocol
+#
+
+if [ -f  *.${ocemod} ]; then
+  echo 'Profiling '${oceexec}' ...'
+  ${cp} *.${ocemod} ${logdir}/${ocemod}.mon.out
+  ${cp} *.${ocemod} mon.out
+  prof ${ocemod}
+fi
+
+if [ -f  *.${atmmod} ]; then
+  echo 'Profiling '${atmexec}' ...'
+  ${cp} *.${atmmod} ${logdir}/${atmmod}.mon.out
+  ${cp} *.${atmmod} mon.out
+  prof ${atmmod}
+fi
+
+if [ -f  *.oasis.x ]; then
+  echo 'Profiling '${cplexec}' ...'
+  ${cp} *.oasis.x ${logdir}/oasis.mon.out
+  ${cp} *.oasis.x mon.out
+  prof oasis.x
+fi
+
+
+# This line to diagnose run time versus pre- and postprocessing performance (grep output):
+print "\n This ${task} script begins postprocessing   at\t$(date | tr -s ' ' | cut -f2-4 -d' ') on host $(hostname)\n"
+
+#------------------------------------------------------------------------------
+#
+#     6. DATA PROCESSING
+#
+#------------------------------------------------------------------------------
+
+#------------------------------------------------------------------------------
+# Definition of some time variables
+# ---------------------------------
+# enddate:      last day of this run
+# prevdate:     last day of the previous run 
+# startyear:    year at the beginning of this run
+# prevyear:     year at the last day of the previous run
+# startdecade:  decade at the beginning of this run
+# prevdecade:   decade at the last day of the previous run
+# previd:       job-id of the previous run (from expid.log)
+# prevstart:    beginning of the previous run (from expid.log)
+
+enddate=$(calc_date minus -c${caltype} -D1 -- ${nextdate})
+prevdate=$(calc_date minus -c${caltype} -D1 -- ${startdate})
+export startyear=$(format_date -f4 -- ${startdate} | cut -f1 -d" ")
+prevyear=$(format_date -f4 -- ${prevdate} | cut -f1 -d" ")
+startdecade=${startyear%?}
+prevdecade=${prevyear%?}
+loginfo=$(get_logpid -d ${startdate} -f ${jobdir}/${expid}.log)                
+previd=${loginfo%[ ]*}
+prevstart=${loginfo#*[ ]}
+[[ -n $prevstart ]] || prevstart=${startdate}
+
+[ ${task} = "RUN" ] && cd ${work}/${expid}/work
+
+saving_error=no
+#------------------------------------------------------------------------------
+# Save files of the coupler (OASIS3)
+#-------------------------------------
+# Output data (EXPOUT)
+print "    |- Save output files of the coupler $coupler"
+if [ ${export} = "EXPOUT" ]; then
+  expoutdate=$(format_date -f2 -s -- ${startdate})
+  expoutfiles=$(ls *_out.${expoutdate}.nc)
+  for file in ${expoutfiles}; do
+    save_file ${coupler} output ${file} 
+  done
+fi
+
+# Restart files
+#
+# We tar the restart files to save i-nodes and then save the tar file
+#
+tar -cf flxatmos.tar flxatm*
+save_file ${coupler} restart flxatmos.tar flxatmos_${expid}_${enddate}.tar
+tar -cf sstocean.tar sstoce*
+save_file ${coupler} restart sstocean.tar sstocean_${expid}_${enddate}.tar 
+#
+
+if [ ${jobnum} = 1 ] && [ ${nprocoasis} = 1 ]; then
+  print "    |- Save input files of the coupler $coupler"
+  # Grid description files (if just created)
+  if [ ${gridswr} = 1 ] && [ ${nprocoasis} = 1 ]; then
+    save_file ${coupler} input grids.nc grids_${res_atm}_${res_oce}${FV_cpl}.nc
+    save_file ${coupler} input areas.nc areas_${res_atm}_${res_oce}${FV_cpl}.nc
+    save_file ${coupler} input masks.nc masks_${res_atm}_${res_oce}${FV_cpl}.nc
+  fi
+
+  n=0
+  while (( n < ${nprocoasis} )); do
+    # SCRIP remapping matrices (if just created)
+    if [ ${scripwr} = 1 ] ; then
+      if [ -f rmp_oces_to_atmo_CONSERV_FRACAREA_${n}.nc ]; then
+      save_file ${coupler} input \
+           rmp_oces_to_atmo_CONSERV_FRACAREA_${n}.nc \
+           rmp_oces_to_atmo_CONSERV_FRACAREA_${res_atm}_${res_oce}.nc
+      fi
+      if [ -f rmp_atmo_to_oces_CONSERV_FRACAREA_${n}.nc ]; then
+      save_file ${coupler} input \
+           rmp_atmo_to_oces_CONSERV_FRACAREA_${n}.nc \
+           rmp_atmo_to_oces_CONSERV_FRACAREA_${res_atm}_${res_oce}.nc
+      fi
+      if [ -f rmp_atml_to_oces_CONSERV_FRACAREA_${n}.nc ]; then
+      save_file ${coupler} input \
+           rmp_atml_to_oces_CONSERV_FRACAREA_${n}.nc \
+           rmp_atml_to_oces_CONSERV_FRACAREA_${res_atm}_${res_oce}.nc
+      fi
+    fi
+
+    # extrapolation matrix (if just created)
+    #
+    # Note:
+    # Some of these are not needed in the current setup. gweights and mweights are
+    # generated with size 0. One could check for the size and get it when needed.
+    #
+    if [ $extrapwr = 1 ]; then
+    # save_file ${coupler} input gweights_${n} gweights_${res_atm}_${res_oce}${FV_cpl}
+    # save_file ${coupler} input mweights_${n} mweights_${res_atm}_${res_oce}${FV_cpl}
+      save_file ${coupler} input nweights_${n} nweights_${res_atm}_${res_oce}${FV_cpl}
+    fi
+    (( n = n + 1 ))
+  done
+
+fi
+###############################################################################
+#
+#  Save raw output of ECHAM
+#
+###############################################################################
+print "\n+++++ Save ECHAM output from $work to $data"
+
+outmod=${exphome}/outdata/${atmmod}
+expmod=${expid}_${atmmod}
+
+# Save ECHAM raw output
+print "    |- Save ECHAM monthly raw (and restart) files of\n       substreams ${substreams}"
+date=${startdate}
+while [[ $(later_date -- ${date} ${enddate}) = ${enddate} ]]; do
+  year=$(format_date -f4 -- ${date} | cut -f1 -d" ")
+  month=$(format_date -f4 -- ${date} | cut -f2 -d" ")
+  day=$(format_date -f4 -- ${date} | cut -f3 -d" ")
+  ym=${year}${month}
+  mv ${expid}_${ym}.${day}_echam ${outmod}/${expid}_echam6_echam_${ym}.grb
+  mv ${expid}_${ym}.${day}_co2 ${outmod}/${expid}_echam6_co2_${ym}.grb
+# do not save trdiag-file by default
+#  mv ${expid}_${ym}.${day}_trdiag.nc ${outmod}/${expid}_trdiag_${ym}.nc
+  date=$(calc_date plus -c${caltype} -M1 -- ${date})
+done # months
+
+# Save ECHAM code files (for the first run)
+if [ ${jobnum} = 1 ]; then
+  mv ${expid}_${startyear}01.01_echam.codes ${exphome}/log/${expid}_echam6_echam.codes
+  mv ${expid}_${startyear}01.01_co2.codes ${exphome}/log/${expid}_echam6_co2.codes
+fi
+
+# extra loop for restartfiles, as vphysc has no restart...
+#
+# Save restart files
+mv rerun_${expid}_echam ${exphome}/restart/${atmmod}/rerun_${expid}_echam_${enddate}
+mv rerun_${expid}_co2 ${exphome}/restart/${atmmod}/rerun_${expid}_co2_${enddate}
+
+# Save hydrology output and restart files
+#if [ $hd = true ]; then  # hd output is switched off!
+#  mv ${expid}_${year}01.${day}_hd_higres.nc ${outmod}/${expmod}_hd_higres_${startdate}.nc
+#fi     
+
+if [ $hd = true ]; then
+  print "   |- Save ECHAM hydrology restart files from $work in &data"
+  mv hdrestart.nc ${exphome}/restart/${atmmod}/hdrestart_${expid}_${enddate}.nc
+fi
+
+###############################################################################
+#
+#  Save output files of JSBACH
+#
+###############################################################################
+print "\n+++++ Save JSBACH raw output\n"
+
+if [[ ${srf_out_filetype} = GRIB* ]] && [ ${jobnum} = 1 ]; then
+  mv ${expid}_${startyear}01.01_land.codes ${exphome}/log/${expid}_${srfmod}_land.codes
+  mv ${expid}_${startyear}01.01_jsbach.codes ${exphome}/log/${expid}_${srfmod}.codes
+  mv ${expid}_${startyear}01.01_veg.codes ${exphome}/log/${expid}_${srfmod}_veg.codes
+  mv ${expid}_${startyear}01.01_surf.codes  ${exphome}/log/${expid}_${srfmod}_surf.codes
+fi
+
+# save raw JSBACH output
+
+outmod=${exphome}/outdata/${srfmod}
+expmod=${expid}_${srfmod}
+ 
+date=${startdate}
+while [[ $(later_date -- ${date} ${enddate}) = ${enddate} ]]; do
+  year=$(format_date -f4 -- ${date} | cut -f1 -d" ")
+  month=$(format_date -f4 -- ${date} | cut -f2 -d" ")
+  day=$(format_date -f4 -- ${date} | cut -f3 -d" ")
+  ym=${year}${month}
+  mv ${expid}_${ym}.${day}_jsbach ${outmod}/${expid}_jsbach_${ym}.grb
+  mv ${expid}_${ym}.${day}_land ${outmod}/${expid}_jsbach_land_${ym}.grb
+  mv ${expid}_${ym}.${day}_veg ${outmod}/${expid}_jsbach_veg_${ym}.grb
+  mv ${expid}_${ym}.${day}_surf ${outmod}/${expid}_jsbach_surf_${ym}.grb
+  date=$(calc_date plus -c${caltype} -M1 -- ${date})
+done # months
+# Restart files
+mv rerun_${expid}_jsbach ${exphome}/restart/${srfmod}/rerun_${expid}_jsbach_${enddate}
+mv rerun_${expid}_surf ${exphome}/restart/${srfmod}/rerun_${expid}_surf_${enddate}
+mv rerun_${expid}_veg ${exphome}/restart/${srfmod}/rerun_${expid}_veg_${enddate}
+
+###############################################################################
+#
+#  Save output files of MPIOM
+#
+###############################################################################
+print "\n+++++ MPIOM output saving"
+### save raw output from compute node on workshare
+outmod=${exphome}/outdata/${ocemod}
+runper=${startdate}_${enddate}
+
+# timeseries, monitoring and netcdf files
+substreams="timeser_dm monitoring_ym data_mm data_dm"
+mv ${expid}_mpiom_data_2d_dm.nc ${outmod}/${expid}_mpiom_data_2d_dm_${runper}.nc
+mv ${expid}_mpiom_data_2d_mm.nc ${outmod}/${expid}_mpiom_data_2d_mm_${runper}.nc
+mv ${expid}_mpiom_data_3du_mm.nc ${outmod}/${expid}_mpiom_data_3du_mm_${runper}.nc
+mv ${expid}_mpiom_data_3dw_mm.nc ${outmod}/${expid}_mpiom_data_3dw_mm_${runper}.nc
+mv ${expid}_mpiom_monitoring_ym.nc ${outmod}/${expid}_mpiom_monitoring_ym_${runper}.nc
+mv ${expid}_mpiom_timeser_dm.nc ${outmod}/${expid}_mpiom_timeser_dm_${runper}.nc
+
+# Restart files
+mv rerun_${expid}_mpiom.nc ${exphome}/restart/${ocemod}/rerun_${expid}_mpiom_${enddate}.nc
+
+###############################################################################
+#
+#  Save output files of HAMOCC
+#
+###############################################################################
+printf "\n+++++ HAMOCC raw output saving\n"
+### Save raw output from compute node on workshare 
+outmod=${exphome}/outdata/${bgcmod}
+
+mv ${expid}_hamocc_co2.nc ${outmod}/${expid}_hamocc_ico2_${startdate}_${enddate}.nc
+
+mv ${expid}_hamocc_data_3d_ym.nc ${outmod}/${expid}_hamocc_data_3d_ym_${startdate}_${enddate}.nc
+mv ${expid}_hamocc_data_0-100m_ym.nc ${outmod}/${expid}_hamocc_data_0-100m_ym_${startdate}_${enddate}.nc
+mv ${expid}_hamocc_data_2d_mm.nc ${outmod}/${expid}_hamocc_data_2d_mm_${startdate}_${enddate}.nc
+mv ${expid}_hamocc_eu_data_mm.nc ${outmod}/${expid}_hamocc_eu_data_mm_${startdate}_${enddate}.nc
+mv ${expid}_hamocc_3d_data_mm.nc ${outmod}/${expid}_hamocc_3d_data_mm_${startdate}_${enddate}.nc
+mv ${expid}_hamocc_sedi_mm.nc ${outmod}/${expid}_hamocc_sedi_mm_${startdate}_${enddate}.nc
+
+#-- monitoring
+
+mv ${expid}_hamocc_monitoring_ym.nc ${outmod}/${expid}_hamocc_monitoring_ym_${startdate}_${enddate}.nc
+
+# Restart files
+mv rerun_${expid}_hamocc.nc ${exphome}/restart/${bgcmod}/rerun_${expid}_hamocc_${enddate}.nc
+
+#------------------------------------------------------------------------------
+#
+# Check whether everything was saved successfully
+#
+#------------------------------------------------------------------------------
+wait
+
+if [ ${saving_error} = no ]; then
+  print "    |+ Everything saved successfully"
+  if [ -s rm.lst.$$ ] ; then
+    printf "     |+ Removing files listed in file rm.lst.$$\n"
+    for file in $(cat rm.lst.$$); do
+      printf "      |- Removing file : $file\n"
+      ${rm} $file
+    done
+    rm rm.lst.$$
+  fi
+  if [ "${rm_list}" != "" ]; then
+    print "     |- Removing files ${rm_list}\n"
+    ${rm} ${rm_list}
+  fi
+else
+  printf "      |- ERROR occured: saving_error = ${saving_error}\n"
+fi
+ 
+#------------------------------------------------------------------------------
+#
+#     8. SUBMISSION OF THE NEXT JOB
+#
+#------------------------------------------------------------------------------
+cd  ${jobdir}
+
+#
+# Number of the next job
+#
+
+(( nextjob = ${jobnum} + 1 ))
+
+#
+# edit .date and .log file
+#
+
+space_error="no"
+
+echo "${nextdate} ${nextjob}" > ${expid}.date.new || { 
+  space_error="yes"; echo "Could not create ${expid}.date"; 
+}
+cp ${expid}.log ${expid}.log.new || { 
+  space_error="yes"; echo "Could not save ${expid}.log"; 
+}
+echo "$(date +"${datefmt}") :  ${jobnum} ${nextdate} ${jobid}  - done" >> ${expid}.log.new || {
+  space_error="yes"; echo "Could not append to ${expid}.log"; 
+}
+
+if [ "${space_error}" = "no" ]; then
+  mv ${expid}.date.new ${expid}.date
+  mv ${expid}.log.new ${expid}.log
+else
+  echo "No disk space left or quota exceeded?"
+  echo " - Show quota"
+  quota
+  exit
+fi
+
+#
+# Check whether final date is reached
+#
+
+if [[ `later_date -- ${nextdate} ${findate}` = ${nextdate} ]]; then
+  echo "Experiment over"
+  echo "$(date +"${datefmt}") :  Experiment over" >> ${expid}.log
+else
+  qs=LL
+  submit -q ${qs} ${job}
+fi
+
+###############################################################################
+#
+#-- update run dates and submit expid.post script
+#
+cd ${jobdir}
+
+cp ${expid}.post  ${expid}.post.${nextdate}
+
+ed -s ${expid}.post.${nextdate} <<EOF
+1,100s/Jobnum/${jobnum}/
+1,100s/Startdate/${startdate}/
+1,100s/Nextdate/${nextdate}/
+1,100s/Findate/${findate}/
+1,100s/Inidate/${inidate}/
+w
+q
+EOF
+
+submit -q ${queueing_system_pp:-LL} ${expid}.post.${nextdate}
+
+#------------------------------------------------------------------------------
+#
+#     9. EPILOGUE
+#
+#------------------------------------------------------------------------------
+
+date
+${job_account}
+wait
+printf "\n%s\t%s\n"  \
+       " This ${task} script ended                   at" \
+       "$(date +'%b %d %T') on host $(hostname)"
+exit
+
+
+

@@ -1,0 +1,92 @@
+#!/usr/bin/ksh
+
+
+#==============================================================================
+#
+#
+#==============================================================================
+
+check_error()
+{
+
+# Check if the first parameter (return status) is not OK 
+echo "Call of check_error from lokal file"
+  if [ $1 -ne 0 ] 
+  then
+
+# Stop running this script and return the error status
+    echo "ERROR: $2"
+    exit $1
+  fi
+}
+
+#==============================================================================
+#
+#
+#==============================================================================
+
+if [ "$1" != "" ] 
+then
+  BB_SYSTEM=$1
+  BB_SLAVE=$2
+
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+  echo "set BB_SYSTEM to $BB_SYSTEM"
+  echo "set BB_SLAVE to $BB_SLAVE"
+  echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+
+fi
+
+#==============================================================================
+
+# load environment variables
+case ${target} in
+    blizz* )
+        echo ". /client/etc/profile.blizzard"           >> ${SETTING_FILE}
+        ;;
+    mpipc* | squall* | tornado* )
+        echo ". /client/etc/profile.zmaw"               >> ${SETTING_FILE}
+        ;;
+esac
+
+
+#==============================================================================
+
+# configure the Makefile and make the executables
+./target_confmake.ksh ${BB_SLAVE}
+
+# stop if not ok
+check_error $? "bb_make: ./target_confmake.ksh  ${BB_SLAVE}"
+
+#==============================================================================
+
+# Create "setting" file for bb_run script and ".status.file" for Buildbot
+
+STATUS_FILE=${PWD}/.status.file
+echo "1" >  ${PWD}/.status.file
+
+SETTING_FILE=${PWD}/setting
+rm -f ${SETTING_FILE}
+
+#------------------------------------------------------------------------------
+
+# set environment variables
+echo "export SETTING_FILE=${SETTING_FILE}"               > ${SETTING_FILE}
+echo "export STATUS_FILE=${STATUS_FILE}"                >> ${SETTING_FILE}
+echo "export BB_SYSTEM=${BB_SYSTEM}"                    >> ${SETTING_FILE}
+echo "export BB_SLAVE=${BB_SLAVE}"                      >> ${SETTING_FILE}
+
+# working directory
+echo "export WORKING_PATH=${PWD}"                       >> ${SETTING_FILE}
+
+#==============================================================================
+
+# load fortran module
+if [ "$loadmodule" != "" ]
+then
+    echo ". ${PWD}/scripts/load_module.ksh $loadmodule" >> ${SETTING_FILE}
+fi
+
+# finish script with OK status
+#
+exit 0

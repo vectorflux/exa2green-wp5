@@ -1,0 +1,135 @@
+export
+
+SHELL = /bin/sh
+ 
+ARCH  = @ARCH@
+
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+datarootdir = @datarootdir@
+datadir = @datadir@
+sysconfdir = @sysconfdir@
+libdir = @libdir@
+includedir = @includedir@
+oldincludedir = @oldincludedir@
+infodir = @infodir@
+mandir = @mandir@
+
+sharedstatedir = @sharedstatedir@
+localstatedir = @localstatedir@
+
+program_transform_name = @program_transform_name@
+
+MPIROOT            = @MPIROOT@
+MPI_LIB            = @MPI_LIB@
+MPI_INCLUDE        = @MPI_INCLUDE@
+
+POSTGRESQLROOT     = @POSTGRESQLROOT@
+POSTGRESQL_LIB     = @POSTGRESQL_LIB@
+POSTGRESQL_INCLUDE = @POSTGRESQL_INCLUDE@
+
+UNITRANSROOT       = @UNITRANSROOT@
+UNITRANS_LIB       = @UNITRANS_LIB@
+UNITRANS_INCLUDE   = @UNITRANS_INCLUDE@
+
+PRISMROOT          = @PRISMROOT@
+PRISM_LIB          = @PRISM_LIB@
+PRISM_INCLUDE      = @PRISM_INCLUDE@
+
+NETCDFROOT         = @NETCDFROOT@
+NETCDF_LIB         = @NETCDF_LIB@
+NETCDF_INCLUDE     = @NETCDF_INCLUDE@
+
+HDF5ROOT           = @HDF5ROOT@
+HDF5_LIB           = @HDF5_LIB@
+HDF5_INCLUDE       = @HDF5_INCLUDE@
+
+SZIPROOT           = @SZIPROOT@
+SZIP_LIB           = @SZIP_LIB@
+SZIP_INCLUDE       = @SZIP_INCLUDE@
+
+ZLIBROOT           = @ZLIBROOT@
+ZLIB_LIB           = @ZLIB_LIB@
+ZLIB_INCLUDE       = @ZLIB_INCLUDE@
+
+LIB      = @LIBS@
+LIBS     = $(LIB) $(NETCDF_LIB) $(HDF5_LIB) $(SZIP_LIB) $(ZLIB_LIB) $(PRISM_LIB) $(UNITRANS_LIB) $(MPI_LIB) $(POSTGRESQL_LIB)
+
+MODOPT   = @MODOPT@
+MODULES  = ./
+
+INCLUDE  = ../include
+INCLUDES = $(MODOPT)$(MODULES) -I$(INCLUDE) $(NETCDF_INCLUDE) $(HDF5_INCLUDE) $(SZIP_INCLUDE) $(ZLIB_INCLUDE) $(PRISM_INCLUDE) $(UNITRANS_INCLUDE) $(MPI_INCLUDE)
+
+F90      = @FC@
+FC       = @FC@
+CC       = @CC@
+CPP      = @CPP@
+AR       = @AR@
+AS       = @AS@ 
+
+DEFS     = @DEFS@
+
+CFLAGS   = -I../config $(POSTGRESQL_INCLUDE) @CFLAGS@
+FFLAGS   = @FFLAGS@
+F90FLAGS = $(INCLUDES) @F90FLAGS@ @MPI@ @PRISM@
+CPPFLAGS = @CPPFLAGS@
+ARFLAGS  = @ARFLAGS@
+LDFLAGS  = @LDFLAGS@
+
+SRCDIRS = @SRCDIRS@ support src
+
+all:
+	@for DIR in $(SRCDIRS) ;\
+	  do \
+	    back=`pwd`; \
+	    cd $$DIR ;\
+	    $(MAKE) ; status=$$? ; \
+	    if [ $$status != 0 ] ; then \
+	      echo "Exit status from make was $$status" ; exit $$status ; \
+	    fi ; \
+	    cd $$back ; \
+	  done 
+
+clean:
+	@for DIR in $(SRCDIRS) ;\
+	  do \
+	  (cd $$DIR ;\
+	  $(MAKE) clean ; if [ $$? != 0 ] ; then \
+	        echo "Exit status from make was $$?" ; exit 1 ; fi ;) ;\
+	  done
+	-rm -f config.cache
+	-rm -f lib/*.a bin/m7_box
+	-rm -f html/[a-z]*
+
+distclean:
+	@for DIR in $(SRCDIRS) ;\
+	  do \
+	  (cd $$DIR ;\
+	  $(MAKE) clean ; if [ $$? != 0 ] ; then \
+	        echo "Exit status from make was $$?" ; exit 1 ; fi ;) ;\
+	  done
+	-rm -f Makefile
+	-rm -f config.log
+	-rm -f config.cache
+	-rm -f config.status
+	-rm -f config/config.h
+	-rm -f Makefile
+	-rm -f lib/*.a bin/m7_box
+	-rm -f html/[a-z]*
+
+tar:
+	@tarfile=../m7_box.f90.`date +%y%m%d`.taz ; gtar zcvf $$tarfile \
+	`ls */*.f90 */*.[fhc] */*inc */Makefile Makefile.in Makefile run/hjob*`
+
+index:
+	-rm -f html/[a-z]*
+	util/f2html.pl -f util/fgenrc -d html \
+          support src include
