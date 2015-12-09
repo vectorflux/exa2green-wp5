@@ -1,0 +1,48 @@
+
+!gf
+iaero   = 1 
+!gf
+
+&HAMCTL
+ lsoa = true
+/
+&HAM_M7CTL
+ nwater = 1
+ nonucl = 0
+/
+&INI_M7CTL
+pap     = 1013.25 ! Pressure (Pa)
+pt      = 265.0   ! Temperature (K)
+prh     = 0.3     ! RH (as saturation ratio)
+pipr    = 5.0     ! Ionization rate (cm-3 s-1)
+pdgso4  = 5.0E4   ! H2SO4(g) production rate (cm-3 s-1)
+pgso4   = 1.0E4   ! H2SO4(g) concentrations (cm-3)
+paclc   = 0.0     ! cloud cover [0,1] (
+                  ! set to zero unless you know what you are doing)
+pforest = 1.0
+paerml  = 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+                  ! Aerosol mass concentrations for individual compounds, 
+                  !(molec. cm-3 for sulfate and
+                  ! ug m-3 for bc, oc, ss, and dust)
+                  ! Order: SO4_NS, SO4_KS, SO4_AS, SO4_CS
+                  !        BC_KS, BC_KI, BC_AS, BC_CS,
+                  !        OC_KS, OC_KI, OC_AS, OC_CS,
+                  !        SS_AS, SS_CS,
+                  !        DU_AS, DU_AI, DU_CS, DU_CI
+paernl  = 1.0,1.0,1.0,1.0,1.0,1.0,1.0
+                  ! Particle number concentrations for each mode (cm-3)
+                  ! Order: NS, KS, AS, CS, KI, AI, CI
+pm6rp   = 1.0,1.0,1.0,1.0,1.0,1.0,1.0
+                  ! Order: NS, KS, AS, CS, KI, AI, CI
+                  ! Particle mean mode actual radius for each mode 
+                  ! (wet for soluble and dry for insoluble modes) (cm) 
+pm6dry  = 1.0,1.0,1.0,1.0
+                  ! Particle dry radius for each soluble modes (cm)
+                  ! Order: NS, KS, AS, CS
+prhop   = 1.0,1.0,1.0,1.0,1.0,1.0,1.0
+                  ! Mean mode particle density for each mode (g cm-3)
+                  ! Order: NS, KS, AS, CS, KI, AI, CI
+pww     = 0.0,0.0,0.0,0.0
+                  ! Water content for each mode [kg(water) m-3(air)]
+                  ! Order: NS, KS, AS, CS, KI, AI, CI
+/

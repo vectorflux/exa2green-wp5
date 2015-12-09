@@ -1,0 +1,196 @@
+#-----------------------------------------------------------------------------
+#
+# i386/i686 Linux
+#
+# 2008-10-06:
+#
+# MPI is not set by default, because no MPI is installed at ZMAW supporting 
+# the required level of MPI properly. The mpich2 development team has fixed
+# the bug open in mpich-1.1a1, but this is a development version only.  
+#
+# 2008-11-13:
+#
+# Reintroduced MPI: mpich2-1.0.8 has backported the fix. 
+#
+#-----------------------------------------------------------------------------
+#
+case $fortran_compiler in
+#
+#-----------------------------------------------------------------------------
+# NAG f95 - this is for testing and debugging
+
+default|nag)   
+
+    ARCH     = LINUX
+
+    CC       = gcc
+    CFLAGS   = -std=c99 -march=native -O -DNAGf90Fortran -g
+
+    F90      = nagfor
+    FFLAGS   = -w=obs -O -float-store
+    F90FLAGS = -colour -C=all -maxcontin=99 -nan -gline -g -fpp -D__NAG -wmismatch=mpi_bcast,mpi_send,mpi_recv,mpi_isend,mpi_irecv,mpi_allreduce,mpi_get_address,mpi_gather,nf_get_var_double,nf_put_var_double,nf_def_var,nf_put_vara_double,dgemm -DHAMMOZ
+
+    DEFOPT   = -D
+    MODOPT   = -I
+
+    SRCDIRS  = blas lapack
+
+    LIBS     = -L../lib -lsupport -llapack -lblas
+
+    MPIROOT  = 
+    MPI_LIB  = 
+
+    NETCDFROOT = /usr/local/netcdf-4.1.1-nag
+
+    HDF5ROOT   = /usr/local/hdf5-1.8.2
+
+    SZIPROOT   = /usr/local
+
+    ZLIBROOT   = /usr
+
+    ;;
+
+#-----------------------------------------------------------------------------
+# PGI pgf95
+
+pgi) 
+
+    ARCH     = LINUX
+
+    CC       = gcc
+    CFLAGS   = -std=c99 -march=native -O -DpgiFortran
+
+    F90      = pgfortran
+    FFLAGS   = -O3 -Kieee -Mpreprocess
+    F90FLAGS = -O3 -Kieee -Mpreprocess -DHAMMOZ
+
+    DEFOPT   = -D
+    MODOPT   = -I
+
+    SRCDIRS  = blas lapack
+
+    LIBS     = -lpthread -lrt -L../lib -lsupport -llapack -lblas
+
+    MPIROOT  = /usr/local/openmpi/1.4.1/pgi-9.0-1
+    MPI_LIB  = -lmpi_cxx -lmpi_f90 -lmpi -lmpi_f77 -lopen-rte -lopen-pal 
+
+    NETCDFROOT = /usr/local/netcdf-4.1.1-pgf90
+
+    HDF5ROOT   = /usr/local/hdf5-1.8.2
+
+    SZIPROOT   = /usr/local
+
+    ZLIBROOT   = /usr
+
+    ;;
+
+#-----------------------------------------------------------------------------
+# Intel ifort
+
+intel)
+
+    ARCH     = LINUX
+
+    CC       = gcc
+    CFLAGS   = -std=c99 -march=native -O -DpgiFortran
+
+    F90      = ifort
+    #>>SF replace -mieee-fp which is obsolete, and add -O2 (see #175)
+    FFLAGS   = -pc64 -fp-model precise -fp-model source -O2 -g
+    F90FLAGS = -pc64 -fp-model precise -fp-model source -O2 -g -fpp -DHAMMOZ
+    #<<SF
+
+    DEFOPT   = -D
+    MODOPT   = -I
+
+    SRCDIRS  = blas lapack
+    LIBS     = -L../lib -lsupport -llapack -lblas
+
+    MPIROOT  = /usr/local/openmpi/1.4.1/ifort-10.1.017
+    MPI_LIB  = -lmpichf90 -lmpich -lpthread -lrt
+
+    NETCDFROOT = /usr/local/netcdf-4.1.1-ifort
+
+    HDF5ROOT   = /usr/local/hdf5-1.8.2
+
+    SZIPROOT   = /usr/local
+
+    ZLIBROOT   = /usr
+
+    ;;
+
+#-----------------------------------------------------------------------------
+# Sun f95
+
+sun)
+
+    ARCH       = LINUX
+
+    CC       = gcc
+    CFLAGS   = -std=c99 -march=native -O -DsunFortran
+    
+    F90      = sunf95
+    FFLAGS   = -fast -fsimple=1 -fstore -g
+    F90FLAGS = -fast -fsimple=1 -g -fpp -DHAMMOZ
+    
+    DEFOPT   = -D
+    MODOPT   = -M
+    
+    SRCDIRS  = blas lapack
+    LIBS     = -L../lib -lsupport -llapack -lblas
+    
+    MPIROOT  = /usr/local/mpich2-1.0.8-sun
+    MPI_LIB  = -lmpichf90 -lmpich -lpthread -lrt
+
+    NETCDFROOT = /usr/local/netcdf-3.6.1
+
+    ZLIBROOT   = /usr/local/zlib-1.2.3
+    SZIPROOT   = /usr/local/szip-2.1-static
+    HDF5ROOT   = /usr/local/hdf5-1.8.2
+    ;;
+
+#-----------------------------------------------------------------------------
+# GCC gfortran
+
+gcc)
+
+    ARCH     = LINUX
+
+    CC       = gcc
+    CFLAGS   = -std=c99 -march=native -O -DpgiFortran -g 
+
+    F90      = gfortran
+    FFLAGS   = -march=native -O -ffloat-store -g 
+
+    FCPP     = -xf95-cpp-input
+    FWARN    = -Wall -Wcharacter-truncation -Wconversion -Wunderflow -Wunused-parameter
+    FDEBUG   = -g -fbacktrace
+    FCHECK   = -finit-real=nan
+    FOPTIONS = "$FCPP" "$FWARN" "$FDEBUG" "$FCHECK"
+
+    F90FLAGS = -march=native -O -ffloat-store -pthread "$FOPTIONS" -DHAMMOZ
+
+    DEFOPT   = -D
+    MODOPT   = -I
+
+    SRCDIRS  = blas lapack
+    LIBS     = -L../lib -lsupport -llapack -lblas
+
+    MPIROOT  = /usr/local/mpich2-1.1.0-gcc
+    MPI_LIB  = -lmpichf90 -lmpich -lpthread -lrt
+
+    NETCDFROOT = /usr/local/netcdf-4.0.1
+
+    HDF5ROOT   = /usr/local/hdf5-1.8.2
+
+    SZIPROOT   = /usr/local/szip-2.1-static
+
+    ZLIBROOT   = /usr/local/zlib-1.2.3
+
+    ;;
+
+#-----------------------------------------------------------------------------
+#
+esac
+#
+#-----------------------------------------------------------------------------

@@ -1,0 +1,41 @@
+#! /bin/bash
+#-----------------------------------------------------------------------------
+#
+set -x
+#
+#-----------------------------------------------------------------------------
+#
+# this section gets parsed und updated by subroutine subjob during model run:
+#
+#PATH
+#EXP
+#DAY
+#MONTH
+#YEAR
+#
+#-----------------------------------------------------------------------------
+# generate the name of the tar file which should contain the restart files
+#
+restart_files=${EXP}_restart${YEAR}${MONTH}.tar
+#
+#-----------------------------------------------------------------------------
+# goto working directory
+#
+cd $PATH
+# 
+# do the work
+#
+if [[ "$MONTH" = "06" || "$MONTH" = "12" ]]; then
+
+    # do always tar file; overhead is small and process is so always the same
+
+    tar cvf $restart_files rerun_${EXP}_* \
+	&& (echo "rerun file ${restart_files} tared.") \
+	|| (echo "rerun file ${restart_files} tar failed."; exit 1)	
+
+fi
+#-----------------------------------------------------------------------------
+#
+exit
+#
+#-----------------------------------------------------------------------------

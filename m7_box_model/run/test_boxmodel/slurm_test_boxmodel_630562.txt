@@ -1,0 +1,223 @@
+ Opened namelist file --> namelist.echam
+ Opened namelist file --> namelist.echam
+ setham: Reading namelist hamctl...
+ setham: Reading namelist hamctl...
+ Namelist file --> namelist.echam --> already opened, rewind file to beginning
+ Namelist file --> namelist.echam --> already opened, rewind file to beginning
+ ----------------------------------------------------------
+ ----------------------------------------------------------
+ --- Min. radius:   4.999999858590343E-010
+ --- Max. radius:   1.999994992729626E-006
+ --- Min. temperature:    218.000000000000     
+ --- Max. temperature:    318.000000000000     
+ --- Min. RH :   0.150000005960464     
+ --- Max. RH :   0.949999630451202     
+ --- Min. hygroscopicity:   3.999999910593033E-002
+ --- Max. hygroscopicity:    1.19999945163727     
+ ----------------------------------------------------------
+ ----------------------------------------------------------
+ ----------------------------------------------------------
+ ----------------------------------------------------------
+ --- Min. radius:   4.999999858590343E-010
+ --- Max. radius:   1.999994992729626E-006
+ --- Min. temperature:    218.000000000000     
+ --- Max. temperature:    318.000000000000     
+ --- Min. RH :   0.150000005960464     
+ --- Max. RH :   0.949999630451202     
+ --- Min. hygroscopicity:   3.999999910593033E-002
+ --- Max. hygroscopicity:    1.19999945163727     
+ ----------------------------------------------------------
+ ----------------------------------------------------------
+ Namelist file --> namelist.echam --> already opened, rewind file to beginning
+-------------------
+M7 boxmodel outputs
+-------------------
+[H2SO4] (cm-3)                      :  0.2122292E+08
+
+NS SO4-- concents (molec. cm-3)     :  0.1133353E+02
+KS SO4-- concents (molec. cm-3)     :  0.0000000E+00
+AS SO4-- concents (molec. cm-3)     :  0.6088761E+07
+CS SO4-- concents (molec. cm-3)     :  0.8698310E+07
+
+BC NS (ug cm-3)                     :  0.0000000E+00
+BC KI (ug cm-3)                     :  0.9746884E+00
+BC AS (ug cm-3)                     :  0.1026070E+01
+BC CS (ug cm-3)                     :  0.1999241E+01
+
+OC NS (ug cm-3)                     :  0.0000000E+00
+OC KI (ug cm-3)                     :  0.9746884E+00
+OC AS (ug cm-3)                     :  0.1026070E+01
+OC CS (ug cm-3)                     :  0.1999241E+01
+
+SS AS (ug cm-3)                     :  0.7954176E-03
+SS CS (ug cm-3)                     :  0.1999205E+01
+
+DU AS (ug cm-3)                     :  0.8155975E-03
+DU AI (ug cm-3)                     :  0.9746298E+00
+DU CS (ug cm-3)                     :  0.2039487E+01
+DU CS (ug cm-3)                     :  0.9850674E+00
+
+SOA MT1 KS (ug cm-3)                :  0.0000000E+00
+SOA MT2 KS (ug cm-3)                :  0.0000000E+00
+SOA IS1 KS (ug cm-3)                :  0.0000000E+00
+SOA IS2 KS (ug cm-3)                :  0.0000000E+00
+SOA TOL KS (ug cm-3)                :  0.0000000E+00
+SOA XYL KS (ug cm-3)                :  0.0000000E+00
+SOA BENZ KS (ug cm-3)               :  0.0000000E+00
+SOA MT1 AS (ug cm-3)                :  0.1000795E+01
+SOA MT2 AS (ug cm-3)                :  0.1000795E+01
+SOA IS1 AS (ug cm-3)                :  0.1000795E+01
+SOA IS2 AS (ug cm-3)                :  0.1000795E+01
+SOA TOL AS (ug cm-3)                :  0.1026070E+01
+SOA XYL AS (ug cm-3)                :  0.1026070E+01
+SOA BENZ AS (ug cm-3)               :  0.1026070E+01
+SOA MT1 CS (ug cm-3)                :  0.1999205E+01
+SOA MT2 CS (ug cm-3)                :  0.1999205E+01
+SOA IS1 CS (ug cm-3)                :  0.1999205E+01
+SOA IS2 CS (ug cm-3)                :  0.1999205E+01
+SOA TOL CS (ug cm-3)                :  0.1999241E+01
+SOA XYL CS (ug cm-3)                :  0.1999241E+01
+SOA BENZ CS (ug cm-3)               :  0.1999241E+01
+SOA MT1 KI (ug cm-3)                :  0.1000000E+01
+SOA MT2 KI (ug cm-3)                :  0.1000000E+01
+SOA IS1 KI (ug cm-3)                :  0.1000000E+01
+SOA IS2 KI (ug cm-3)                :  0.1000000E+01
+SOA TOL KI (ug cm-3)                :  0.9746884E+00
+SOA XYL KI (ug cm-3)                :  0.9746884E+00
+SOA BENZ KI (ug cm-3)               :  0.9746884E+00
+
+[NS] (cm-3)                         :  0.8350359E+00
+[KI] (cm-3)                         :  0.9746863E+00
+[KS] (cm-3)                         :  0.0000000E+00
+[AI] (cm-3)                         :  0.9746298E+00
+[AS] (cm-3)                         :  0.1153234E+01
+[CI] (cm-3)                         :  0.9850674E+00
+[CS] (cm-3)                         :  0.1912335E+01
+
+NS geom. mean rad. (nm)             :  0.4843908E+02
+KI geom. mean rad. (nm)             :  0.8272014E+05
+KS geom. mean rad. (nm)             :  0.0000000E+00
+AI geom. mean rad. (nm)             :  0.3246857E+05
+AS geom. mean rad. (nm)             :  0.7978635E+05
+CI geom. mean rad. (nm)             :  0.2180560E+05
+CS geom. mean rad. (nm)             :  0.6301613E+05
+
+NS dry rad. (nm)                    :  0.4742592E+02
+KS dry rad. (nm)                    :  0.0000000E+00
+AS dry rad. (nm)                    :  0.7890847E+05
+CS dry rad. (nm)                    :  0.5860868E+05
+
+NS particle density (g cm-3)        :  0.1789325E+01
+KI particle density (g cm-3)        :  0.1458911E+01
+KS particle density (g cm-3)        :  0.1000000E+01
+AI particle density (g cm-3)        :  0.2650000E+01
+AS particle density (g cm-3)        :  0.1447441E+01
+CI particle density (g cm-3)        :  0.2650000E+01
+CS particle density (g cm-3)        :  0.1460538E+01
+
+NS water content (kg(H2O) m-3(air)) :  0.6429038E-19
+KI water content (kg(H2O) m-3(air)) :  0.0000000E+00
+KS water content (kg(H2O) m-3(air)) :  0.2108191E-09
+AI water content (kg(H2O) m-3(air)) :  0.3404841E-08
+AS water content (kg(H2O) m-3(air)) :  0.0000000E+00
+CI water content (kg(H2O) m-3(air)) :  0.0000000E+00
+CS water content (kg(H2O) m-3(air)) :  0.0000000E+00
+
+ Namelist file --> namelist.echam --> already opened, rewind file to beginning
+-------------------
+M7 boxmodel outputs
+-------------------
+[H2SO4] (cm-3)                      :  0.2122292E+08
+
+NS SO4-- concents (molec. cm-3)     :  0.1133353E+02
+KS SO4-- concents (molec. cm-3)     :  0.0000000E+00
+AS SO4-- concents (molec. cm-3)     :  0.6088761E+07
+CS SO4-- concents (molec. cm-3)     :  0.8698310E+07
+
+BC NS (ug cm-3)                     :  0.0000000E+00
+BC KI (ug cm-3)                     :  0.9746884E+00
+BC AS (ug cm-3)                     :  0.1026070E+01
+BC CS (ug cm-3)                     :  0.1999241E+01
+
+OC NS (ug cm-3)                     :  0.0000000E+00
+OC KI (ug cm-3)                     :  0.9746884E+00
+OC AS (ug cm-3)                     :  0.1026070E+01
+OC CS (ug cm-3)                     :  0.1999241E+01
+
+SS AS (ug cm-3)                     :  0.7954176E-03
+SS CS (ug cm-3)                     :  0.1999205E+01
+
+DU AS (ug cm-3)                     :  0.8155975E-03
+DU AI (ug cm-3)                     :  0.9746298E+00
+DU CS (ug cm-3)                     :  0.2039487E+01
+DU CS (ug cm-3)                     :  0.9850674E+00
+
+SOA MT1 KS (ug cm-3)                :  0.0000000E+00
+SOA MT2 KS (ug cm-3)                :  0.0000000E+00
+SOA IS1 KS (ug cm-3)                :  0.0000000E+00
+SOA IS2 KS (ug cm-3)                :  0.0000000E+00
+SOA TOL KS (ug cm-3)                :  0.0000000E+00
+SOA XYL KS (ug cm-3)                :  0.0000000E+00
+SOA BENZ KS (ug cm-3)               :  0.0000000E+00
+SOA MT1 AS (ug cm-3)                :  0.1000795E+01
+SOA MT2 AS (ug cm-3)                :  0.1000795E+01
+SOA IS1 AS (ug cm-3)                :  0.1000795E+01
+SOA IS2 AS (ug cm-3)                :  0.1000795E+01
+SOA TOL AS (ug cm-3)                :  0.1026070E+01
+SOA XYL AS (ug cm-3)                :  0.1026070E+01
+SOA BENZ AS (ug cm-3)               :  0.1026070E+01
+SOA MT1 CS (ug cm-3)                :  0.1999205E+01
+SOA MT2 CS (ug cm-3)                :  0.1999205E+01
+SOA IS1 CS (ug cm-3)                :  0.1999205E+01
+SOA IS2 CS (ug cm-3)                :  0.1999205E+01
+SOA TOL CS (ug cm-3)                :  0.1999241E+01
+SOA XYL CS (ug cm-3)                :  0.1999241E+01
+SOA BENZ CS (ug cm-3)               :  0.1999241E+01
+SOA MT1 KI (ug cm-3)                :  0.1000000E+01
+SOA MT2 KI (ug cm-3)                :  0.1000000E+01
+SOA IS1 KI (ug cm-3)                :  0.1000000E+01
+SOA IS2 KI (ug cm-3)                :  0.1000000E+01
+SOA TOL KI (ug cm-3)                :  0.9746884E+00
+SOA XYL KI (ug cm-3)                :  0.9746884E+00
+SOA BENZ KI (ug cm-3)               :  0.9746884E+00
+
+[NS] (cm-3)                         :  0.8350359E+00
+[KI] (cm-3)                         :  0.9746863E+00
+[KS] (cm-3)                         :  0.0000000E+00
+[AI] (cm-3)                         :  0.9746298E+00
+[AS] (cm-3)                         :  0.1153234E+01
+[CI] (cm-3)                         :  0.9850674E+00
+[CS] (cm-3)                         :  0.1912335E+01
+
+NS geom. mean rad. (nm)             :  0.4843908E+02
+KI geom. mean rad. (nm)             :  0.8272014E+05
+KS geom. mean rad. (nm)             :  0.0000000E+00
+AI geom. mean rad. (nm)             :  0.3246857E+05
+AS geom. mean rad. (nm)             :  0.7978635E+05
+CI geom. mean rad. (nm)             :  0.2180560E+05
+CS geom. mean rad. (nm)             :  0.6301613E+05
+
+NS dry rad. (nm)                    :  0.4742592E+02
+KS dry rad. (nm)                    :  0.0000000E+00
+AS dry rad. (nm)                    :  0.7890847E+05
+CS dry rad. (nm)                    :  0.5860868E+05
+
+NS particle density (g cm-3)        :  0.1789325E+01
+KI particle density (g cm-3)        :  0.1458911E+01
+KS particle density (g cm-3)        :  0.1000000E+01
+AI particle density (g cm-3)        :  0.2650000E+01
+AS particle density (g cm-3)        :  0.1447441E+01
+CI particle density (g cm-3)        :  0.2650000E+01
+CS particle density (g cm-3)        :  0.1460538E+01
+
+NS water content (kg(H2O) m-3(air)) :  0.6429038E-19
+KI water content (kg(H2O) m-3(air)) :  0.0000000E+00
+KS water content (kg(H2O) m-3(air)) :  0.2108191E-09
+AI water content (kg(H2O) m-3(air)) :  0.3404841E-08
+AS water content (kg(H2O) m-3(air)) :  0.0000000E+00
+CI water content (kg(H2O) m-3(air)) :  0.0000000E+00
+CS water content (kg(H2O) m-3(air)) :  0.0000000E+00
+
+Application 3442609 resources: utime ~6s, stime ~2s
+Submitted batch job 279415 on cluster julier
+/ufs/slurm/spool/job630562/slurm_script: line 81: module: command not found

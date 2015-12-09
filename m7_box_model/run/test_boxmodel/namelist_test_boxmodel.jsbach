@@ -1,0 +1,29 @@
+&JSBACH_CTL
+  standalone = .false.
+  ! --- number of tiles ---
+  ntiles = 11
+
+  ! --- options to activate the different jsbach modules ---
+  use_bethy = .true.
+  use_phenology = .true.
+  use_albedo = .true.
+  use_dynveg = .false.
+
+  ! --- output options ---
+  file_type = "NETCDF"
+  lpost_echam = .false.
+  debug = .false.
+/
+&ALBEDO_CTL
+  use_albedocanopy = .false.
+/
+&CBALANCE_CTL
+  read_cpools = .false.
+/
+&DYNVEG_CTL
+  read_fpc = .false.
+  dynveg_feedback = .false.
+/
+&CLIMBUF_CTL
+  init_running_means = .false.
+/

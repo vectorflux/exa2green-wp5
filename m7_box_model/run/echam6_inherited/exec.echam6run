@@ -1,0 +1,199 @@
+
+set -ex
+
+ulimit -c 0
+
+BIN_DIR=_BIN_DIR
+START="_START"
+
+#
+#-----------------------------------------------------------------------------
+#
+dir=`pwd -P`
+WORK_DIR=${dir%%/run}
+#
+# absolute path to directory with job scripts:
+SCRIPTDIR=${WORK_DIR}/run
+#
+# absolute path to directory with plenty of space:
+EXPDIR=${WORK_DIR}/experiments/$EXP
+#
+# absolute path to directory with initial data:
+INI_DATA=/pool/data/ECHAM6
+INITIAL_DATA=/pool/data/ECHAM6/T${RES}
+#
+# absolute path to directory with SST and sea ice files:
+BOUNDARY_DATA=${INI_DATA}/T${RES}/amip2
+#
+# absolute path to model binary, including the executable
+#MODEL=${WORK_DIR}/bin/echam6
+MODEL=${WORK_DIR}/${BIN_DIR}
+#
+#-----------------------------------------------------------------------------
+#
+# the directory for the experiment will be created, if not already there
+if [ ! -d $EXPDIR ]; then
+    mkdir -p $EXPDIR
+fi
+#
+#-----------------------------------------------------------------------------
+#
+cd $EXPDIR           #  output and rerun files are written into $EXPDIR
+
+#-----------------------------------------------------------------------------
+#
+# specification of files for ECHAM
+#
+#-----------------------------------------------------------------------------
+#
+rm -f unit.?? sst* ice* hdpara.nc hdstart.nc rrtadata lctlib.def jsbach.nc rrtmg_lw.nc
+rm -f ECHAM6_CldOptProps.nc aero* swflux* ozon* greenhouse_gases.nc
+#
+ln -s  ${INITIAL_DATA}/T${RES}L${LEVELS}_jan_spec.nc       unit.23
+ln -s  ${INITIAL_DATA}/T${RES}${OCERES}_jan_surf.nc        unit.24
+#
+ln -s  ${INITIAL_DATA}/T${RES}_O3clim2.nc                  unit.21
+ln -s  ${INITIAL_DATA}/T${RES}${OCERES}_VLTCLIM.nc         unit.90
+ln -s  ${INITIAL_DATA}/T${RES}${OCERES}_VGRATCLIM.nc       unit.91
+ln -s  ${INITIAL_DATA}/T${RES}_TSLCLIM2.nc                 unit.92
+#
+ln -s  ${INI_DATA}/surrta_data                             rrtadata
+ln -s  ${INI_DATA}/rrtmg_lw.nc                             rrtmg_lw.nc
+ln -s  ${INI_DATA}/ECHAM6_CldOptProps.nc                   ECHAM6_CldOptProps.nc
+ln -s  ${INI_DATA}/hdpara.nc                               hdpara.nc
+ln -s  ${INI_DATA}/hdstart.nc                              hdstart.nc
+#
+ln -s  ${BOUNDARY_DATA}/T${RES}_amip2sst_clim.nc           unit.20
+ln -s  ${BOUNDARY_DATA}/T${RES}_amip2sic_clim.nc           unit.96
+#
+years="1977 1978 1979"
+for year in $years ; do
+ln -s  ${BOUNDARY_DATA}/T${RES}_amip2sst_${year}.nc  sst${year}
+ln -s  ${BOUNDARY_DATA}/T${RES}_amip2sic_${year}.nc  ice${year}
+# aerosols
+ln -s ${INITIAL_DATA}/aero/g30_coa_T${RES}.nc         aero_coarse_${year}.nc
+ln -s ${INITIAL_DATA}/aero/g30_fin_T${RES}_${year}.nc aero_fine_${year}.nc
+ln -s ${INITIAL_DATA}/aero/g30_fir_T${RES}.nc         aero_farir_${year}.nc
+# ozone
+ln -s ${INITIAL_DATA}/ozone/T${RES}_ozone_CMIP5_${year}.nc ozon${year}
+# solar irradiance
+ln -s ${INI_DATA}/solar_irradiance/swflux_14band_${year}.nc   swflux_${year}.nc
+done
+#
+# greenhouse gases
+#
+ln -s ${INI_DATA}/greenhouse_rcp45.nc                greenhouse_gases.nc
+#
+#-----------------------------------------------------------------------------
+#
+# specification of files for JSBACH
+#
+#-----------------------------------------------------------------------------
+ln -s  ${INI_DATA}/jsbach/lctlib_nlct21.def_rev3562                    lctlib.def
+ln -s  ${INITIAL_DATA}/jsbach/c3630/jsbach_T${RES}${OCERES}_11tiles_1992.nc  jsbach.nc
+#-----------------------------------------------------------------------------
+#
+# ECHAM6 namelist
+#   - for production runs set LABORT=.FALSE.
+#
+cat > namelist.echam << EOF
+&parctl
+  nproca       = ${NPROCA}
+  nprocb       = ${NPROCB}
+/
+&runctl
+  out_datapath = "${EXPDIR}/"
+  out_expname  = "${EXP}"
+  out_filetype = 1                  ! 1 - GRIB1, 2 - netCDF
+  lresume      = $RERUN
+  lamip        = .true.
+  labort       = .false.
+  dt_start     = 1978,01,01,12,0,0
+  dt_stop      = 1978,01,10,12,0,0
+  putdata      = 6, 'hours', 'first', 0
+  nproma       = ${NPROMA} 
+  lipcc        = .true.
+/
+&physctl
+  lcover       = .false.
+/
+&radctl
+  trigrad      = 1, 'hours', 'first', 0
+  isolrad      = 1
+  io3          = 4
+  ighg         = 1
+  icfc         = 4
+  ich4         = 4
+  in2o         = 4
+  ico2         = 4
+/
+EOF
+#
+cat > namelist.jsbach <<EOF
+&jsbach_ctl
+  standalone    = .false.
+  ntiles        = 11                   ! --- number of tiles ---
+  ! --- options to activate the different jsbach modules ---
+  use_bethy     = .true.
+  use_phenology = .true.
+  use_albedo    = .true.
+  use_dynveg    = .false.
+  ! --- output options ---
+  file_type     = "GRIB"
+  lpost_echam   = .false.
+  debug         = .false.
+/
+&albedo_ctl
+  use_albedocanopy = .false.
+/
+&cbalance_ctl
+  read_cpools = .false.
+/
+&dynveg_ctl
+  read_fpc = .false.
+  dynveg_feedback = .false.
+/
+&climbuf_ctl
+  init_running_means = .false.
+/
+EOF
+#-----------------------------------------------------------------------------
+### Start the run:
+#
+#cp $SCRIPTDIR/job1 .
+#
+# IBM/POE startup
+#
+# poe $MODEL
+
+$START $MODEL
+STATUS=$?
+
+if [ $STATUS -ne 0 ] 
+then
+
+# Stop running this script and return the error status
+
+  exit $?
+fi
+ 
+#
+#llsubmit subjob1
+#-----------------------------------------------------------------------------
+cd $SCRIPTDIR
+#
+#llsubmit -s ham6run_bb_run.ibm
+#
+
+#
+# Kill mpd's
+if [ -e /tmp/mpd_$$.pid  ]
+then
+  sleep 2
+  MPD_PID=`cat /tmp/mpd_$$.pid`
+  kill -9 ${MPD_PID}
+fi
+
+exit 0
+#
+#-----------------------------------------------------------------------------

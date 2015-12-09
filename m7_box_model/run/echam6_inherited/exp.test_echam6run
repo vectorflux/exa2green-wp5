@@ -1,0 +1,23 @@
+#
+NPROMA=_NPROMA        # Blocking length, should be large for vector architecture
+# 
+NPROCA=2
+NPROCB=3
+NCPUS=`expr $NPROCA \* $NPROCB`       # Number of CPUS for parallel run
+
+# experiment identifier: your given experimenter-id according to
+# http://svn.zmaw.de/dokuwiki/doku.php?id=listofids:list_of_experimenter_ids
+# followed by a number for the current experiment
+#
+#
+EXP_USER=$(id -un)
+#EXP_GROUP=${EXP_USER:0:1}
+#
+EXP="bb_0001"  # experiment identifier
+#
+RERUN=.false.    # Rerun switch; .false. for initial run, .true. else
+#
+
+RES=31           # spectral truncation of run
+LEVELS=19        # number of levels
+OCERES=GR30

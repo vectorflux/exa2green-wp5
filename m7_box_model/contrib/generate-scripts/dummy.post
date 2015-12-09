@@ -1,0 +1,293 @@
+#!/client/bin/ksh
+
+###############################################################################
+#                              EXP-ID.post
+###############################################################################
+#
+#   P O S T P R O C E S S I N G Script for the coupled model
+#
+#   The script is called by the run script at the end of 
+#   each run.
+#
+#   The Parameters in section TIME PARAMETERS are edited by the runscript just 
+#   before submission.
+#
+###############################################################################
+# @ shell            = /client/bin/ksh
+# @ job_type         = serial
+# @ node_usage       = shared
+# @ resources        = ConsumableMemory(50000mb)
+# @ task_affinity    = cpu(16)
+# @ parallel_threads = 16
+# @ network.MPI      = sn_all,shared,us
+# @ wall_clock_limit = 02:00:00
+# @ job_name         = $(base_executable)
+# @ output           = $(job_name).o$(jobid)
+# @ error            = $(job_name).o$(jobid)
+# @ notification     = error
+# @ notify_user      = EMAIL
+# @ account_no       = ACCOUNT
+# @ queue
+###############################################################################
+
+set -e
+export task=POST     # The task: RUN, ARCH, POST, MON, REM
+print "\n This ${task} script\n - is started at\t$(date)\n - on host\t$(hostname)"
+
+###############################################################################
+#
+# TIME PARAMETERS
+#
+###############################################################################
+jobnum=Jobnum
+startdate=Startdate
+nextdate=Nextdate
+findate=Findate
+inidate=Inidate
+
+###############################################################################
+#
+#        SETUP OF EXPERIMENT EXP-ID
+#
+###############################################################################
+#------------------------------------------------------------------------------
+#   0.1   Experiment settings
+#------------------------------------------------------------------------------
+
+#
+#-- Experiment ID
+#
+
+export expid=EXP-ID
+
+export jobdir=/home/zmaw/USER_ID/REPOS_NAM/experiments/$expid/scripts
+export data=/work/GROUP_ID/USER_ID/REPOS_NAM/experiments/$expid
+#
+export cdo=/sw/aix61/cdo-1.4.6/bin/cdo
+export afterburner=/sw/aix61/after-4.6.2/bin/after
+#
+###############################################################################
+#
+#  Postprocessing of ECHAM
+#
+###############################################################################
+postprocessing_error=no
+if [ ! -d $data/outdata/post_${startdate} ]; then
+    mkdir -p $data/outdata/post_${startdate}
+fi
+#
+cd $data/outdata/post_${startdate}
+#
+date=`echo ${startdate} | cut -c1-6`
+  yr=`echo ${date} | cut -c1-4`
+  yrbase=`echo ${date} | cut -c1-4`
+# output files
+  FILO_BOT=$data/outdata/echam6/${expid}_echam6_BOT_mm_${yrbase}.grb
+  FILO_ATM=$data/outdata/echam6/${expid}_echam6_ATM_mm_${yrbase}.grb
+  FILO_co2=$data/outdata/echam6/${expid}_echam6_co2_mm_${yrbase}.grb
+  FILO_LOG=$data/outdata/echam6/${expid}_echam6_LOG_mm_${yrbase}.grb
+  FILO_QBO=$data/outdata/echam6/${expid}_echam6_QBO_mm_${yrbase}.grb
+
+ndate=`echo ${nextdate} | cut -c1-6`
+while [ ${date} -lt ${ndate} ]; do
+
+  mn=`echo ${date} | cut -c5-6`
+
+#
+#--  Run the afterburner each month
+#
+# input files
+  FILI=$data/outdata/echam6/${expid}_echam6_echam_${yr}${mn}.grb
+  FILI_co2=$data/outdata/echam6/${expid}_echam6_co2_${yr}${mn}.grb
+
+# BOT
+  ${afterburner} -p </pool/data/ECHAM6/post/inputlists/inp_list1_c $FILI BOTT
+  cat BOTT>> $FILO_BOT
+
+  status=$?
+  if [ $status != 0 ]; then
+    postprocessing_error=yes
+    echo "ERROR: year ${yr} month ${mn} BOT: postprocessing_error = yes"
+  fi
+
+# ATM
+  rm -rf ATM_1 ATM_2 ATMM
+  ${afterburner} -P 8 </pool/data/ECHAM6/post/inputlists/SELECT1_c $FILI ATM_1
+  ${afterburner} -P 8 </pool/data/ECHAM6/post/inputlists/SELECT2_c $FILI ATM_2
+  ${cdo} merge ATM_1 ATM_2 ATMM
+  cat ATMM>> $FILO_ATM
+
+  status=$?
+  if [ $status != 0 ]; then
+    postprocessing_error=yes
+    echo "ERROR: year ${yr} month ${mn} ATM: postprocessing_error = yes"
+  fi
+
+#LOG
+# for L95
+#  ${afterburner} -P 8 </pool/data/ECHAM6/post/inputlists/SELECT3_h $FILI LOGG
+# for L47
+  ${afterburner} -P 8 </pool/data/ECHAM6/post/inputlists/SELECT3 $FILI LOGG
+  cat LOGG>> $FILO_LOG
+
+# QBO only for L95
+#  ${afterburner} -P 8 </pool/data/ECHAM6/post/inputlists/SELECT4 $FILI QBOO
+#  cat QBOO>> $FILO_QBO
+
+# CO2
+
+  ${cdo} -s monavg -selcode,5,6,7,8,17,20,24,25,26 $FILI_co2 CO2
+
+  cat CO2>>$FILO_co2
+
+  status=$?
+  if [ $status != 0 ]; then
+    postprocessing_error=yes
+    echo "ERROR: year ${yr} month ${mn} CO2: postprocessing_error = yes"
+  fi
+
+  (( mn = `expr $mn + 1` ))
+
+  if [ "${mn}" -lt "10" ] ; then
+   mn=0${mn}
+  fi
+
+  if [ ${mn} = 13 ] ; then
+    mn=01
+    if [ ${mn} = 13 ] ; then
+     mn=0${mn}
+    fi
+    (( yr = yr + 1 ))
+  fi
+  date=${yr}${mn}
+
+done
+
+###############################################################################
+#
+#  Postprocessing of JSBACH
+#
+###############################################################################
+#--  Generate monthly means
+
+date=`echo ${startdate} | cut -c1-6`
+  yr=`echo ${date} | cut -c1-4`
+  yrbase=`echo ${date} | cut -c1-4`
+ndate=`echo ${nextdate} | cut -c1-6`
+#
+# loop over month
+#
+while [ ${date} -lt ${ndate} ]; do
+  mn=`echo ${date} | cut -c5-6`
+  FILI_jsba=$data/outdata/jsbach/${expid}_jsbach_${yr}${mn}.grb
+  FILI_land=$data/outdata/jsbach/${expid}_jsbach_land_${yr}${mn}.grb
+  FILI_surf=$data/outdata/jsbach/${expid}_jsbach_surf_${yr}${mn}.grb
+  FILI_veg=$data/outdata/jsbach/${expid}_jsbach_veg_${yr}${mn}.grb
+
+#${cdo} -s monavg -selcode,148,149,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,175,176,177,179 $FILI_veg veg_mm
+# list for dynveg=true
+${cdo} -s monavg -selcode,18,19,20,21,23,31,32,33,34,35,38,39,40,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,175,176,179 $FILI_veg veg_mm
+${cdo} -s monavg -selcode,203,204,205,206,207,212,213                                         $FILI_surf surf_mm
+#${cdo} -s monavg -selcode,12,21,22,55,107,124,126,148,20                                  $FILI_jsba main_mm
+# list for dynveg=true
+${cdo} -s monavg -selcode,12,21,22,55,107,124,126,148,20                                  $FILI_jsba main_mm
+${cdo} -s monavg -selcode,40,44,60,67,68,76,107,109,110,124,126,148,149                   $FILI_land land_mm
+
+  cat veg_mm >>yearly_veg
+  cat surf_mm>>yearly_surf
+  cat main_mm>>yearly_main
+  cat land_mm>>yearly_land
+#
+#--  save annual mm files
+# further processing
+#
+
+  (( mn = `expr $mn + 1` ))
+
+  if [ "${mn}" -lt "10" ] ; then
+   mn=0${mn}
+  fi
+
+  if [ ${mn} = 13 ] ; then
+    mn=01
+    if [ ${mn} = 13 ] ; then
+     mn=0${mn}
+    fi
+    (( yr = yr + 1 ))
+  fi
+  date=${yr}${mn}
+
+done
+#
+# monthly processing is finished, year is complete
+#
+# veg:  adapt time in monthly mean veg stream to times in the other mm streams
+ ${cdo} settime,18 yearly_veg yearly_vegt
+ mv yearly_vegt ${data}/outdata/jsbach/${expid}_jsbach_veg_mm_${yrbase}.grb
+# main: Monthly mean Albedo
+ ${cdo}  -s setcode,13 -div -selcode,22 yearly_main -selcode,21 yearly_main blah_m
+ ${cdo} merge yearly_main blah_m yearly_mainm
+ ${cdo}  -s setcode,125 -div -selcode,148 yearly_main  -selcode,149 yearly_land blah
+ ${cdo} merge blah yearly_mainm yearly_mainmm
+ mv yearly_mainmm ${data}/outdata/jsbach/${expid}_jsbach_main_mm_${yrbase}.grb
+# land: Monthly mean FaPAR for land stream stream
+ ${cdo}  -s setcode,125 -div -selcode,148 yearly_land  -selcode,149 yearly_land blah
+ ${cdo} merge yearly_land blah yearly_landm
+ mv yearly_landm ${data}/outdata/jsbach/${expid}_jsbach_land_mm_${yrbase}.grb
+# surf: nothing to do
+ mv yearly_surf ${data}/outdata/jsbach/${expid}_jsbach_surf_mm_${yrbase}.grb
+
+
+#cl_POST_echam6_co2_dm="5,8"
+#
+##
+##-- Code lists for postprocessing of JSBACH model output (monthly means)
+##     
+#
+## dm and 24h derived data only generated in post postprocessing if dbfill=yes set !
+#cl_POST_jsbach_main_dm="21,22,55,107,124,126,127,148"
+#cl_POST_jsbach_land_dm="40,44,60,67,68,76,107,109,110,124,126,127,148,149"
+#cl_POST_jsbach_veg_dm="150,151,152,153,154,156,157,158,160,161,162,163,164,170,174,175,176"
+#cl_POST_jsbach_veg_24h="181,182"
+#
+#
+# remove postpro-directory
+#
+cd $data/outdata
+rm -rf post_${startdate}
+################################################################################
+##
+##-- update run dates and submit expid.mon script
+##
+#cd ${jobdir}
+#
+#cp ${expid}.mon  ${expid}.mon.${nextdate}
+#
+#ed -s ${expid}.mon.${nextdate} <<EOF
+#1,100s/Jobnum/${jobnum}/
+#1,100s/Startdate/${startdate}/
+#1,100s/Nextdate/${nextdate}/
+#1,100s/Findate/${findate}/
+#1,100s/Inidate/${inidate}/
+#w
+#q
+#EOF
+#
+#llsubmit ${expid}.mon.${nextdate}
+##
+################################################################################
+#------------------------------------------------------------------------------
+#
+#     9. EPILOGUE
+#
+#------------------------------------------------------------------------------
+
+date
+${job_account}
+wait
+printf "\n%s\t%s\n"  \
+       " This ${task} script ended                   at" \
+       "$(date +'%b %d %T') on host $(hostname)"
+exit
+
+

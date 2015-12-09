@@ -1,0 +1,36 @@
+#!/bin/bash
+#
+#$ -S /bin/bash
+#$ -N BB_0001
+#$ -o BB_0001.$JOB_ID.o
+#$ -j y
+#$ -pe linux64 _NPROCS
+#$ -q squall
+#$ -M walter.sauf@zmaw.de
+#$ -m a
+#$ -cwd
+
+#
+. /client/etc/profile.zmaw
+
+echo -n " Job started at: "
+date
+echo -n " Execution host: "
+hostname
+
+#-----------------------------------------------------------------------------
+#
+# start mpd (MPI deamon for MPICH2)
+#
+
+MPIROOT=_MPIROOT
+
+${MPIROOT}/bin/mpd &
+#
+sleep 2
+#
+mpdid=$(${MPIROOT}/bin/mpdtrace -l | awk '{print $1}')
+#
+echo "mpd started as $mpdid"
+#
+echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"

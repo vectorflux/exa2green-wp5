@@ -1,0 +1,217 @@
+ 
+ -------------------------------------------------------------------
+ Documentation of ECHAM-6 output codes (taken from echam-stream)
+               (M. Esch 23-Feb-2012)
+ -------------------------------------------------------------------
+ type: g=grid, s=spectral, m=mean over output interval, 
+       f=not written out by default
+       c=written out for coupled model only
+       a=afterburner output only
+ levels: VR=vertical resolution as given by initial files (L19 - L95)
+
+ All variables with an internal name can be requested as model output.
+ 
+ All variables denoted as 'afterburner output only' are derived variables 
+ and are computed by the "afterburner" software package "after" (valid for 
+ all model resolutions).
+ The afterburner also computes grid point versions of spectral variables.
+ (see documentation:  https://code.zmaw.de/projects/cdo/wiki/Cdo#Documentation)
+
+ Note: To compute multi level derived variables and for interpolation
+       to pressure levels the afterburner needs all default prognostic
+       variables (130,133,138,152,153,154,155) and code129 (GEOSP).
+       Changing of the default list is therefore not recommended.
+
+ Attention!!!:
+ "ice" denotes sea ice and lake ice
+ "land" includes ice sheets and glaciers
+------------------------------------------------------------------------------
+
+ code|levels|internal       | type | variable
+     |      | name          |      |
+     |      |               |      |
+  34 |  1   |low_cld        | a    |low cloud
+  35 |  1   |mid_cld        | a    |mid cloud
+  36 |  1   |hih_cld        | a    |high cloud
+  68 |  1   |fage           | g    |aging factor of snow on ice
+  69 |  1   |snifrac        | g    |fraction of ice covered with snow
+  70 |  1   |barefrac       | g    |bare ice fraction
+  71 |  1   |alsom          | g    |albedo of melt ponds
+  72 |  1   |alsobs         | g    |albedo of bare ice and snow without 
+     |      |               |      | ponds
+  73 |  1   |sicepdw        | g    |melt pond depth on sea-ice              [m]
+  74 |  1   |sicepdi        | g    |ice thickness on melt pond              [m]
+  75 |  1   |tsicepdi       | g    |ice temperature on frozen melt pond     [K]
+  76 |  1   |sicepres       | g    |residual heat flux                      [W/m**2]
+  77 |  1   |ameltdepth     | g    |total melt pond depth                   [m]
+  78 |  1   |ameltfrac      | g    |fractional area of melt ponds on sea-ice
+  79 |  1   |albedo_vis_dir | g    |surface albedo visible range direct
+  80 |  1   |albedo_nir_dir | g    |surface albedo NIR range direct
+  81 |  1   |albedo_vis_dif | g    |surface albedo visible range diffuse 
+  82 |  1   |albedo_nir_dif | g    |surface albedo NIR range diffuse
+  83 |  1   |ocu            | g   c|ocean eastw. velocity (coupled mode)    [m/s]
+  84 |  1   |ocv            | g   c|ocean northw. velocity (coupled mode)   [m/s]
+  85 |  1   |tradl          | g m  |thermal radiation 200mb                 [W/m**2]
+  86 |  1   |sradl          | g m  |solar radiation 200mb                   [W/m**2]
+  87 |  1   |trafl          | g m  |thermal radiation 200mb (clear sky)     [W/m**2]
+  88 |  1   |srafl          | g m  |solar radiation 200mb (clear sky)       [W/m**2]
+  89 |  1   |amlcorac       | g m  |mixed layer flux correction             [W/m**2]
+  90 |  1   |amlheatac      | g m f|mixed layer heat content                [J/m**2]
+  91 |  1   |trfliac        | g m  |LW flux over ice                        [W/m**2]
+  92 |  1   |trflwac        | g m  |LW flux over water                      [W/m**2]
+  93 |  1   |trfllac        | g m  |LW flux over land                       [W/m**2]
+  94 |  1   |sofliac        | g m  |SW flux over ice                        [W/m**2]
+  95 |  1   |soflwac        | g m  |SW flux over water                      [W/m**2]
+  96 |  1   |sofllac        | g m  |SW flux over land                       [W/m**2]
+  97 |  1   |friac          | g m  |ice cover (fraction of grid box)
+ 100 |  1   |albedo_vis     | g    |surface albedo visible range 
+ 101 |  1   |albedo_nir     | g    |surface albedo NIR range    
+ 102 |  1   |tsi            | g    |surface temperature of ice              [K]
+ 103 |  1   |tsw            | g    |surface temperature of water            [K]
+ 104 |  1   |ustri          | g    |zonal      wind stress over ice         [Pa]
+ 105 |  1   |vstri          | g    |meridional wind stress over ice         [Pa]
+ 106 |  1   |ustrw          | g    |zonal      wind stress over water       [Pa]
+ 107 |  1   |vstrw          | g    |meridional wind stress over water       [Pa]
+ 108 |  1   |ustrl          | g    |zonal      wind stress over land        [Pa]
+ 109 |  1   |vstrl          | g    |meridional wind stress over land        [Pa]
+ 110 |  1   |ahfliac        | g m  |latent heat flux over ice               [W/m**2]
+ 111 |  1   |ahflwac        | g m  |latent heat flux over water             [W/m**2]
+ 112 |  1   |ahfllac        | g m  |latent heat flux over land              [W/m**2]
+ 113 |  1   |evapiac        | g m  |evaporation over ice                    [kg/m**2s]
+ 114 |  1   |evapwac        | g m  |evaporation over water                  [kg/m**2s]
+ 115 |  1   |evaplac        | g m  |evaporation over land                   [kg/m**2s]
+ 116 |  1   |az0i           | g    |roughness length over ice               [m]
+ 117 |  1   |az0w           | g    |roughness length over water             [m]
+ 118 |  1   |az0l           | g    |roughness length over land              [m]
+ 119 |  1   |ahfsiac        | g m  |sensible heat flux over ice             [W/m**2]
+ 120 |  1   |ahfswac        | g m  |sensible heat flux over water           [W/m**2]
+ 121 |  1   |ahfslac        | g m  |sensible heat flux over land            [W/m**2]
+ 122 |  1   |alsoi          | g    |albedo of ice                           
+ 123 |  1   |alsow          | g    |albedo of water                        
+ 124 |  1   |alsol          | g    |albedo of land                        
+ 125 |  1   |ahfice         | g    |conductive heat flux                    [W/m**2]
+ 126 |  1   |qres           | g    |residual heat flux for melting sea ice  [W/m**2]
+ 127 |  1   |alake          | g   f|lake fraction of grid box
+ 128 |  1   |rintop         | g   f|low level inversion
+ 129 |  1   |geosp          | g    |surface geopotential (orography)        [m**2/s**2]
+ 130 | VR   |stp            | s    |temperature                             [K]  (see notes)
+ 131 | VR   |u              | a    |u-velocity                              [m/s]
+ 132 | VR   |v              | a    |v-velocity                              [m/s]
+ 133 | VR   |q              | g    |specific humidity
+ 134 |  1   |aps            | g    |Surface pressure                        [Pa]
+ 135 | VR   |omega          | a    |Vertical velocity                       [Pa/s]
+ 136 | VR   |acdnc          | g   f|cloud droplet number concentration      [1/m**3]
+ 137 |  1   |apmeb          | g m  |vert. integr. tendencies of water       [kg/m**2s]
+ 138 | VR   |svo            | s    |vorticity                               [1/s]
+ 139 |  1   |tslm1          | g    |surface temperature of land             [K]
+ 140 |  1   |ws             | g    |soil wetness                            [m]
+ 141 |  1   |sn             | g    |snow depth                              [m]
+ 142 |  1   |aprl           | g m  |large scale precipitation               [kg/m**2s]
+ 143 |  1   |aprc           | g m  |convective  precipitation               [kg/m**2s]
+ 144 |  1   |aprs           | g m  |snow fall                               [kg/m**2s]
+ 145 |  1   |vdis           | g m  |boundary layer dissipation              [W/m**2]
+ 146 |  1   |ahfs           | g m  |sensible heat flux                      [W/m**2]
+ 147 |  1   |ahfl           | g m  |latent heat flux                        [W/m**2]
+ 148 | VR   |stream         | a    |streamfunction                          [m**2/s]
+ 149 | VR   |velopot        | a    |velocity potential                      [m**2/s]
+ 150 |  1   |xivi           | g m  |vertically integrated cloud ice         [kg/m**2]
+ 151 |  1   |slp            | a    |mean sea level pressure                 [Pa]
+ 152 |  1   |stp(20)        | s    |log surface pressure
+ 153 | VR   |xl             | g    |cloud water
+ 154 | VR   |xi             | g    |cloud ice
+ 155 | VR   |sd             | s    |divergence                              [1/s]
+ 156 | VR   |geopoth        | a    |geopotential height                     [gpm]
+ 157 | VR   |relhum         | g    |relative humidity                       
+     |
+ 159 |  1   |wind10w        | g   f|10m windspeed over water                [m/s]
+ 160 |  1   |runoff         | g m  |surface runoff and drainage             [kg/m**2s] 
+ 161 |  1   |drain          | g m  |drainage                                [kg/m**2s] 
+ 162 | VR   |aclc           | g   f|cloud cover                            
+ 163 |  1   |aclcv          | g   f|total cloud cover                     
+ 164 |  1   |aclcov         | g m  |total cloud cover                    
+ 165 |  1   |u10            | g    |10m u-velocity                          [m/s]
+ 166 |  1   |v10            | g    |10m v-velocity                          [m/s]
+ 167 |  1   |temp2          | g    |2m temperature                          [K]
+ 168 |  1   |dew2           | g    |2m dew point temperature                [K]
+ 169 |  1   |tsurf          | g m  |surface temperature                     [K]
+ 170 | VR   |xvar           | g   f|variance of total water amount qv+qi+ql
+     |      |               |      | expressed as width of distribution
+ 171 |  1   |wind10         | g m  |10m windspeed                           [m/s]
+ 172 |  1   |slm            | g    |land sea mask (1. = land, 0. = sea/lakes)
+ 173 |  1   |az0            | g   f|roughness length                        [m]
+ 174 |  1   |alb            | g   f|surface background albedo               
+ 175 |  1   |albedo         | g    |surface albedo                         
+ 176 |  1   |srads          | g m  |net surface solar radiation             [W/m**2]
+ 177 |  1   |trads          | g m  |net surface thermal radiation           [W/m**2]
+ 178 |  1   |srad0          | g m  |net top solar radiation                 [W/m**2]
+ 179 |  1   |trad0          | g m  |top thermal radiation (OLR)             [W/m**2]
+ 180 |  1   |ustr           | g m  |u-stress                                [Pa]
+ 181 |  1   |vstr           | g m  |v-stress                                [Pa]
+ 182 |  1   |evap           | g m  |evaporation                             [kg/m**2s]
+ 183 | VR   |xskew          | g   f|skewness of total water amount qv+qi+ql [-]
+ 184 |  1   |srad0d         | g m  |top incoming solar radiation            [W/m**2]
+ 185 |  1   |srafs          | g m  |net surf. solar radiation   (clear sky) [W/m**2]
+ 186 |  1   |trafs          | g m  |net surf. thermal radiation (clear sky) [W/m**2]
+ 187 |  1   |sraf0          | g m  |net top solar radiation     (clear sky) [W/m**2]
+ 188 |  1   |traf0          | g m  |net top thermal radiation   (clear sky) [W/m**2]
+ 189 |  1   |sclfs          | a m  |surface solar cloud forcing             [W/m**2]
+ 190 |  1   |tclfs          | a m  |surface thermal cloud forcing           [W/m**2]
+ 191 |  1   |sclf0          | a    |SW top cloud forcing (178-187)          [W/m**2]
+ 192 |  1   |tclf0          | a    |LW top cloud forcing (179-188)          [W/m**2]
+ 193 |  1   |wl             | g    |skin reservoir content                  [m]
+ 194 |  1   |slf            | g   f|sea land fraction
+ 195 |  1   |ustrgw         | g   f|u-gravity wave stress                   [Pa]
+ 196 |  1   |vstrgw         | g   f|v-gravity wave stress                   [Pa]
+ 197 |  1   |vdisgw         | g    |gravity wave dissipation                [W/m**2]
+ 198 |  1   |vgrat          | g   f|vegetation ratio
+ 199 |  1   |orostd         | g   f|orographic standard deviation           [m]
+ 200 |  1   |vlt            | g   f|leaf area index 
+ 201 |  1   |t2max          | g    |maximum 2m-temperature                  [K]
+ 202 |  1   |t2min          | g    |minimum 2m-temperature                  [K]
+ 203 |  1   |srad0u         | g m  |top solar radiation upward              [W/m**2]
+ 204 |  1   |sradsu         | g m  |surface solar radiation upward          [W/m**2]
+ 205 |  1   |tradsu         | g m  |surface thermal radiation upward        [W/m**2]
+     |
+     |
+ 208 |  1   |ahfcon         | g m  |conductive heat flux through ice        [W/m**2]
+ 209 |  1   |ahfres         | g m  |melting of ice                          [W/m**2]
+ 210 |  1   |seaice         | g    |ice cover (fraction of 1-SLM)
+ 211 |  1   |siced          | g    |ice depth                               [m]
+ 212 |  1   |forest         | g   f|forest fraction
+ 213 |  1   |gld            | g    |glacier depth                           [m]
+ 214 |  1   |sni            | g    |water equivalent of snow on ice         [m]
+ 215 |  1   |rogl           | g m f|glacier runoff                          [kg/m**2s]
+ 216 |  1   |wimax          | g    |maximum 10m-wind speed                  [m/s]
+ 217 |  1   |topmax         | g    |maximum height of convective cloud tops [Pa]
+ 218 |  1   |snmel          | g m  |snow melt                               [kg/m**2s]
+ 219 |  1   |runtoc         | g m c|surface runoff into ocean               [kg/m**2s]
+ 220 |  1   |runlnd         | g   f|surface runoff not running into ocean   [kg/m**2s]
+ 221 |  1   |apmegl         | g m  |P-E over land ice                       [kg/m**2s]
+ 222 |  1   |snacl          | g m  |snow accumulation over land             [kg/m**2s]
+ 223 | VR   |aclcac         | g m  |cloud cover                             
+ 224 | VR   |tke            | g   f|turbulent kinetic energy                [m**2/s**2]
+ 225 | VR   |tkem1          | g   f|turbulent kinetic energy (t-1)          [m**2/s**2]
+ 226 |  1   |fao            | g   f|FAO data set (soil data flags)          [0...5]
+ 227 |  1   |rgcgn          | g   f|volumetric heat capacity of soil and 
+     |      |               |      |  land ice                              [J/(m**3K)]
+ 228 |  1   |sodif          | g   f|diffusivity of soil and land ice        [m**2/s]
+ 229 |  1   |wsmx           | g    |field capacity of soil                  [m]
+ 230 |  1   |qvi            | g m  |vertically integrated water vapor       [kg/m**2]
+ 231 |  1   |xlvi           | g m  |vertically integrated cloud water       [kg/m**2]
+ 232 |  1   |glac           | g    |fraction of land covered by glaciers
+ 233 |  1   |snc            | g    |Snow depth at the canopy                [m]
+ 234 |  1   |rtype          | g   f|type of convection                      [0...3]
+     |
+ 235 |  1   |abso4          | g m  |antropogenic sulfur burden              [kg/m**2]
+ 236 | VR   |ao3            | g    |ipcc ozone
+ 237 |  1   |tropo          | g    |WMO defined tropopause height           [Pa]
+ 238 |  1   |thvsig         | g    |stddev virt. pot temp at halfl. klevm1  [K]
+ 239 | VR   |tpot           | g    |potential temperature                   [K]
+    
+ 259 | VR   |windspeed      | a    |windspeed (sqrt(u**2+v**2))             [m/s]
+ 260 |  1   |precip         | a m  |total precipitation (142+143)           [kg/m**2s]
+ 261 |  1   |net_top        | a m  |total top radiation (178+179)           [W/m**2]
+ 262 |  1   |net_bot        | a m  |total surface radiation (176+177)       [W/m**2]
+
+ ------------------------------------------------------------------------------
+

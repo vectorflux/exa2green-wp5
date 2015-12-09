@@ -1,0 +1,39 @@
+#! /bin/ksh
+#=============================================================================
+#
+# This section of the run script contains the header lines for the 
+# environment variables for OpenMP.
+#
+# NTHREADS must be defined as environment variables or it must be 
+# substituted with an appropriate value.
+# 
+# Marco Giorgetta, MPI-M, 2010-04-21
+#
+#-----------------------------------------------------------------------------
+#
+# default for systems without queueing systems
+# ============================================
+#
+# openmp environment variables
+# ----------------------------
+#
+#
+#-----------------------------------------------------------------------------
+#
+
+. /client/etc/profile.zmaw
+
+# start mpd (MPI deamon for MPICH2)
+#
+export MPD_CON_EXT=job_$$
+#
+MPIROOT=_MPIROOT
+
+${MPIROOT}/bin/mpd --pid=/tmp/mpd_$$.pid --daemon
+#
+sleep 2
+#
+mpdid=$(${MPIROOT}/bin/mpdtrace -l | awk '{print $1}')
+#
+echo "mpd started as $mpdid"
+#

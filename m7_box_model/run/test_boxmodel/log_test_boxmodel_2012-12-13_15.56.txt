@@ -1,0 +1,348 @@
+----
+Using configuration for machine:  rosa
+
+
+----
+Setting starting and stopping dates of the current run...
+Total number of months for this run: 15
+
+----
+Setting nproca and nprocb...
+
+Warning! nproca x nprocb is not equal to ncpus in your settings file.
+
+Replacing nproca and nprocb by valid values
+nproca = 2 nprocb = 1
+
+----
+Setting machine-specific variables and create the batch job script...
+WARNING! Your number of CPUs is not a multiple of 32
+----
+Computing the total number of run cycles...
+Warning! putrerun has not been set to 1 month!
+Setting the job chaining to 'standard'
+----
+Creating the job script for ECHAM
+
+Echam jobscript name: /users/mariaf/m7_boxmodel/grazia/run/test_boxmodel/echam_jobscript_test_boxmodel.sh
+
+----
+Recording the compute settings:
+- queue name: rosa
+- job name: test_boxmodel
+- number of cpus: 2
+
+----
+Creating the output directory...
+
+Output directory: /scratch/rosa/mariaf/test_boxmodel/
+
+----
+Parsing namelist_test_boxmodel.echam to get input files-related flags...
+
+----
+Starting input files linking process into /scratch/rosa/mariaf/test_boxmodel/...
+
+with:
+
+input_basepath=/project/s235/echam/ECHAM6-HAMMOZ/v01_001
+nudg_basepath=/project/s235/echam/echam_nudging_DKRZ
+exp_dir=/scratch/rosa/mariaf/test_boxmodel/
+hres=T63
+vres=L31
+oceres=GR15
+start_yyyymm=199910
+stop_yyyymm=200012
+start_year_m1=1998
+stop_year_p1=2001
+start_yyyymm_m1=199909
+stop_yyyymm_p1=200101
+flag_time_dep_sst_sic=false
+sst_sic_dataset=amip2
+flag_CMIP5_ozon=false
+flag_time_dep_sol_irr=false
+flag_kinne_aerosols=false
+flag_stenchikov_aerosols=false
+flag_crowley_aerosols=false
+flag_submclim_aerosols=false
+scenario=rcp45
+flag_nudg=false
+flag_nudg_netcdf=false
+aero_dataset=aerocom_II
+
+
+----
+Keeping a record of all symbolic links... 
+
+lrwxrwxrwx 1 mariaf s235 67 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/unit.21 -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/echam6/T63/T63_O3clim2.nc
+lrwxrwxrwx 1 mariaf s235 71 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/unit.23 -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/echam6/T63/T63L31_jan_spec.nc
+lrwxrwxrwx 1 mariaf s235 72 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/unit.24 -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/echam6/T63/T63GR15_jan_surf.nc
+lrwxrwxrwx 1 mariaf s235 71 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/unit.90 -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/echam6/T63/T63GR15_VLTCLIM.nc
+lrwxrwxrwx 1 mariaf s235 73 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/unit.91 -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/echam6/T63/T63GR15_VGRATCLIM.nc
+lrwxrwxrwx 1 mariaf s235 68 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/unit.92 -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/echam6/T63/T63_TSLCLIM2.nc
+lrwxrwxrwx 1 mariaf s235 60 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/rrtadata -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/echam6/surrta_data
+lrwxrwxrwx 1 mariaf s235 60 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/rrtmg_lw.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/echam6/rrtmg_lw.nc
+lrwxrwxrwx 1 mariaf s235 58 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/hdpara.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/echam6/hdpara.nc
+lrwxrwxrwx 1 mariaf s235 59 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/hdstart.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/echam6/hdstart.nc
+lrwxrwxrwx 1 mariaf s235 70 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/ECHAM6_CldOptProps.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/echam6/ECHAM6_CldOptProps.nc
+lrwxrwxrwx 1 mariaf s235 68 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/greenhouse_gases.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/echam6/greenhouse_rcp45.nc
+lrwxrwxrwx 1 mariaf s235 81 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/lctlib.def -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/echam6/jsbach/lctlib_nlct21.def_rev4154
+lrwxrwxrwx 1 mariaf s235 83 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/jsbach.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/jsbach/T63/jsbach_T63GR15_11tiles_2005.nc
+lrwxrwxrwx 1 mariaf s235 89 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/unit.20 -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/echam6/T63/amip2/T63_amip2sst_1979-2008_mean.nc
+lrwxrwxrwx 1 mariaf s235 89 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/unit.96 -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/echam6/T63/amip2/T63_amip2sic_1979-2008_mean.nc
+lrwxrwxrwx 1 mariaf s235 70 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/xtsoil.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/T63/soilpHfrac_T63.nc
+lrwxrwxrwx 1 mariaf s235 69 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/xtsurf.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/T63/xtsurf_v2_T63.nc
+lrwxrwxrwx 1 mariaf s235 85 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/explosive_volcanos.dat -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/emissions_aerocom_II/explosive_volcanos.dat
+lrwxrwxrwx 1 mariaf s235 86 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/continuous_volcanos.dat -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/emissions_aerocom_II/continuous_volcanos.dat
+lrwxrwxrwx 1 mariaf s235 102 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/conc_aerocom_DMS_sea.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/emissions_aerocom_II/T63/emiss_fields_dms_sea_monthly_T63.nc
+lrwxrwxrwx 1 mariaf s235 71 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/dust_pot_sources.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/T63/pot_sources.T63.nc
+lrwxrwxrwx 1 mariaf s235 76 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/ndvi_lai_eff.12m.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/T63/ndvi_lai_eff.12m.T63.nc
+lrwxrwxrwx 1 mariaf s235 70 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/soil_type2.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/T63/soil_type2.T63.nc
+lrwxrwxrwx 1 mariaf s235 70 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/soil_type3.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/T63/soil_type3.T63.nc
+lrwxrwxrwx 1 mariaf s235 70 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/soil_type4.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/T63/soil_type4.T63.nc
+lrwxrwxrwx 1 mariaf s235 70 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/soil_type6.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/T63/soil_type6.T63.nc
+lrwxrwxrwx 1 mariaf s235 71 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/soil_type13.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/T63/soil_type13.T63.nc
+lrwxrwxrwx 1 mariaf s235 71 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/soil_type14.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/T63/soil_type14.T63.nc
+lrwxrwxrwx 1 mariaf s235 71 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/soil_type15.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/T63/soil_type15.T63.nc
+lrwxrwxrwx 1 mariaf s235 71 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/soil_type16.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/T63/soil_type16.T63.nc
+lrwxrwxrwx 1 mariaf s235 71 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/soil_type17.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/T63/soil_type17.T63.nc
+lrwxrwxrwx 1 mariaf s235 77 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/surface_rough.12m.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/T63/surface_rough.12m.T63.nc
+lrwxrwxrwx 1 mariaf s235 96 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/megan_emission_factors.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/emissions_aerocom_II/T63/megan_emission_factors_T63.nc
+lrwxrwxrwx 1 mariaf s235 88 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/ham_oxidants_monthly.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/T63/ham_oxidants_monthly_T63L31_macc.nc
+lrwxrwxrwx 1 mariaf s235 59 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/gcr_ipr_solmin.txt -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/solmin.txt
+lrwxrwxrwx 1 mariaf s235 59 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/gcr_ipr_solmax.txt -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/solmax.txt
+lrwxrwxrwx 1 mariaf s235 75 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/parnuc.15H2SO4.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/parnuc.15H2SO4.A0.total.nc
+lrwxrwxrwx 1 mariaf s235 61 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/lut_kappa.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/lut_kappa.nc
+lrwxrwxrwx 1 mariaf s235 78 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/lut_optical_properties.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/lut_optical_properties_new.nc
+lrwxrwxrwx 1 mariaf s235 77 2012-12-13 15:56 /scratch/rosa/mariaf/test_boxmodel/lut_optical_properties_lw.nc -> /project/s235/echam/ECHAM6-HAMMOZ/v01_001/hammoz/lut_optical_properties_lw.nc
+
+----
+Checking if all symbolic links point to real files...
+
+List of non-existent input files:
+None!
+
+----
+Copying the echam binary and the namelists (and emi_spec.txt if relevant) into the output directory...
+... and keeping a record of all namelists (and emi_spec.txt if relevant)...
+
+Recording namelist.echam:
+
+
+!gf
+iaero   = 1 
+!gf
+
+&HAMCTL
+ lsoa = true
+/
+&HAM_M7CTL
+ nwater = 1
+ nonucl = 0
+/
+&INI_M7CTL
+pap     = 1013.25 ! Pressure (Pa)
+pt      = 265.0   ! Temperature (K)
+prh     = 0.3     ! RH (as saturation ratio)
+pipr    = 5.0     ! Ionization rate (cm-3 s-1)
+pdgso4  = 5.0E4   ! H2SO4(g) production rate (cm-3 s-1)
+pgso4   = 1.0E4   ! H2SO4(g) concentrations (cm-3)
+paclc   = 0.0     ! cloud cover [0,1] (
+                  ! set to zero unless you know what you are doing)
+pforest = 1.0
+paerml  = 1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+                  ! Aerosol mass for individual compounds, 
+                  !(molec. cm-3 for sulfate and
+                  ! ug m-3 for bc, oc, ss, and dust)
+paernl  = 1.0,1.0,1.0,1.0,1.0,1.0,1.0
+                  ! Particle concentrations (cm-3)
+pm6rp   = 1.0,1.0,1.0,1.0,1.0,1.0,1.0
+                  ! Particle radii (cm)
+pm6dry  = 1.0,1.0,1.0,1.0
+prhop   = 1.0,1.0,1.0,1.0,1.0,1.0,1.0
+                  ! Mean mode particle density [g cm-3]
+pww     = 1.0,1.0,1.0,1.0,1.0,1.0,1.0
+                  ! Water content for each mode [kg(water) m-3(air)]
+/
+
+Recording /users/mariaf/m7_boxmodel/grazia/run/test_boxmodel/activ.nml:
+
+&MVCTL
+  PUTMEAN = 1,'months','last',0
+  meannam = 'all'
+/
+
+Recording /users/mariaf/m7_boxmodel/grazia/run/test_boxmodel/ham.nml:
+
+&MVCTL
+  PUTMEAN = 1,'months','last',0
+  meannam = 'all'
+/
+
+Recording /users/mariaf/m7_boxmodel/grazia/run/test_boxmodel/rad.nml:
+
+&MVCTL
+  PUTMEAN = 1,'months','last',0
+  meannam = 'all'
+/
+
+Recording /users/mariaf/m7_boxmodel/grazia/run/test_boxmodel/tracer.nml:
+
+&MVCTL
+  PUTMEAN = 1,'months','last',0
+  meannam = 'all' 
+/
+
+Recording /users/mariaf/m7_boxmodel/grazia/run/test_boxmodel/vphysc.nml:
+
+&MVCTL
+  PUTMEAN = 1,'months','last',0
+  meannam = 'all'
+/
+
+Recording namelist.jsbach:
+
+&JSBACH_CTL
+  standalone = .false.
+  ! --- number of tiles ---
+  ntiles = 11
+
+  ! --- options to activate the different jsbach modules ---
+  use_bethy = .true.
+  use_phenology = .true.
+  use_albedo = .true.
+  use_dynveg = .false.
+
+  ! --- output options ---
+  file_type = "NETCDF"
+  lpost_echam = .false.
+  debug = .false.
+/
+&ALBEDO_CTL
+  use_albedocanopy = .false.
+/
+&CBALANCE_CTL
+  read_cpools = .false.
+/
+&DYNVEG_CTL
+  read_fpc = .false.
+  dynveg_feedback = .false.
+/
+&CLIMBUF_CTL
+  init_running_means = .false.
+/
+
+Recording emi_spec.txt:
+
+# AEROCOM_II emission matrix, 2012.09.25
+#
+# This is the default emi_spec file for echam-hammoz (echam6.1.0-ham2.1-moz0.8)
+# See all references and details about the AEROCOM_II emission dataset on redmine:
+# https://redmine.hammoz.ethz.ch/projects/hammoz/wiki/2_References#AEROCOM_II-emissions
+#
+# Note:
+# Secondary organic aerosols are prescribed (lsoa=.false.)
+#
+# Authors:
+# Martin Schultz and Sabine Schroeder, FZ Juelich
+# Grazia Frontoso, C2SM / ETH Zurich
+# Sylvaine Ferrachat (cleanup), ETH Zurich
+#
+# 1. Sectors
+# Notes:
+#
+#  a) %C0 will be replaced by species name to identify the correct file
+#
+#  b) %T0 will be replaced by the horizontal resolution
+#
+#  c) %L0 will be replaced by the vertical resolution
+#
+#  d) format is: EF_TYPE, parameters
+#      - for EF_FILE (reading from file),            paramaters are: filename, variable name, options, emission type
+#      - for EF_MODULE (using a module in the code), parameters are: emission type (mandatory)
+#      - for EF_VALUE (using a constant),            parameters are: a constant value, emission type
+#      - for EF_INACTIVE (sector switch off),        parameters are: none 
+#
+#
+#  f) Valid tags for emission type are:
+#      - surface  (mass flux will be added to pxtems array)
+#      - level50m (mass flux will be added to 2nd lowest model level)
+#      - volume   (mass flux will be defined as 3D field and added to pxtte at all levels)
+#      - fire     (specific handling of vertical mass flux distribution for fire emissions)
+# 
+#  g) for more infos, please read the Boundary Condition Scheme manual, available on redmine here:
+#      https://redmine.hammoz.ethz.ch/projects/hammoz/wiki/2_Technical_Documentation#ECHAM
+#
+
+# Agricultural:
+AGR=EF_FILE,      %T0/2000/emiss_aerocom_II_%C0_anthropogenic_2000_%T0.nc, emiss_agr,      EF_LONLAT, EF_IGNOREYEAR, surface
+# Agricultural waste burning:
+AWB=EF_FILE,      %T0/2000/emiss_aerocom_II_%C0_anthropogenic_2000_%T0.nc, emiss_awb,      EF_LONLAT, EF_IGNOREYEAR, surface
+# Aircraft:
+AIRC=EF_FILE,     %T0/2000/emiss_aerocom_II_%C0_aircraft_2000_%T0.nc,      emiss_air,      EF_3D,     EF_IGNOREYEAR, EF_TIMEOFFSET=-14.0, volume
+# Biogenic:
+BIOGENIC=EF_FILE, %T0/2000/emiss_aerocom_%C0_monthly_2000_%T0.nc,          emiss_biogenic, EF_LONLAT, EF_IGNOREYEAR, surface
+# Domestic:
+DOM=EF_FILE,      %T0/2000/emiss_aerocom_II_%C0_anthropogenic_2000_%T0.nc, emiss_dom,      EF_LONLAT, EF_IGNOREYEAR, surface
+# Energy:
+ENE=EF_FILE,      %T0/2000/emiss_aerocom_II_%C0_anthropogenic_2000_%T0.nc, emiss_ene,      EF_LONLAT, EF_IGNOREYEAR, level50m
+# Forest fire:
+FFIRE=EF_FILE,    %T0/2000/emiss_aerocom_II_%C0_wildfire_2000_%T0.nc,      emiss_ffire,    EF_LONLAT, EF_IGNOREYEAR, EF_TIMEOFFSET=-14.0, fire
+# Grass fire:
+GFIRE=EF_FILE,    %T0/2000/emiss_aerocom_II_%C0_wildfire_2000_%T0.nc,      emiss_gfire,    EF_LONLAT, EF_IGNOREYEAR, EF_TIMEOFFSET=-14.0, fire
+# Industry:
+IND=EF_FILE,      %T0/2000/emiss_aerocom_II_%C0_anthropogenic_2000_%T0.nc, emiss_ind,      EF_LONLAT, EF_IGNOREYEAR, surface
+# Ships:
+SHIPS=EF_FILE,    %T0/2000/emiss_aerocom_II_%C0_ships_2000_%T0.nc,         emiss_shp,      EF_LONLAT, EF_IGNOREYEAR, level50m
+# Solvent:
+SLV=EF_FILE,      %T0/2000/emiss_aerocom_II_%C0_anthropogenic_2000_%T0.nc, emiss_slv,      EF_LONLAT, EF_IGNOREYEAR, surface
+# Terrestrial:
+TERR=EF_FILE,     %T0/emiss_aerocom_%C0_monthly_CLIM_%T0.nc,               DMS_terr,       EF_LONLAT, EF_IGNOREYEAR, surface
+# Transport:
+TRA=EF_FILE,      %T0/2000/emiss_aerocom_II_%C0_anthropogenic_2000_%T0.nc, emiss_tra,      EF_LONLAT, EF_IGNOREYEAR, surface
+# Waste:
+WST=EF_FILE,      %T0/2000/emiss_aerocom_II_%C0_anthropogenic_2000_%T0.nc, emiss_wst,      EF_LONLAT, EF_IGNOREYEAR, surface
+
+# Dust:
+DUST=EF_MODULE,    surface
+# Oceanic: 
+OCEANI=EF_MODULE,  surface
+# Sea salt:
+SEASALT=EF_MODULE, surface
+# Volcanic (continuous):
+VOLCC=EF_MODULE,   volume
+# Volcanic (explosive):
+VOLCE=EF_MODULE,   volume
+
+#
+# 2. Species-sector-matrix
+#
+# Values in this matrix are interpreted as a scale factor
+# Use 0 to switch off emissions usually present
+# Use a minus sign (-) to indicate a missing sector for a specific species
+# You can enter decimal values here, but the default is to use 1 or zero to make the table look less cluttered
+# The MATRIX keyword is mandatory
+#
+# Notes:
+# (1) Units for DMS and SO2 in the input files need to be "Kg m-2 s-1".
+# (2) Diagnostics ("_emi") for SO2 emissions contains the fraction that is emitted as SO4.
+#
+
+MATRIX
+  SPEC   AGR AWB AIRC BIOGENIC DOM ENE FFIRE GFIRE IND SHIPS SLV TERR TRA WST DUST OCEANI SEASALT VOLCE VOLCC 
+  DMS     -   -    -     -      -   -   -     -     -    -    -   1    -   -  -     1      -       -     -    
+  SO2     -   1    -     -      1   1   1     1     1    1    -   -    1   1  -     -      -       1     1    
+  BC      -   1    1     -      1   1   1     1     1    1    -   -    1   1  -     -      -       -     -    
+  OC      -   1    -     1      1   1   1     1     1    1    -   -    1   1  -     -      -       -     -    
+  DU      -   -    -     -      -   -   -     -     -    -    -   -    -   -  1     -      -       -     -    
+  SS      -   -    -     -      -   -   -     -     -    -    -   -    -   -  -     -      1       -     -    
+
+
+----
+Submitting /users/mariaf/m7_boxmodel/grazia/run/test_boxmodel/echam_jobscript_test_boxmodel.sh to the batch system...
+----
+The complete log of this job submission can be found here:
+/users/mariaf/m7_boxmodel/grazia/run/test_boxmodel/log_test_boxmodel_2012-12-13_15.56.txt
+
+----
+Finished!

@@ -1,0 +1,188 @@
+##################################################################################
+#
+# This is a simple recipe to checkout and run the MPIESM model
+# for a coupled model configuration with the components
+#      ECHAM  - global atmosphere GCM (MPI-M)
+#      JSBACH - global land surface model (MPI-M)
+#      MPIOM  - global ocean GCM (MPI-M)
+#      HAMOCC - global ocean bio-geo-chemistry model (MPI-M)
+#
+# - only restarts are possible
+# - only yearly chunks
+# - only coupled experiments
+# - either LR (T63L47GR15L40,  4 nodes) 
+#       or MR (T63L95TP04L40, 10 nodes) experiments
+#
+# - only predefined experiment settings (cmip5-style) possible:
+#   LR: piControl, historical, rcp26/45/85, 1pctCo2, piControl-P
+#   MR: piControl, historical, rcp26/45/85
+#
+# RERUN-files are taken from the original CMIP5 experiments (1st realization)
+# 
+# Monika Esch, MPI, 2012-02-23
+# 
+##################################################################################
+
+1. Login and checkout (or untar) the model
+------------------------------------------
+
+Login on blizzard.dkrz.de
+
+Checkout latest model version:
+svn checkout http://svn.zmaw.de/svn/cosmos/tags/mpiesm-1.0.00
+
+(or untar the mpiesm-1.0.00.tar-file you got)
+
+on your HOME(!)-directory, e.g. "/home/zmaw/m214002"
+
+This results in a directory named mpiesm-1.0.00 
+##################################################################################
+
+2. Compiling
+------------
+
+To generate the compile scripts change the directory:
+
+cd mpiesm-1.0.00/util/compile/tools
+
+First load the right module for the compiler:
+
+module load IBM/xlf13.1.0.2
+
+define your personal experiment-id <EXP_ID>*, e.g. "mbe0333", and type
+
+./Create_COMP_cpl_models.ksh -i <EXP_ID>  -n aix -c xlf mpiesm-asob
+
+With this command you generated 5 compile script whereof you have to
+execute the following:
+
+/home/zmaw/<USER>/mpiesm-1.0.00/src/mod/oasis3/COMP_oasis3_MPI1.ksh -j 4
+/home/zmaw/<USER>/mpiesm-1.0.00/src/mod/echam6/COMP_echam6_<EXP_ID>.ksh -j 4
+/home/zmaw/<USER>/mpiesm-1.0.00/src/mod/mpiom/COMP_mpiom_<EXP_ID>.ksh  -j 4
+ 
+where <USER> is your User-id, e.g. "m214002"
+The "-j 4"-add-on takes care that the compilation is done on 4 cpus in parallel.
+Executing these scripts might still take a while....
+Each script will give you an information about the place and name of the
+compiled executable, e.g.
+"Executable : /pf/zmaw/m214002/mpiesm-1.0.00/AIX-xlf/bin/mpiom_hamocc_mbe0333.MPI1.x"
+
+If you execute these scripts in different windows make sure you loaded the right
+compiler in each of these windows!
+
+You will need the information about the final executable names for editing 
+the generate-mpiesm.sh script.
+##################################################################################
+
+3. Building the scripts and running the model
+---------------------------------------------
+
+cd ~/contrib/generate-scripts
+
+Edit the shell script generate-mpiesm.sh following the examples given in the script 
+and simply run
+
+./generate-mpiesm.sh
+
+The generate-mpiesm.sh-script finally tells you where to find your run- and
+postprocessing script, e.g.
+"you will find your scripts in
+/home/zmaw/m214002/mpiesm-1.0.00/experiments/mbe0333/scripts"
+
+In this directory your scripts are stored, the job-output of your
+running jobs and the <EXP_ID>.log and <EXP_ID>.date files.
+
+(For testing reasons as final_date for the default piControl-setting
+1851 is used, so you run only a 2-year simulation.
+In case of production you have to modify the according line in your
+runscript.)
+
+Change into this directory and submit the runscript:
+
+cd /home/zmaw/<USER>/mpiesm-1.0.00/experiments/<EXP_ID>/scripts
+llsubmit <EXP_ID>.run
+
+To check the status of your job type
+
+llq -u <USER>
+
+Detailed information is given by 
+
+llq -W -f %id %o %jn %jt %a %gl %dq %c %nh %st %h -u <USER>
+##################################################################################
+
+4. General Remarks
+------------------
+
+As first test you should run a one year simulation and compare your output
+with the original data produced by the according M&D-experiment
+(see: https://cmip5-cordex.dkrz.de/CMIP5/).
+In case of differences please check that you loaded the right compiler 
+version before compiling!
+
+After one year is finally processed you will find the models output (the raw 
+data) in your data-directory,
+/work/<GROUP_ID>/<USER_ID>/<REPOS_NAM>/experiments/<EXP_ID>/,
+as defined in generate-mpiesm.sh. The data are stored model wise, for each 
+model component you will find an extra subdirectory.
+
+Once your model crashes before finishing one year you will find your data in the
+temporary directory, /scratch/m/<USER_ID>/<REPOS_NAM>/experiments/<EXP_ID>/work.
+This directory will be cleaned up (rm *) when a new year/run is started.
+
+When you add output streams to the model you have to take care that these streams
+are also copied from the "work"- to the "data"-directory!
+The "work"-directory is cleaned before starting a new year/run.
+
+At the end of one years simulation the <EXP_ID>.run is submitted again unless
+the final_date is reached. In addition the <EXP_ID>.post is submitted to do
+a first post processing of the model data. The postprocessed data will be stored
+in the data-directory, too.
+
+For follow-up experiments you can either generate more runscripts using the
+generate-mpiesm.sh-script, or simply copy the <EXP_ID>.run and <EXP_ID>.post to a 
+new ~/<REPOS_NAM>/experiments/<EXP_ID>/scripts directory and edit them directly.
+You don't have to compile the models again and again but can use the same
+executable for a variety of experiments.
+For changing the namelists for the models used follow the description in
+your runscript.
+##################################################################################
+
+5. Further Hints
+----------------
+
+Changing the namelists after generating the scripts:
+
+The run scripts generated by ./generate-mpiesm.sh copy the Fortran namelists,
+which define the experiment, from read only directories on Blizzard at:
+
+   /pool/data/ECHAM6/cmip5_namelists/${expname}
+
+in order to obtain a model configuration, which can reproduce tested
+experiments, or here CMIP5 experiments.
+
+Thus, if an experiment should be modified by namelist changes, it must be avoided
+that the run script automatically gets the original namelists. You may proceed as
+follows:
+
+1)  copy namelist.echam of the experiment of interest (${expname}) from
+      /pool/data/ECHAM6/cmip5_namelists/${expname} to your own scripts-directory
+2)  modify the namelist as you want
+3)  change the line in your run script from:
+      cp /pool/data/ECHAM6/cmip5_namelists/${expname}/namelist.echam .
+    to:
+      cp $home/${expid}/scripts/namelist.echam .
+    so that this namelist will be copied into the run script.
+##################################################################################
+
+
+* 
+the <EXP_ID> by convention consists of 3 letters and 4 digits, where the 3
+letters are an abbreviation that should result from the experimenter's name.
+People inside MPI-M are asked to fill in their abbreviations for the naming 
+convention in
+http://svn.zmaw.de/dokuwiki/doku.php?id=listofids:list_of_experimenter_ids
+
+##################################################################################
+Please send comments etc. to monika.esch@zmaw.de
+
